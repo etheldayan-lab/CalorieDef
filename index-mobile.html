@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="תפריט">
+<title>תפריט חודשי · אתאל ויונה</title>
+<style>
+/* ===== styles/theme.css ===== */
+/* =====================================================================
+   תפריט — calm modern wellness design system
+   Soft warm neutrals + muted plum (Atael) / teal (Yona) accents.
+   Light + dark. Heebo throughout. RTL-first.
+   ===================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap');
+
+:root{
+  /* ---- warm neutral canvas (light) ---- */
+  --bg:        #f4f1ea;
+  --bg-tint:   #efeae0;
+  --surface:   #fbfaf6;
+  --surface-2: #ffffff;
+  --raised:    #ffffff;
+  --ink:       #2b2926;
+  --ink-2:     #6c6860;
+  --ink-3:     #a39e93;
+  --line:      #e6e1d6;
+  --line-2:    #efece4;
+
+  /* ---- accents (calm but alive; ~L .6 C .1) ---- */
+  --plum:      #8a5fb0;   /* Atael */
+  --plum-deep: #6e4a93;
+  --plum-soft: #efe7f6;
+  --plum-line: #ddccec;
+
+  --teal:      #2f87a8;   /* Yona */
+  --teal-deep: #236d8a;
+  --teal-soft: #e1eff4;
+  --teal-line: #bcdce8;
+
+  --sage:      #4f9d6a;   /* positive / lunch */
+  --sage-deep: #3c7f53;
+  --sage-soft: #e3f0e6;
+  --sage-line: #c4e1cb;
+
+  --rose:      #cc6982;   /* cycle / snack */
+  --rose-deep: #ad5067;
+  --rose-soft: #f8e7eb;
+  --rose-line: #efccd5;
+
+  --amber:     #cf9233;   /* shabbat / breakfast */
+  --amber-deep:#a9731c;
+  --amber-soft:#f6ecd6;
+  --amber-line:#e8d4ab;
+
+  --indigo:     #6a64c0;  /* dinner */
+  --indigo-deep:#514aa3;
+  --indigo-soft:#e8e7f7;
+  --indigo-line:#cdcaee;
+
+  /* current-user driven (set on body) */
+  --accent:      var(--plum);
+  --accent-deep: var(--plum-deep);
+  --accent-soft: var(--plum-soft);
+  --accent-line: var(--plum-line);
+
+  --radius:   18px;
+  --radius-sm:12px;
+  --radius-lg:26px;
+  --shadow-1: 0 1px 2px rgba(43,41,38,.04), 0 1px 1px rgba(43,41,38,.03);
+  --shadow-2: 0 1px 2px rgba(43,41,38,.04), 0 14px 30px -18px rgba(43,41,38,.22);
+  --shadow-3: 0 2px 6px rgba(43,41,38,.05), 0 26px 50px -24px rgba(43,41,38,.28);
+  --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+[data-user="yona"]{
+  --accent:      var(--teal);
+  --accent-deep: var(--teal-deep);
+  --accent-soft: var(--teal-soft);
+  --accent-line: var(--teal-line);
+}
+
+[data-theme="dark"]{
+  --bg:        #16181d;
+  --bg-tint:   #1c1f25;
+  --surface:   #1e2127;
+  --surface-2: #242830;
+  --raised:    #2a2f38;
+  --ink:       #eef1f5;
+  --ink-2:     #a7adb8;
+  --ink-3:     #6f7682;
+  --line:      #2f343d;
+  --line-2:    #282c34;
+
+  --plum:#b196d6; --plum-deep:#c4afe2; --plum-soft:#2c2740; --plum-line:#41385a;
+  --teal:#5cb6dc; --teal-deep:#8acdec; --teal-soft:#192d38; --teal-line:#2c4a5b;
+  --sage:#6fc78d; --sage-deep:#95dbaf; --sage-soft:#192f23; --sage-line:#2e4d38;
+  --rose:#e791a6; --rose-deep:#f1b1c0; --rose-soft:#33222a; --rose-line:#523846;
+  --amber:#e0b35f; --amber-deep:#f0cb88; --amber-soft:#312716; --amber-line:#534321;
+  --indigo:#9b96e6; --indigo-deep:#b8b4f0; --indigo-soft:#252447; --indigo-line:#3b3968;
+  --shadow-1: 0 1px 2px rgba(0,0,0,.34);
+  --shadow-2: 0 1px 2px rgba(0,0,0,.34), 0 16px 34px -20px rgba(0,0,0,.7);
+  --shadow-3: 0 2px 6px rgba(0,0,0,.36), 0 28px 56px -26px rgba(0,0,0,.76);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;background-color:var(--bg)}
+body{
+  font-family:'Heebo',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background-color:var(--bg); color:var(--ink);
+  direction:rtl; text-align:right;
+  font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,textarea,select{font-family:inherit}
+::selection{background:var(--accent-soft);color:var(--accent-deep)}
+
+/* numerals: tabular for calorie figures */
+.tnum{font-variant-numeric:tabular-nums;font-feature-settings:'tnum'}
+
+/* scrollbars */
+*::-webkit-scrollbar{width:10px;height:10px}
+*::-webkit-scrollbar-thumb{background:var(--line);border-radius:20px;border:3px solid transparent;background-clip:padding-box}
+*::-webkit-scrollbar-track{background:transparent}
+
+/* ---------- shared atoms ---------- */
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12.5px;font-weight:600;color:var(--ink-2);
+  background:var(--surface-2);border:1px solid var(--line);
+  padding:5px 11px;border-radius:999px;white-space:nowrap;
+}
+.chip svg{width:14px;height:14px;opacity:.8}
+.chip.accent{background:var(--accent-soft);color:var(--accent-deep);border-color:var(--accent-line)}
+.chip.sage{background:var(--sage-soft);color:var(--sage-deep);border-color:var(--sage-line)}
+.chip.rose{background:var(--rose-soft);color:var(--rose-deep);border-color:var(--rose-line)}
+.chip.amber{background:var(--amber-soft);color:var(--amber-deep);border-color:var(--amber-line)}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-size:14px;font-weight:600;color:var(--ink);
+  background:var(--surface-2);border:1px solid var(--line);
+  padding:10px 16px;border-radius:12px;
+  transition:all .18s var(--ease);
+}
+.btn svg{width:17px;height:17px}
+.btn:hover{border-color:var(--ink-3);transform:translateY(-1px);box-shadow:var(--shadow-1)}
+.btn:active{transform:translateY(0)}
+.btn.primary{background:var(--accent);color:#fff;border-color:transparent}
+.btn.primary:hover{background:var(--accent-deep)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--ink-2)}
+.btn.ghost:hover{background:var(--bg-tint);border-color:transparent;box-shadow:none}
+
+.card{
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+}
+
+/* progress ring helper (set --p 0..100, --ring color) */
+.ring{
+  --p:60; --ring:var(--accent); --track:var(--line);
+  border-radius:50%;
+  background:conic-gradient(var(--ring) calc(var(--p)*1%), var(--track) 0);
+  display:grid;place-items:center;
+}
+.ring::after{content:'';position:absolute}
+
+/* mounted views are always visible — no opacity animation (it can strand
+   content at opacity:0 if the animation clock never advances). */
+.rise{opacity:1}
+</style>
+<style>
+/* ===== styles/components.css ===== */
+/* =====================================================================
+   components.css — shared UI building blocks for the menu app
+   (meal cards, nav, tabs, stats, segments, rings, profile switch).
+   Used by both the look-direction mockups and the final app.
+   ===================================================================== */
+
+/* ---------- meal card ---------- */
+.meal{display:flex;flex-direction:column;gap:11px;padding:15px 16px;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s var(--ease)}
+.meal:hover{transform:translateY(-3px);box-shadow:var(--shadow-2);border-color:var(--accent-line)}
+.meal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.meal-id{display:flex;align-items:center;gap:12px;min-width:0}
+.token{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;
+  background:var(--accent-soft);color:var(--accent-deep);flex-shrink:0}
+.token svg{width:21px;height:21px}
+.token.amber,.token.breakfast{background:var(--amber-soft);color:var(--amber-deep)}
+.token.sage,.token.lunch{background:var(--sage-soft);color:var(--sage-deep)}
+.token.rose,.token.snack{background:var(--rose-soft);color:var(--rose-deep)}
+.token.indigo,.token.dinner{background:var(--indigo-soft);color:var(--indigo-deep)}
+.meal-name{font-size:15.5px;font-weight:700;line-height:1.28;color:var(--ink)}
+.meal-desc{font-size:13px;color:var(--ink-2);line-height:1.5;text-wrap:pretty}
+
+.cal-pill{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:14px;
+  color:var(--accent-deep);background:var(--accent-soft);border:1px solid var(--accent-line);
+  padding:5px 10px 5px 11px;border-radius:999px;white-space:nowrap;flex-shrink:0}
+.cal-pill svg{width:15px;height:15px}
+.cal-pill .u{font-size:11px;font-weight:500;opacity:.75}
+
+.meta{display:flex;flex-wrap:wrap;gap:6px 13px}
+.meta .m{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--ink-2);font-weight:500}
+.meta .m svg{width:14px;height:14px;color:var(--ink-3)}
+
+.portion{display:flex;align-items:flex-start;gap:7px;font-size:12.5px;color:var(--accent-deep);
+  background:var(--accent-soft);border:1px solid var(--accent-line);padding:7px 11px;border-radius:11px;line-height:1.45}
+.portion .who{font-weight:700;flex-shrink:0}
+
+.meal-actions{display:flex;gap:7px;margin-top:1px;flex-wrap:wrap}
+.act{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2);
+  background:transparent;border:1px solid var(--line);padding:7px 12px;border-radius:10px;transition:all .15s var(--ease)}
+.act:hover{color:var(--accent-deep);border-color:var(--accent-line);background:var(--accent-soft);transform:translateY(-1px)}
+.act svg{width:15px;height:15px}
+.act.rose:hover{color:var(--rose-deep);border-color:var(--rose-line);background:var(--rose-soft)}
+
+/* shabbat flavour */
+.meal.shab{background:linear-gradient(180deg,var(--amber-soft),var(--surface-2));border-color:var(--amber-line)}
+.tag-shab{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--amber-deep);
+  background:var(--surface-2);border:1px solid var(--amber-line);padding:3px 9px;border-radius:999px;align-self:flex-start}
+.tag-shab svg{width:13px;height:13px}
+/* cycle recommended flag */
+.tag-cycle{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--rose-deep);
+  background:var(--rose-soft);border:1px solid var(--rose-line);padding:3px 9px;border-radius:999px;align-self:flex-start}
+.tag-cycle svg{width:13px;height:13px}
+
+/* ---------- add tile ---------- */
+.addtile{border:1.5px dashed var(--line);background:transparent;border-radius:var(--radius);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  color:var(--ink-3);min-height:130px;font-size:14px;font-weight:600;transition:all .2s var(--ease)}
+.addtile svg{width:24px;height:24px}
+.addtile:hover{border-color:var(--accent-line);color:var(--accent-deep);background:var(--accent-soft);transform:translateY(-2px)}
+
+/* ---------- nav rail ---------- */
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:13px;font-size:14.5px;
+  font-weight:600;color:var(--ink-2);transition:all .16s var(--ease);width:100%;text-align:right}
+.nav-item svg{width:20px;height:20px;flex-shrink:0}
+.nav-item:hover{background:var(--bg-tint);color:var(--ink)}
+.nav-item.on{background:var(--accent-soft);color:var(--accent-deep)}
+.nav-item .badge{margin-inline-start:auto;font-size:11px;font-weight:700;background:var(--accent);color:#fff;
+  border-radius:999px;padding:1px 7px;min-width:20px;text-align:center}
+
+/* ---------- bottom tabs (mobile) ---------- */
+.tabbar{display:flex;background:var(--surface-2);border-top:1px solid var(--line)}
+.tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 2px 8px;
+  font-size:10.5px;font-weight:600;color:var(--ink-3);transition:color .15s}
+.tabbar button svg{width:22px;height:22px}
+.tabbar button.on{color:var(--accent-deep)}
+.tabbar button.on.tab-catalog{color:var(--plum-deep)}
+.tabbar button.on.tab-plan{color:var(--teal-deep)}
+.tabbar button.on.tab-fridge{color:var(--sage-deep)}
+.tabbar button.on.tab-shopping{color:var(--amber-deep)}
+.tabbar button.on.tab-planner{color:var(--indigo-deep)}
+
+/* ---------- category tabs ---------- */
+.cat-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.cat-tab{padding:8px 14px;border-radius:11px;font-size:13.5px;font-weight:600;color:var(--ink-2);
+  background:transparent;border:1px solid transparent;display:inline-flex;align-items:center;gap:7px;transition:all .15s var(--ease)}
+.cat-tab svg{width:16px;height:16px}
+.cat-tab:hover{background:var(--bg-tint)}
+.cat-tab.on{background:var(--surface-2);border-color:var(--line);color:var(--accent-deep);box-shadow:var(--shadow-1)}
+/* editorial underline variant */
+.cat-link{padding:7px 2px;font-size:15px;font-weight:600;color:var(--ink-3);border-bottom:2px solid transparent;transition:all .15s}
+.cat-link:hover{color:var(--ink)}
+.cat-link.on{color:var(--accent-deep);border-color:var(--accent)}
+
+/* ---------- stats ---------- */
+.stat-row{display:flex;align-items:stretch}
+.stat-cell{flex:1;padding:4px 18px}
+.stat-cell + .stat-cell{border-inline-start:1px solid var(--line)}
+.stat-val{font-size:25px;font-weight:700;color:var(--ink);line-height:1;letter-spacing:-.01em}
+.stat-val small{font-size:14px;font-weight:600;color:var(--ink-3)}
+.stat-lbl{font-size:12px;color:var(--ink-3);margin-top:6px;font-weight:500}
+
+/* ---------- segmented control ---------- */
+.seg{display:inline-flex;background:var(--bg-tint);border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px}
+.seg button{padding:7px 14px;border-radius:9px;font-size:13px;font-weight:600;color:var(--ink-2);transition:all .15s var(--ease);display:inline-flex;align-items:center;gap:6px}
+.seg button svg{width:15px;height:15px}
+.seg button.on{background:var(--surface-2);color:var(--accent-deep);box-shadow:var(--shadow-1)}
+
+/* ---------- profile switch ---------- */
+.prof-switch{display:flex;gap:8px}
+.prof{display:flex;align-items:center;gap:10px;padding:8px 12px 8px 9px;border-radius:14px;border:1px solid var(--line);
+  background:transparent;transition:all .18s var(--ease);flex:1;min-width:0}
+.prof:hover{background:var(--bg-tint)}
+.prof.on{background:var(--surface-2);box-shadow:var(--shadow-1)}
+.prof.on.atael{border-color:var(--plum-line)}
+.prof.on.yona{border-color:var(--teal-line)}
+.avatar{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:15px;font-weight:700;flex-shrink:0}
+.avatar.atael{background:var(--plum-soft);color:var(--plum-deep)}
+.avatar.yona{background:var(--teal-soft);color:var(--teal-deep)}
+.prof-name{font-size:13.5px;font-weight:700;color:var(--ink);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prof-sub{font-size:11px;color:var(--ink-3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- progress ring ---------- */
+.ring-wrap{position:relative;display:grid;place-items:center}
+.ring-wrap .ring-svg{transform:rotate(-90deg)}
+.ring-wrap .ring-center{position:absolute;display:flex;flex-direction:column;align-items:center;line-height:1}
+.ring-center .rc-val{font-size:22px;font-weight:700;color:var(--ink)}
+.ring-center .rc-lbl{font-size:11px;color:var(--ink-3);margin-top:3px}
+
+/* ---------- bars ---------- */
+.bar{height:8px;border-radius:999px;background:var(--bg-tint);overflow:hidden}
+.bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-deep))}
+
+/* ---------- soft section label ---------- */
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.page-title{font-size:26px;font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+.page-sub{font-size:14px;color:var(--ink-2);margin-top:4px}
+
+/* theme/icon round button */
+.iconbtn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--ink-2);
+  border:1px solid var(--line);background:var(--surface-2);transition:all .16s var(--ease)}
+.iconbtn:hover{color:var(--accent-deep);border-color:var(--accent-line);background:var(--accent-soft)}
+.iconbtn svg{width:19px;height:19px}
+</style>
+<style>
+/* ===== styles/app.css ===== */
+/* =====================================================================
+   app.css — application shell, page chrome, and inner-page styles
+   (sidebar, topbar, gradient heroes, calendar, shopping, fridge, modals).
+   ===================================================================== */
+
+/* ---------- layout shell (mobile-only forced) ---------- */
+.app{min-height:100vh;display:grid;grid-template-columns:1fr}
+.sidebar{display:none}
+.sidebar-foot{display:none}
+.main{min-width:0;display:flex;flex-direction:column;min-height:100vh}
+.main-inner{padding:16px 16px 110px;max-width:430px;width:100%;margin:0 auto;flex:1}
+
+.topbar{display:flex;position:sticky;top:0;z-index:60;align-items:center;justify-content:space-between;
+    padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line);gap:10px}
+.tabbar-wrap{display:block;position:fixed;bottom:0;left:0;right:0;z-index:60;
+    box-shadow:0 -6px 22px -14px rgba(0,0,0,.35);padding-bottom:env(safe-area-inset-bottom);
+    background:var(--surface-2)}
+
+/* ---------- gradient hero / context band ---------- */
+.hero{position:relative;overflow:hidden;border-radius:var(--radius-lg);padding:24px 28px;
+  border:1px solid var(--accent-line);
+  background:
+    radial-gradient(120% 140% at 92% 8%, color-mix(in oklab, var(--accent) 26%, transparent), transparent 60%),
+    linear-gradient(118deg, var(--accent-soft), var(--surface-2) 76%)}
+.hero.amber{border-color:var(--amber-line);
+  background:radial-gradient(120% 140% at 92% 8%, color-mix(in oklab,var(--amber) 26%,transparent),transparent 60%),
+    linear-gradient(118deg,var(--amber-soft),var(--surface-2) 76%)}
+.hero.rose{border-color:var(--rose-line);
+  background:radial-gradient(120% 140% at 92% 8%, color-mix(in oklab,var(--rose) 26%,transparent),transparent 60%),
+    linear-gradient(118deg,var(--rose-soft),var(--surface-2) 76%)}
+.hero-row{display:flex;align-items:center;justify-content:space-between;gap:22px;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13.5px;color:var(--accent-deep)}
+.hero-title{font-size:28px;font-weight:800;letter-spacing:-.015em;margin-top:10px;line-height:1.15;
+  overflow-wrap:break-word;word-break:normal;text-wrap:balance}
+.hero-sub{font-size:14px;color:var(--ink-2);margin-top:9px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* ---------- meal grid ---------- */
+.meal-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(282px,1fr))}
+.meal-grid.cols2{grid-template-columns:repeat(auto-fill,minmax(330px,1fr))}
+
+/* section heading ---------- */
+.sec-head{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;color:var(--ink);margin:2px 0 12px}
+.sec-head svg{width:18px;height:18px;color:var(--accent-deep)}
+.sec-head .count{font-weight:600;color:var(--ink-3);font-size:12.5px}
+
+/* ---------- calendar ---------- */
+.wk-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.wk-cell{border-radius:14px;border:1px solid var(--line);background:var(--surface-2);padding:11px 4px;text-align:center;
+  transition:transform .15s var(--ease)}
+.wk-cell .wl{font-size:12px;font-weight:700;color:var(--ink-2)}
+.wk-cell .wi{height:22px;display:grid;place-items:center;margin-top:4px;color:var(--ink-3)}
+.wk-cell .wi svg{width:17px;height:17px}
+.wk-cell.a{background:var(--plum-soft);border-color:var(--plum-line)} .wk-cell.a .wi{color:var(--plum-deep)} .wk-cell.a .wl{color:var(--plum-deep)}
+.wk-cell.b{background:var(--teal-soft);border-color:var(--teal-line)} .wk-cell.b .wi{color:var(--teal-deep)} .wk-cell.b .wl{color:var(--teal-deep)}
+.wk-cell.both{background:linear-gradient(135deg,var(--plum-soft) 50%,var(--teal-soft) 50%);border-color:var(--plum-line)}
+.wk-cell.shab{background:var(--amber-soft);border-color:var(--amber-line)} .wk-cell.shab .wi{color:var(--amber-deep)} .wk-cell.shab .wl{color:var(--amber-deep)}
+
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+.legend .lg{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);font-weight:500}
+.dot{width:11px;height:11px;border-radius:50%}
+.dot.a{background:var(--plum)} .dot.b{background:var(--teal)}
+.dot.both{background:linear-gradient(135deg,var(--plum) 50%,var(--teal) 50%)}
+.dot.shab{background:var(--amber)}
+
+.day-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:9px}
+.day-btn{border-radius:13px;border:1px solid var(--line);background:var(--surface-2);padding:10px 4px 9px;text-align:center;
+  transition:all .15s var(--ease)}
+.day-btn:hover{border-color:var(--accent-line);transform:translateY(-2px)}
+.day-btn .dn{font-size:18px;font-weight:700;color:var(--ink);line-height:1}
+.day-btn .dl{font-size:11px;color:var(--ink-3);margin-top:4px}
+.day-btn .di{height:15px;margin-top:5px;color:var(--ink-3)}
+.day-btn .di svg{width:14px;height:14px}
+.day-btn.sel{border-color:var(--accent);background:var(--accent-soft);box-shadow:var(--shadow-1)}
+.day-btn.sel .dn{color:var(--accent-deep)}
+.day-btn.shab{background:var(--amber-soft);border-color:var(--amber-line)} .day-btn.shab .dn{color:var(--amber-deep)}
+.day-btn.shab.sel{box-shadow:0 0 0 2px var(--amber)}
+
+.day-detail{border-radius:var(--radius);border:1px solid var(--line);overflow:hidden;background:var(--surface-2)}
+.dd-head{padding:18px 22px;color:#fff;
+  background:radial-gradient(120% 160% at 90% 0%, color-mix(in oklab,#fff 24%,transparent),transparent 55%),linear-gradient(110deg,var(--accent),var(--accent-deep))}
+.dd-head.shab{background:radial-gradient(120% 160% at 90% 0%, color-mix(in oklab,#fff 24%,transparent),transparent 55%),linear-gradient(110deg,var(--amber),var(--amber-deep))}
+.dd-title{font-size:19px;font-weight:800}
+.dd-sub{font-size:13px;opacity:.85;margin-top:3px}
+.dd-body{padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+
+/* total bar */
+.total{border-radius:var(--radius-sm);background:var(--accent-soft);border:1px solid var(--accent-line);padding:13px 15px}
+.total-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.total-lbl{font-size:13px;color:var(--accent-deep);font-weight:600}
+.total-num{font-size:15px;font-weight:800;color:var(--accent-deep)}
+
+/* ---------- shopping ---------- */
+.shop-sec{border-radius:var(--radius);border:1px solid var(--line);background:var(--surface-2);overflow:hidden;margin-bottom:11px}
+.shop-head{display:flex;align-items:center;justify-content:space-between;padding:14px 17px;cursor:pointer;transition:background .15s}
+.shop-head:hover{background:var(--bg-tint)}
+.shop-head .sh-l{display:flex;align-items:center;gap:11px;font-size:15px;font-weight:700}
+.shop-head .sh-tok{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent-deep)}
+.shop-head .sh-tok svg{width:18px;height:18px}
+.shop-prog{display:flex;align-items:center;gap:10px;color:var(--ink-3);font-size:12.5px;font-weight:600}
+.shop-items{padding:4px 17px 13px;border-top:1px solid var(--line)}
+.shop-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--line-2);font-size:14px;color:var(--ink);cursor:pointer}
+.shop-item:last-child{border-bottom:none}
+.cb{width:21px;height:21px;border-radius:7px;border:1.5px solid var(--accent-line);display:grid;place-items:center;flex-shrink:0;
+  color:#fff;transition:all .14s var(--ease)}
+.cb svg{width:13px;height:13px;opacity:0;transform:scale(.6);transition:all .14s var(--ease)}
+.shop-item.done .cb{background:var(--accent);border-color:var(--accent)}
+.shop-item.done .cb svg{opacity:1;transform:none}
+.shop-item.done .si-txt{text-decoration:line-through;color:var(--ink-3)}
+
+/* ---------- fridge ---------- */
+.fridge-grid{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(118px,1fr))}
+.ing-chip{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);
+  background:var(--surface-2);font-size:13.5px;font-weight:600;color:var(--ink-2);transition:all .15s var(--ease);text-align:right}
+.ing-chip:hover{border-color:var(--accent-line);transform:translateY(-1px)}
+.ing-chip .ic-box{width:18px;height:18px;border-radius:6px;border:1.5px solid var(--line);flex-shrink:0;display:grid;place-items:center;color:#fff;transition:all .14s}
+.ing-chip .ic-box svg{width:12px;height:12px;opacity:0;transition:opacity .12s}
+.ing-chip.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-deep)}
+.ing-chip.on .ic-box{background:var(--accent);border-color:var(--accent)}
+.ing-chip.on .ic-box svg{opacity:1}
+/* ingredient search */
+.ing-search{display:flex;align-items:center;gap:10px;padding:11px 15px;margin-bottom:18px;border-radius:var(--radius-sm);
+  border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink-3);transition:border-color .15s,box-shadow .15s}
+.ing-search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);color:var(--accent-deep)}
+.ing-search-input{flex:1;min-width:0;border:none;background:transparent;outline:none;color:var(--ink);font-size:14.5px;font-weight:600;padding:2px 0}
+.ing-search-input::placeholder{color:var(--ink-3);font-weight:500}
+.ing-search-x{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:var(--ink-3);flex-shrink:0;transition:all .14s}
+.ing-search-x:hover{background:var(--bg-tint);color:var(--ink)}
+.ing-chip.usr{border-style:dashed}
+.ing-chip.usr.on{border-style:solid}
+.ing-x{display:grid;place-items:center;width:18px;height:18px;border-radius:6px;color:var(--ink-3);flex-shrink:0;transition:all .14s}
+.ing-x:hover{background:var(--rose-soft);color:var(--rose-deep)}
+.ing-chip.on .ing-x{color:var(--accent-deep)}
+/* inline add field shaped like a chip */
+.ing-add{display:flex;align-items:center;gap:4px;padding:4px 6px 4px 10px;border-radius:12px;
+  border:1.5px dashed var(--line);background:var(--surface);transition:border-color .15s}
+.ing-add:focus-within{border-color:var(--accent);border-style:solid;box-shadow:0 0 0 3px var(--accent-soft)}
+.ing-add-input{flex:1;min-width:0;border:none;background:transparent;outline:none;color:var(--ink);
+  font-size:13.5px;font-weight:600;padding:6px 2px}
+.ing-add-input::placeholder{color:var(--ink-3);font-weight:500}
+.ing-add-btn{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex-shrink:0;
+  background:var(--accent);color:#fff;transition:all .15s var(--ease)}
+.ing-add-btn:hover{background:var(--accent-deep)}
+.ing-add-btn:disabled{background:var(--line);color:var(--ink-3);cursor:default}
+.match-badge{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:800;color:#fff;background:var(--sage);
+  padding:3px 9px;border-radius:999px}
+.match-badge.mid{background:var(--amber)} .match-badge.low{background:var(--ink-3)}
+
+/* sticky fridge action bar */
+.fridge-bar{position:sticky;bottom:0;z-index:20;margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:13px 18px;border-radius:var(--radius);border:1px solid var(--accent-line);background:var(--surface-2);box-shadow:var(--shadow-2)}
+
+/* ---------- modal ---------- */
+.modal-bg{position:fixed;inset:0;z-index:200;background:color-mix(in oklab,var(--ink) 42%,transparent);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+.modal-bg.open{opacity:1;pointer-events:auto}
+.modal{background:var(--surface-2);border-radius:var(--radius-lg);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;
+  border:1px solid var(--line);box-shadow:var(--shadow-3);transform:translateY(14px) scale(.98);transition:transform .28s var(--ease)}
+.modal-bg.open .modal{transform:none}
+.modal-pad{padding:24px 26px 30px}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}
+.modal-title{font-size:21px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.modal-x{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--bg-tint);color:var(--ink-2);flex-shrink:0;transition:all .15s}
+.modal-x:hover{background:var(--line);color:var(--ink)}
+.ing-line{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--line-2);font-size:14px;color:var(--ink-2)}
+.ing-line:last-child{border-bottom:none}
+.ing-line .b{color:var(--accent-deep);flex-shrink:0}
+.step-line{display:flex;gap:12px;padding:9px 0;font-size:14px;color:var(--ink-2);line-height:1.55}
+.step-line .n{flex-shrink:0;width:25px;height:25px;border-radius:8px;background:var(--accent-soft);color:var(--accent-deep);
+  display:grid;place-items:center;font-weight:800;font-size:13px}
+
+/* form fields */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:6px}
+.input,.textarea,.select{width:100%;padding:11px 13px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);
+  color:var(--ink);font-size:14px;transition:border-color .15s,box-shadow .15s;outline:none}
+.input:focus,.textarea:focus,.select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.textarea{resize:vertical;min-height:80px;line-height:1.5}
+.field-row{display:flex;gap:12px}.field-row > *{flex:1}
+
+/* loading dots */
+.dots{display:flex;gap:6px;align-items:center;justify-content:center;padding:26px 0}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--accent);animation:dotp 1s ease-in-out infinite}
+.dots i:nth-child(2){animation-delay:.16s}.dots i:nth-child(3){animation-delay:.32s}
+@keyframes dotp{0%,100%{opacity:.3;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
+
+/* tips box */
+.tip{border-radius:var(--radius);border:1px solid var(--accent-line);background:var(--accent-soft);padding:16px 18px}
+.tip-title{display:flex;align-items:center;gap:8px;font-weight:700;color:var(--accent-deep);font-size:14px;margin-bottom:9px}
+.tip-list{display:flex;flex-direction:column;gap:7px}
+.tip-list div{display:flex;gap:9px;font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.tip-list .b{color:var(--accent-deep);flex-shrink:0}
+
+/* cycle banner */
+.cycle-banner{border-radius:var(--radius);border:1px solid var(--rose-line);background:
+  radial-gradient(110% 130% at 92% 6%, color-mix(in oklab,var(--rose) 22%,transparent),transparent 60%),
+  linear-gradient(118deg,var(--rose-soft),var(--surface-2) 78%);padding:18px 20px}
+.cycle-banner .cb-top{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px;color:var(--rose-deep)}
+.cycle-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.cycle-tag{font-size:12px;font-weight:600;color:var(--rose-deep);background:var(--surface-2);border:1px solid var(--rose-line);
+  padding:4px 10px;border-radius:999px}
+
+/* toast */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);z-index:300;
+  background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:13px;font-size:14px;font-weight:600;
+  box-shadow:var(--shadow-3);opacity:0;transition:all .3s var(--ease);display:flex;align-items:center;gap:9px;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.toast svg{width:17px;height:17px;color:var(--sage-deep)}
+
+/* ---------- mobile styles (always applied) ---------- */
+.hero{padding:18px 19px;border-radius:var(--radius)}
+.hero-title{font-size:22px}
+.hero-row{gap:14px}
+.meal-grid,.meal-grid.cols2{grid-template-columns:1fr}
+.modal{max-width:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0;max-height:92vh}
+.modal-bg{align-items:flex-end;padding:0}
+.modal-bg.open .modal{transform:none}
+.modal-bg .modal{transform:translateY(100%)}
+.day-grid{grid-template-columns:repeat(5,1fr)}
+.fridge-grid{grid-template-columns:repeat(auto-fill,minmax(104px,1fr))}
+</style>
+</head>
+<body data-user="atael">
+<div id="root"></div>
+<script>
+  // apply persisted theme before first paint (no flash)
+  try{ var st=JSON.parse(localStorage.getItem('menuapp.v2')||'{}'); if(st.theme==='dark') document.documentElement.dataset.theme='dark'; if(st.user) document.body.dataset.user=st.user; }catch(e){}
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script>
+/* ===== data/menu-data.js ===== */
+// =====================================================================
+// MENU DATA — extracted verbatim from the original family-menu app.
+// Pure data + a couple of pure helpers. Attaches everything to window.MENU
+// =====================================================================
+
+const USERS={
+  atael:{
+    name:'אתאל', avatar:'א', color:'var(--purple)', bg:'var(--purple-bg)', border:'var(--purple-border)',
+    tagClass:'tag-a',
+    restCal:1400, trainCal:1600,
+    workoutDays:[2,5], // שלישי=2, שישי=5
+    breakfastCal:{rest:300,train:340},
+    lunchCal:{rest:380,train:450},
+    snackCal:{rest:130,train:155},
+    dinnerCal:{rest:370,train:420},
+  },
+  yona:{
+    name:'יונה', avatar:'י', color:'var(--blue-dark)', bg:'var(--blue-bg)', border:'var(--blue-border)',
+    tagClass:'tag-b',
+    restCal:1800, trainCal:2000,
+    workoutDays:[0,3,5], // ראשון=0, רביעי=3, שישי=5
+    breakfastCal:{rest:380,train:430},
+    lunchCal:{rest:500,train:580},
+    snackCal:{rest:180,train:220},
+    dinnerCal:{rest:480,train:550},
+  }
+};
+
+// ============================================================
+// PORTIONS — אותן מנות, כמויות שונות לפי יוזר ויום אימון
+// ============================================================
+const PORTIONS={
+  atael:{
+    rest:{
+      b1:'½ כוס שיבולת | 100 גר׳ יוגורט 5%',
+      b2:'3 ביצים | 30 גר׳ גבינה',
+      b3:'2 פרוסות לחם | ½ אבוקדו | 1 ביצה',
+      b4:'1 בננה | ½ כוס שיבולת | 150 מ"ל חלב',
+      b5:'200 גר׳ יוגורט יווני | 5 אגוזים',
+      b6:'2 פרוסות לחם שיפון | 4 כפות גבינה',
+      b7:'½ כוס שיבולת | ½ כוס פירות יער',
+      b8:'3 ביצים | ½ גמבה',
+      b9:'1 לחמניה | 80 גר׳ הודו',
+      b10:'50 גר׳ גרנולה | 150 מ"ל חלב',
+      b11:'4 ביצים | 30 גר׳ גבינה',
+      b12:'1 בננה | 150 מ"ל חלב | 3 כפות גבינה לבנה',
+      b13:'2 ביצים | 6 פטריות | לאפה 1',
+      b14:'200 גר׳ קוטג׳ | 5 אגוזים | 2 תמרים',
+      b15:'4 ביצים | 6 פטריות',
+      b16:'2 פרוסות | 1 כף חמאת בוטנים | ½ בננה',
+      b17:'½ כוס שיבולת | ½ תפוח | 10 אגוזי לוז',
+      b18:'½ פיתה | 3 כפות חומוס',
+      b19:'2 ביצים | פרוסת לחם',
+      b20:'150 גר׳ יוגורט | 2 קוביות שוקולד',
+      b21:'½ כוס קמח | 2 קרפים | 4 כפות גבינה',
+      b22:'2 ביצים | 20 גר׳ פטה',
+      b23:'2 פרוסות | ½ אבוקדו | 2 פרוסות הודו',
+      b24:'50 גר׳ מוסלי | 150 מ"ל חלב',
+      b25:'2 ביצים | 3 כפות חומוס',
+      b26:'3 ביצים | 6 פטריות | 20 גר׳ גאודה',
+      b27:'פרוסה אחת (80 גר׳)',
+      b28:'2 ביצים | לחמניה 1',
+      b29:'50 גר׳ קורנפלקס | 150 מ"ל חלב',
+      b30:'½ כוס שיבולת | 100 גר׳ יוגורט',
+      l1:'150 גר׳ עוף | ½ כוס קינואה | ½ בטטה',
+      l2:'100 גר׳ פסטה | כף פרמזן',
+      l3:'150 גר׳ הודו | ירקות קלויים',
+      l4:'1 כוס עדשים | 2 פרוסות לחם',
+      l5:'150 גר׳ עוף טחון | לחמניה 1',
+      l6:'100 גר׳ טונה מעושנת | ½ אבוקדו',
+      l7:'½ כוס שעורה | 8 פטריות | כף פרמזן',
+      l8:'150 גר׳ עוף | ½ כוס אורז',
+      l9:'150 גר׳ עוף | 2 תפו"א',
+      l10:'150 גר׳ עוף | ½ ראש חסה',
+      l11:'100 גר׳ ספגטי | 4 כדורי הודו',
+      l12:'150 גר׳ עוף | ½ כוס קוסקוס | 10 שקדים',
+      l13:'200 גר׳ ריקוטה | 6 יריעות לזניה',
+      l14:'2 פרוסות לחם | 80 גר׳ הודו',
+      l15:'150 גר׳ עוף | 2 קישואים',
+      l16:'150 גר׳ עוף | ½ כוס אורז',
+      l17:'1 כוס אורז | חופן תרד | 3 ביצים',
+      l18:'1 קופסת שעועית | 2 עגבניות',
+      l19:'1 קופסת חומוס | ½ פיתה',
+      l20:'80 גר׳ פסטה | 80 גר׳ מוצרלה',
+      l21:'1 כוס עדשים | 8 קציצות',
+      l22:'100 גר׳ אטריות | 100 גר׳ טונה',
+      l23:'150 גר׳ עוף | לאפה 1',
+      l24:'2 ביצים | 1 תפו"א | ½ כוס שעועית ירוקה',
+      l25:'150 גר׳ עוף | ½ כוס אורז',
+      l26:'1 קופסת שעועית | 2 ביצים | ½ בטטה',
+      l27:'100 גר׳ פסטה | 150 גר׳ עוף',
+      l28:'150 גר׳ עוף | 1 בטטה | ½ כוס עדשים',
+      l29:'100 גר׳ הלומי | 1 כוס אבטיח',
+      l30:'150 גר׳ עוף | 1 גזר | ½ כוס אורז',
+      s1:'2 פצפוצים | 30 גר׳ גבינה',
+      s2:'1 תפוח | 1 כף חמאת בוטנים',
+      s3:'20 גר׳ שוקולד 85%',
+      s4:'150 גר׳ יוגורט | 5 אגוזים',
+      s5:'1 כוס אדממה',
+      s6:'2 כדורים',
+      s7:'3 כפות חומוס | ½ פיתה',
+      s8:'2 בננות קפואות',
+      s9:'1 בננה | 1 ביצה | 3 כפות שיבולת',
+      s10:'200 מ"ל חלב 1%',
+      s11:'10 גזרי בייבי | ½ אבוקדו',
+      s12:'150 גר׳ קוטג׳ | 8 עגבניות שרי',
+      s13:'2 פצפוצים | ¼ אבוקדו',
+      s14:'1 מאפין',
+      s15:'פרוסת לחם שיפון | 2 כפות גבינה לבנה',
+      d1:'150 גר׳ לברק',
+      d2:'מרק שלם',
+      d3:'150 גר׳ עוף | ½ כוס אורז',
+      d4:'2 ביצים | 2 פרוסות לחם שיפון',
+      d5:'6 כדורי פלאפל | ½ פיתה',
+      d6:'150 גר׳ סלמון | ½ בטטה',
+      d7:'3 ביצים | 8 פטריות',
+      d8:'150 גר׳ עוף ירך',
+      d9:'1 חציל | 150 גר׳ ריקוטה',
+      d10:'150 גר׳ עוף',
+      d11:'½ ראש כרובית',
+      d12:'6 קנלוני | 150 גר׳ ריקוטה',
+      d13:'150 גר׳ פרגיות',
+      d14:'150 גר׳ בורי',
+      d15:'150 גר׳ עוף | 1 כוס שעועית ירוקה',
+      d16:'100 גר׳ פסטה | 15 עגבניות שרי',
+      d17:'150 גר׳ עוף | 50 גר׳ אטריות',
+      d18:'150 גר׳ עוף | זיתים + לימון כבוש',
+      d19:'½ כוס אורז | 2 ביצים',
+      d20:'150 גר׳ הודו | ½ בטטה',
+      d21:'לאפה 1 | 60 גר׳ מוצרלה',
+      d22:'200 גר׳ בקלה | ½ כוס אורז',
+      d23:'150 גר׳ עוף | 1 זוקיני',
+      d24:'2 ביצים | 2 פרוסות לחם שיפון',
+      d25:'200 גר׳ הודו טחון | 3 כפות טחינה',
+      d26:'½ ראש כרובית | כף פרמזן',
+      d27:'150 גר׳ עוף | 1 תפוח',
+      d28:'150 גר׳ סלמון | ½ כוס אורז',
+      d29:'300 גר׳ דלעת | פרוסת לחם',
+      d30:'150 גר׳ פרגיות | ½ כוס קוסקוס',
+    },
+    train:{}
+  },
+  yona:{
+    rest:{
+      b1:'¾ כוס שיבולת | 150 גר׳ יוגורט 5% | בננה',
+      b2:'4 ביצים | 50 גר׳ גבינה | 2 פרוסות לחם',
+      b3:'2 פרוסות לחם | 1 אבוקדו שלם | 2 ביצים',
+      b4:'1.5 בננות | ¾ כוס שיבולת | 250 מ"ל חלב',
+      b5:'250 גר׳ יוגורט יווני | 8 אגוזים | דבש',
+      b6:'3 פרוסות לחם | 5 כפות גבינה | זיתים',
+      b7:'¾ כוס שיבולת | ¾ כוס פירות יער | פשתן',
+      b8:'4 ביצים | גמבה שלמה | גבינה 30 גר׳',
+      b9:'1 לחמניה | 120 גר׳ הודו | עגבנייה',
+      b10:'70 גר׳ גרנולה | 200 מ"ל חלב | פירות',
+      b11:'5 ביצים | 40 גר׳ גבינה',
+      b12:'1.5 בננות | 200 מ"ל חלב | 4 כפות גבינה',
+      b13:'3 ביצים | 8 פטריות | לאפה גדולה',
+      b14:'300 גר׳ קוטג׳ | 8 אגוזים | 3 תמרים',
+      b15:'5 ביצים | 8 פטריות | גבינה',
+      b16:'3 פרוסות | 1.5 כף חמאת בוטנים | בננה',
+      b17:'¾ כוס שיבולת | תפוח שלם | 15 אגוזי לוז',
+      b18:'פיתה שלמה | 4 כפות חומוס',
+      b19:'3 ביצים | 2 פרוסות לחם',
+      b20:'200 גר׳ יוגורט | שוקולד | פירות',
+      b21:'¾ כוס קמח | 3 קרפים | 5 כפות גבינה',
+      b22:'3 ביצים | 30 גר׳ פטה | שמנת',
+      b23:'3 פרוסות | אבוקדו שלם | 3 פרוסות הודו',
+      b24:'70 גר׳ מוסלי | 200 מ"ל חלב',
+      b25:'3 ביצים | 4 כפות חומוס | זיתים',
+      b26:'4 ביצים | 8 פטריות | 30 גר׳ גאודה',
+      b27:'2 פרוסות (160 גר׳)',
+      b28:'3 ביצים | לחמניה גדולה',
+      b29:'70 גר׳ קורנפלקס | 200 מ"ל חלב',
+      b30:'¾ כוס שיבולת | 150 גר׳ יוגורט',
+      l1:'220 גר׳ עוף | ¾ כוס קינואה | בטטה שלמה',
+      l2:'150 גר׳ פסטה | רוטב עשיר | 2 כפות פרמזן',
+      l3:'220 גר׳ הודו | ירקות + 2 תפו"א',
+      l4:'1.5 כוס עדשים | 3 פרוסות לחם | טחינה',
+      l5:'220 גר׳ עוף טחון | לחמניה גדולה',
+      l6:'150 גר׳ טונה | אבוקדו שלם | 2 לאפות',
+      l7:'¾ כוס שעורה | 10 פטריות | 2 כפות פרמזן',
+      l8:'220 גר׳ עוף | ¾ כוס אורז',
+      l9:'220 גר׳ עוף | 3 תפו"א',
+      l10:'220 גר׳ עוף | ראש חסה שלם | קרוטונים',
+      l11:'150 גר׳ ספגטי | 6 כדורי הודו',
+      l12:'220 גר׳ עוף | ¾ כוס קוסקוס | 15 שקדים',
+      l13:'300 גר׳ ריקוטה | 8 יריעות לזניה',
+      l14:'3 פרוסות לחם | 120 גר׳ הודו',
+      l15:'220 גר׳ עוף | 3 קישואים',
+      l16:'220 גר׳ עוף | ¾ כוס אורז',
+      l17:'1.5 כוס אורז | תרד | 4 ביצים',
+      l18:'1.5 קופסת שעועית | 3 עגבניות',
+      l19:'1.5 קופסת חומוס | פיתה שלמה',
+      l20:'120 גר׳ פסטה | 120 גר׳ מוצרלה',
+      l21:'1.5 כוס עדשים | 12 קציצות',
+      l22:'150 גר׳ אטריות | 150 גר׳ טונה',
+      l23:'220 גר׳ עוף | 2 לאפות',
+      l24:'3 ביצים | 2 תפו"א | שעועית ירוקה',
+      l25:'220 גר׳ עוף | ¾ כוס אורז',
+      l26:'1.5 קופסת שעועית | 2 ביצים | בטטה',
+      l27:'150 גר׳ פסטה | 220 גר׳ עוף',
+      l28:'220 גר׳ עוף | 1.5 בטטה | ¾ כוס עדשים',
+      l29:'150 גר׳ הלומי | 2 כוסות אבטיח',
+      l30:'220 גר׳ עוף | 2 גזרים | ¾ כוס אורז',
+      s1:'3 פצפוצים | 40 גר׳ גבינה',
+      s2:'1 תפוח גדול | 1.5 כף חמאת בוטנים',
+      s3:'30 גר׳ שוקולד 85% + פרי',
+      s4:'200 גר׳ יוגורט | 8 אגוזים',
+      s5:'1.5 כוס אדממה',
+      s6:'3-4 כדורים',
+      s7:'4 כפות חומוס | פיתה שלמה',
+      s8:'2 בננות + כף חמאת בוטנים',
+      s9:'1.5 בננה | 2 ביצים | 4 כפות שיבולת',
+      s10:'300 מ"ל חלב 3%',
+      s11:'15 גזרי בייבי | אבוקדו שלם',
+      s12:'200 גר׳ קוטג׳ | עגבניות + לחם שיפון',
+      s13:'3 פצפוצים | ½ אבוקדו',
+      s14:'2 מאפינים',
+      s15:'2 פרוסות לחם | 4 כפות גבינה',
+      d1:'220 גר׳ לברק | ½ כוס אורז',
+      d2:'מרק + פרוסת לחם',
+      d3:'220 גר׳ עוף | ¾ כוס אורז',
+      d4:'3 ביצים | 3 פרוסות לחם שיפון',
+      d5:'8 כדורי פלאפל | פיתה שלמה',
+      d6:'220 גר׳ סלמון | בטטה שלמה',
+      d7:'4 ביצים | 10 פטריות | 2 פרוסות לחם',
+      d8:'220 גר׳ עוף ירך | ½ כוס אורז',
+      d9:'1.5 חציל | 200 גר׳ ריקוטה',
+      d10:'220 גר׳ עוף | ½ כוס אורז',
+      d11:'ראש כרובית שלם',
+      d12:'8 קנלוני | 200 גר׳ ריקוטה',
+      d13:'220 גר׳ פרגיות',
+      d14:'220 גר׳ בורי | ½ כוס אורז',
+      d15:'220 גר׳ עוף | 1.5 כוס שעועית ירוקה',
+      d16:'150 גר׳ פסטה | עגבניות + זיתים',
+      d17:'220 גר׳ עוף | 80 גר׳ אטריות',
+      d18:'220 גר׳ עוף | קוסקוס ½ כוס',
+      d19:'¾ כוס אורז | 3 ביצים',
+      d20:'220 גר׳ הודו | בטטה שלמה',
+      d21:'2 לאפות | 90 גר׳ מוצרלה',
+      d22:'280 גר׳ בקלה | ¾ כוס אורז',
+      d23:'220 גר׳ עוף | זוקיני + עגבניות',
+      d24:'3 ביצים | 3 פרוסות לחם שיפון',
+      d25:'280 גר׳ הודו טחון | 4 כפות טחינה',
+      d26:'ראש כרובית שלם | 2 כפות פרמזן',
+      d27:'220 גר׳ עוף | 1.5 תפוח',
+      d28:'220 גר׳ סלמון | ¾ כוס אורז',
+      d29:'400 גר׳ דלעת | 2 פרוסות לחם',
+      d30:'220 גר׳ פרגיות | ¾ כוס קוסקוס',
+    },
+    train:{}
+  }
+};
+// train = rest + ~10% more
+Object.keys(PORTIONS).forEach(u=>{
+  Object.keys(PORTIONS[u].rest).forEach(k=>{
+    PORTIONS[u].train[k]=PORTIONS[u].rest[k]; // same label — could differentiate more
+  });
+});
+
+// ============================================================
+// MEALS DATA
+// ============================================================
+const meals={
+breakfast:[
+{id:'b1',name:'פנקייק שיבולת שועל',calA:{rest:340,train:365},calB:{rest:430,train:470},protein:22,fiber:5,prep:'10 דק',desc:'פנקייקים עם יוגורט 5% ותות טרי',recipe:{ings:['שיבולת שועל','ביצה','יוגורט 3%','אבקת אפייה','דבש','יוגורט 5% לגבייה','פירות טריים'],steps:['ערבבי שיבולת + ביצה + יוגורט + אבקת אפייה + דבש','חממי מחבת נון-סטיק בלי שמן','צקי עיגולים, צלי 2-3 דק׳ לצד','הגישי עם יוגורט ופירות']}},
+{id:'b2',name:'ביצים מקושקשות עם גבינה בולגרית',calA:{rest:290,train:310},calB:{rest:390,train:430},protein:20,fiber:2,prep:'8 דק',desc:'ביצים + גבינה 5% + עגבנייה + לחם שיפון',recipe:{ings:['ביצים','גבינה בולגרית 5%','עגבנייה','חמאה','לחם שיפון','מלח + פלפל'],steps:['טרפי ביצים עם מלח ופלפל','חממי מחבת עם חמאה','ערבבי לאט עד שמתייצבות','הגישי עם עגבנייה + גבינה על לחם']}},
+{id:'b3',name:'לחם מלא עם אבוקדו וביצה עלומה',calA:{rest:370,train:390},calB:{rest:460,train:510},protein:18,fiber:8,prep:'12 דק',desc:'לחם מחיטה מלאה + אבוקדו + ביצה עלומה',recipe:{ings:['לחם מחיטה מלאה','אבוקדו','ביצה','מלח ים','פלפל','לימון'],steps:['הרתיחי מים עם כפית חומץ, צרפי ביצה, בשלי 3-4 דק׳','קלי לחם, מעכי אבוקדו + לימון + מלח','מרחי על לחם, הניחי ביצה מעל']}},
+{id:'b4',name:'שייק בננה ושיבולת שועל',calA:{rest:340,train:360},calB:{rest:450,train:490},protein:24,fiber:6,prep:'3 דק',desc:'בננה + שיבולת שועל + חלב + גבינה לבנה',recipe:{ings:['בננה','שיבולת שועל','חלב 1%','גבינה לבנה 5%','קינמון'],steps:['הכניסי הכל לבלנדר, טחני 40 שניות']}},
+{id:'b5',name:'יוגורט יווני עם פירות ואגוזים',calA:{rest:300,train:320},calB:{rest:410,train:450},protein:18,fiber:4,prep:'3 דק',desc:'יוגורט יווני + פירות עונתיים + אגוזים + דבש',recipe:{ings:['יוגורט יווני 2%','פירות עונתיים','אגוזי מלך','דבש'],steps:['שפכי יוגורט לקערה, סדרי פירות, פזרי אגוזים + דבש']}},
+{id:'b6',name:'טוסט גבינה לבנה ועשבי תיבול',calA:{rest:265,train:285},calB:{rest:360,train:400},protein:16,fiber:4,prep:'5 דק',desc:'לחם שיפון + גבינה לבנה 5% + מלפפון + שמיר + זיתים',recipe:{ings:['לחם שיפון','גבינה לבנה 5%','מלפפון','זיתים שחורים','שמיר','מלח + פלפל'],steps:['קלי לחם, מרחי גבינה, סדרי מלפפון + שמיר + זיתים']}},
+{id:'b7',name:'שיבולת שועל לילית',calA:{rest:295,train:315},calB:{rest:400,train:440},protein:14,fiber:8,prep:'2 דק׳ (בבוקר)',desc:'מוכן ערב קודם: שיבולת + חלב + יוגורט + פירות יער',recipe:{ings:['שיבולת שועל','חלב 1%','יוגורט 3%','דבש','פירות יער (קפוא מצוין!)','זרעי פשתן'],steps:['ערב לפני: ערבבי הכל בצנצנת, שמי במקרר','בבוקר: פרשי פירות יער + פשתן מעל']}},
+{id:'b8',name:'חביתת ירקות אפויה',calA:{rest:275,train:295},calB:{rest:380,train:420},protein:21,fiber:3,prep:'20 דק',desc:'ביצים + גמבה + תרד + בצל ירוק, בתנור',recipe:{ings:['ביצים','גמבה','תרד','בצל ירוק','גבינה בולגרית','מלח + פלפל + פפריקה'],steps:['חממי תנור ל-180°, רססי תבנית','פזרי ירקות, שפכי ביצים טרופות + גבינה','אפי 15-18 דק׳']}},
+{id:'b9',name:'לחמניה מלאה עם נקניק הודו',calA:{rest:305,train:325},calB:{rest:400,train:440},protein:24,fiber:5,prep:'5 דק',desc:'לחמניה מלאה + נקניק הודו + חרדל + ירקות',recipe:{ings:['לחמניה מחיטה מלאה','נקניק הודו','חרדל','חסה + עגבנייה + מלפפון'],steps:['חתכי לחמניה, מרחי חרדל, שכבי ירקות + נקניק']}},
+{id:'b10',name:'גרנולה עם חלב ותות',calA:{rest:295,train:315},calB:{rest:410,train:450},protein:12,fiber:6,prep:'3 דק',desc:'גרנולה דלת סוכר + חלב 1% + תות טרי',recipe:{ings:['גרנולה','חלב 1%','תותים','קינמון'],steps:['שפכי גרנולה לקערה, הוספי חלב + תותים + קינמון']}},
+],
+lunch:[
+{id:'l1',name:'קערת עוף צלוי וקינואה',calA:{rest:475,train:510},calB:{rest:620,train:680},protein:38,fiber:8,prep:'30 דק',desc:'עוף צלוי + קינואה + בטטה + חומוס + טחינה',recipe:{ings:['חזה עוף','קינואה','בטטה','חומוס','טחינה גולמית','לימון + שמן זית + פפריקה'],steps:['בשלי קינואה 1:2 עם מים 15 דק׳','עוף + בטטה מתובלים בתנור 200° 25 דק׳','הרכיבי קערה + טחינה']}},
+{id:'l2',name:'פסטה מחיטה מלאה עם עגבניות ותרד',calA:{rest:415,train:445},calB:{rest:560,train:620},protein:18,fiber:10,prep:'20 דק',desc:'פסטה + רוטב עגבניות + תרד + שום',recipe:{ings:['פסטה מחיטה מלאה','עגבניות מרוסקות','שיני שום','תרד','שמן זית + אורגנו + ריחן','פרמזן'],steps:['בשלי פסטה, טגני שום, הוספי עגבניות + תבלינים 10 דק׳','הוספי תרד, מזגי על פסטה + פרמזן']}},
+{id:'l3',name:'שניצל הודו בתנור',calA:{rest:455,train:490},calB:{rest:600,train:660},protein:42,fiber:6,prep:'35 דק',desc:'חזה הודו בפירורי לחם + ברוקולי + גזר + בטטה',recipe:{ings:['חזה הודו','פירורי לחם','ביצה','ברוקולי + גזר + בטטה','שמן זית + פפריקה + מלח'],steps:['חממי תנור ל-200°, עטפי הודו: ביצה → פירורי + פפריקה','שמי עם ירקות מתובלים בתבנית, אפי 25-30 דק׳']}},
+{id:'l4',name:'מרק עדשים עם לחם שיפון',calA:{rest:390,train:415},calB:{rest:510,train:560},protein:20,fiber:13,prep:'30 דק',desc:'עדשים כתומות + כמון + שום + לחם שיפון',recipe:{ings:['עדשים כתומות','בצל','שיני שום','גזר','כמון + כורכום + מלח + שמן זית + לימון','לחם שיפון + טחינה'],steps:['טגני בצל + שום + גזר 5 דק׳','הוספי עדשים + 4 כוסות מים + תבלינים, בשלי 20 דק׳','טחני חצי מהמרק, סחטי לימון, הגישי עם לחם']}},
+{id:'l5',name:'בורגר עוף ביתי עם קולסלאו',calA:{rest:465,train:500},calB:{rest:610,train:670},protein:40,fiber:5,prep:'25 דק',desc:'קציצת עוף + לחמניה מלאה + קולסלאו יוגורט',recipe:{ings:['עוף טחון','לחמניה מלאה','כרוב לבן מגורר','גזר מגורר','יוגורט + חרדל + מלח'],steps:['ערבבי עוף + שום + מלח + פפריקה, צרי קציצה, צלי 5-6 דק׳','קולסלאו: כרוב + גזר + יוגורט + חרדל','הרכיבי בורגר']}},
+{id:'l6',name:'עטרה של טונה מעושנת ואבוקדו',calA:{rest:405,train:435},calB:{rest:560,train:615},protein:30,fiber:7,prep:'15 דק',desc:'לאפה + טונה מעושנת + אבוקדו + כרוב + יוגורט-לימון',recipe:{ings:['לאפה','טונה מעושנת','אבוקדו','כרוב סגול','יוגורט + לימון + מלח'],steps:['ערבבי יוגורט + לימון + מלח, חממי לאפה','מרחי אבוקדו, שכבי כרוב + טונה, גלגלי']}},
+{id:'l7',name:'ריזוטו שעורה עם פטריות',calA:{rest:385,train:415},calB:{rest:520,train:575},protein:16,fiber:9,prep:'35 דק',desc:'שעורה (סיבים כפולים) + פטריות + תרד + פרמזן',recipe:{ings:['שעורה','ציר ירקות','פטריות שמפיניון','תרד','שאלוט','פרמזן','שמן זית + תימין'],steps:['טגני שאלוט, הוספי שעורה, הוספי ציר מצקת בכל פעם תוך ערבוב 25-30 דק׳','טגני פטריות + תרד בנפרד, ערבבי יחד + פרמזן']}},
+{id:'l8',name:'שיפוד עוף ברוטב חריימה',calA:{rest:445,train:480},calB:{rest:590,train:650},protein:39,fiber:4,prep:'30 דק',desc:'שיפוד עוף + חריימה ביתי + אורז',recipe:{ings:['עוף קוביות','אורז','עגבניות מרוסקות','שיני שום','פלפל חריף + פפריקה מעושנת + כמון'],steps:['חריימה: טגני שום + עגבניות + תבלינים 10 דק׳','גרפי עוף על שיפודים, צלי 6 דק׳, הגישי מעל אורז']}},
+{id:'l9',name:'שניצל עוף עם תפוחי אדמה',calA:{rest:445,train:475},calB:{rest:590,train:650},protein:38,fiber:5,prep:'35 דק',desc:'חזה עוף בציפוי + תפוחי אדמה אפויים + סלט',recipe:{ings:['חזה עוף','פירורי לחם','ביצה','תפוחי אדמה','שמן זית + פפריקה + מלח'],steps:['חממי תנור ל-200°, תפו"א: תבלי + שמן זית, אפי 30 דק׳','עוף: עטפי בביצה + פירורי, אפי 25 דק׳']}},
+{id:'l10',name:'סלט קיסר עוף ביתי',calA:{rest:420,train:450},calB:{rest:565,train:620},protein:36,fiber:5,prep:'20 דק',desc:'חסה רומנית + עוף צלוי + קרוטונים + יוגורט-לימון',recipe:{ings:['חזה עוף','חסה רומנית','לחם קלוי (קרוטונים)','פרמזן','רוטב: יוגורט + לימון + חרדל + שום'],steps:['צלי עוף 5-6 דק׳, פרסי, קרוטונים: קוביות, קלי בתנור 5 דק׳','ערבבי רוטב, הרכיבי: חסה + עוף + קרוטונים + פרמזן']}},
+],
+snack:[
+{id:'s1',name:'פצפוצי אורז עם גבינה בולגרית',calA:{rest:145,train:160},calB:{rest:195,train:215},protein:9,fiber:2,prep:'2 דק',desc:'פצפוצי אורז + גבינה בולגרית + מלפפון',recipe:{ings:['פצפוצי אורז','גבינה בולגרית','מלפפון','פפריקה'],steps:['פרורי גבינה על פצפוצים, שמי מלפפון, פזרי פפריקה']}},
+{id:'s2',name:'תפוח עם חמאת בוטנים',calA:{rest:165,train:180},calB:{rest:230,train:260},protein:5,fiber:4,prep:'1 דק',desc:'תפוח + חמאת בוטנים טבעית',recipe:{ings:['תפוח בינוני','חמאת בוטנים טבעית'],steps:['חתכי תפוח לפלחים, טבלי בחמאת בוטנים']}},
+{id:'s3',name:'שוקולד מריר 85% עם קפה',calA:{rest:115,train:130},calB:{rest:170,train:190},protein:2,fiber:2,prep:'0 דק',desc:'שוקולד 85% + קפה — הפינוק שמגיע!',recipe:{ings:['שוקולד מריר 85%','קפה שחור'],steps:['הוצאי שוקולד, הכיני קפה — תהני! 😊']}},
+{id:'s4',name:'יוגורט יווני עם דבש ואגוזים',calA:{rest:160,train:175},calB:{rest:220,train:245},protein:14,fiber:1,prep:'1 דק',desc:'יוגורט 2% + דבש + אגוזי מלך',recipe:{ings:['יוגורט יווני 2%','דבש','אגוזי מלך'],steps:['שפכי יוגורט לקערה, טפטפי דבש, פזרי אגוזים']}},
+{id:'s5',name:'אדממה במלח ים',calA:{rest:135,train:150},calB:{rest:195,train:215},protein:12,fiber:5,prep:'5 דק',desc:'אדממה + מלח ים + לימון',recipe:{ings:['אדממה קפוא','מלח ים גס','לימון'],steps:['בשלי 3-4 דק׳ במים רותחים, סנני, פזרי מלח + לימון']}},
+{id:'s6',name:'כדורי אנרגיה מתמרים',calA:{rest:170,train:185},calB:{rest:230,train:255},protein:4,fiber:4,prep:'מוכן מראש',desc:'תמרים + שיבולת שועל + קקאו + קוקוס',recipe:{ings:['תמרים (לכל האצווה)','שיבולת שועל','קקאו','קוקוס מגורר','קורט מלח'],steps:['טחני תמרים, הוספי שיבולת + קקאו + מלח','צרי כדורים, גלגלי בקוקוס, שמרי במקרר']}},
+{id:'s7',name:'חומוס עם ניבושי פיתה',calA:{rest:150,train:165},calB:{rest:210,train:235},protein:7,fiber:5,prep:'5 דק',desc:'חומוס + פיתה קלויה לניבושים',recipe:{ings:['חומוס','פיתה מחיטה מלאה','פפריקה + שמן זית'],steps:['חתכי פיתה, פזרי פפריקה + שמן, קלי 5-7 דק׳, הגישי עם חומוס']}},
+{id:'s8',name:'גלידת בננה קפואה',calA:{rest:115,train:130},calB:{rest:175,train:195},protein:2,fiber:3,prep:'5 דק׳ + קיפאון',desc:'בננות קפואות בבלנדר — גלידה טבעית',recipe:{ings:['בננות קפואות','קינמון/קקאו'],steps:['הקפאי בננות 2+ שעות, טחני בבלנדר 1-2 דק׳ עד קרמי']}},
+{id:'s9',name:'פנקייקי מיני בננה',calA:{rest:155,train:170},calB:{rest:220,train:245},protein:10,fiber:3,prep:'8 דק',desc:'בננה + ביצה + שיבולת שועל — ללא סוכר',recipe:{ings:['בננה בשלה','ביצה','שיבולת שועל','קינמון + מלח'],steps:['מעכי בננה, ערבבי עם ביצה + שיבולת + קינמון','צלי 3 עיגולים 2 דק׳ לצד']}},
+{id:'s10',name:'שוקו חם ביתי',calA:{rest:125,train:140},calB:{rest:185,train:205},protein:4,fiber:2,prep:'3 דק',desc:'חלב 1% + קקאו + דבש — חם ומנחם',recipe:{ings:['חלב 1%','קקאו מאמיר','דבש','קינמון'],steps:['חממי חלב, הוספי קקאו + דבש, ערבבי, פזרי קינמון']}},
+],
+dinner:[
+{id:'d1',name:'דג לברק בתנור עם עגבניות שרי',calA:{rest:365,train:395},calB:{rest:490,train:540},protein:38,fiber:6,prep:'25 דק',desc:'פילה לברק + עגבניות שרי + שום + זיתים + לימון',recipe:{ings:['פילה לברק','עגבניות שרי','שיני שום','זיתים','שמן זית + לימון + אורגנו + מלח'],steps:['חממי תנור ל-200°, שמי דג עם עגבניות + שום + זיתים','טפטפי שמן + לימון + אורגנו, אפי 18-20 דק׳']}},
+{id:'d2',name:'מרק ירקות שורש עם שעועית',calA:{rest:285,train:310},calB:{rest:400,train:440},protein:13,fiber:11,prep:'35 דק',desc:'בטטה + גזר + סלרי + שעועית לבנה + כמון',recipe:{ings:['בטטה + גזר + סלרי','שעועית לבנה','בצל + שיני שום','כמון + כורכום + מלח + שמן זית + לימון'],steps:['טגני בצל + שום, הוספי ירקות + תבלינים + מים, בשלי 20 דק׳','הוספי שעועית 10 דק׳ נוספות']}},
+{id:'d3',name:'עוף מוקפץ עם ירקות ואורז',calA:{rest:415,train:445},calB:{rest:560,train:615},protein:37,fiber:4,prep:'20 דק',desc:'עוף + ברוקולי + פלפל + סויה-דבש + אורז',recipe:{ings:['עוף לרצועות','ברוקולי + פלפל','אורז','סויה + דבש + שום + ג׳ינג׳ר','שומשום'],steps:['בשלי אורז, הקפיצי עוף 4 דק׳, הוספי ירקות 3 דק׳','הוספי רוטב, הגישי מעל אורז + שומשום']}},
+{id:'d4',name:'שקשוקה קלאסית עם לחם שיפון',calA:{rest:305,train:330},calB:{rest:430,train:475},protein:20,fiber:7,prep:'20 דק',desc:'ביצים ברוטב עגבניות + פלפל + שום + לחם',recipe:{ings:['ביצים','עגבניות בשלות','פלפל אדום','שיני שום','שמן זית + כמון + פפריקה','לחם שיפון'],steps:['טגני שום + פלפל, הוספי עגבניות + תבלינים 10 דק׳','ייצרי גומות, שברי ביצים, כסי, בשלי 4-5 דק׳']}},
+{id:'d5',name:'פלאפל אפוי עם ירקות קלויים',calA:{rest:375,train:405},calB:{rest:505,train:555},protein:15,fiber:10,prep:'30 דק',desc:'פלאפל + ירקות קלויים + טחינה + פיתה',recipe:{ings:['חומוס + בצל + שום + כוסברה + קמח + כמון','זוקיני + פלפל + חצילון','טחינה + לימון','פיתה'],steps:['חממי תנור ל-200°, ירקות + שמן + מלח 25 דק׳','פלאפל: צרי כדורים, אפי 20-25 דק׳, הגישי עם טחינה']}},
+{id:'d6',name:'סלמון בתנור עם בטטה ואספרגוס',calA:{rest:425,train:455},calB:{rest:570,train:625},protein:36,fiber:7,prep:'30 דק',desc:'פילה סלמון + בטטה + אספרגוס — הכל בתנור',recipe:{ings:['פילה סלמון','בטטה קוביות','אספרגוס','שמן זית + לימון + שום + מלח'],steps:['חממי תנור ל-200°, בטטה + שמן 15 דק׳','הוספי סלמון + אספרגוס + תבלינים, אפי 15 דק׳ נוספות']}},
+{id:'d7',name:'חביתת פטריות עם סלט שדה',calA:{rest:275,train:300},calB:{rest:390,train:430},protein:20,fiber:4,prep:'15 דק',desc:'ביצים + פטריות + תרד + גבינה לבנה + סלט',recipe:{ings:['ביצים','פטריות שמפיניון','תרד','גבינה לבנה','שמן זית + מלח + פלפל','סלט שדה + לימון'],steps:['טגני פטריות + תרד, שפכי ביצים טרופות + גבינה','כסי + בשלי 4 דק׳, הגישי עם סלט']}},
+{id:'d8',name:'עוף ברוטב לימון וכפרס',calA:{rest:415,train:445},calB:{rest:560,train:615},protein:38,fiber:3,prep:'35 דק',desc:'עוף בתנור + לימון + כפרס + שמן זית + עשבים',recipe:{ings:['ירך עוף ללא עור','לימון פרוס','כפרס','שיני שום','תימין + רוזמרין + מלח','מרק + שמן זית'],steps:['שמי עוף בתבנית עם כל החומרים, אפי 200° 30-35 דק׳']}},
+{id:'d9',name:'מוסקה ירקות עם ריקוטה',calA:{rest:355,train:380},calB:{rest:475,train:525},protein:18,fiber:8,prep:'50 דק',desc:'חצילים + בשאמל ריקוטה + עגבניות + פרמזן',recipe:{ings:['חציל גדול פרוס','עגבניות מרוסקות','ריקוטה','ביצה + פרמזן','שום + שמן זית + אגוז מוסקט'],steps:['חצילים: שמן + מלח, צלי 15 דק׳, עגבניות: שום + תבלינים 10 דק׳','שכבות: עגבנייה → חציל → ריקוטה+ביצה, פרמזן מעל, אפי 25 דק׳']}},
+{id:'d10',name:'עוף אפוי בשמן זית ועשבים',calA:{rest:395,train:425},calB:{rest:530,train:585},protein:38,fiber:3,prep:'30 דק',desc:'חזה עוף + שמן זית + שום + לימון + רוזמרין',recipe:{ings:['חזה עוף','שמן זית + שום + לימון + רוזמרין + תימין + מלח'],steps:['השרי עוף עם תבלינים 15 דק׳, אפי בתנור 200° 25 דק׳']}},
+],
+};
+
+// shabbat meals (simplified)
+const shabbatFridayLunch=[
+{id:'sf1',name:'שניצל עוף קלאסי עם אורז ושקדים',calA:{rest:520,train:550},calB:{rest:680,train:740},protein:44,fiber:4,prep:'35 דק',isShab:true,desc:'שניצל + אורז עם שקדים — שישי קלאסי',recipe:{ings:['חזה עוף (שניצל)','פירורי לחם','ביצה','שמן לטיגון רדוד','אורז','שקדים מולבנים','מלח + פפריקה'],steps:['חממי שמן, עטפי שניצל: ביצה → פירורי, טגני 4-5 דק׳ לצד','אורז: בשלי 1:1.5 עם מים, ערבבי עם שקדים קלויים']}},
+{id:'sf2',name:'קוסקוס ירקות עם עוף',calA:{rest:495,train:525},calB:{rest:650,train:715},protein:38,fiber:8,prep:'40 דק',isShab:true,desc:'קוסקוס עם ירקות + עוף — ארוחת שישי מרוקאית',recipe:{ings:['עוף ירך','קוסקוס','ציר רותח','גזר + קישוא + בצל + עגבנייה','כמון + כורכום + כוסברה + מלח'],steps:['תבלי עוף, צלי 6 דק׳, הוצאי','טגני ירקות 5 דק׳, הוספי עוף + מים, בשלי 15 דק׳','קוסקוס: מרק רותח + שמן, כסי 5 דק׳, הגישי עוף מעל']}},
+{id:'sf3',name:'אסאדו עוף בתנור עם תפוחי אדמה',calA:{rest:545,train:580},calB:{rest:720,train:790},protein:45,fiber:5,prep:'60 דק',isShab:true,desc:'ירכי עוף שלמות + תפוחי אדמה — שישי קלאסי',recipe:{ings:['ירכי עוף שלמות עם עור','תפוחי אדמה לרבעים','ראש שום שלם','שמן זית + פפריקה + כורכום + כמון + מלח','מיץ לימון','ציר עוף'],steps:['חממי תנור ל-200°, שמי עוף + תפוחי אדמה + שום בתבנית','תבלי נדיבות, שפכי ציר, אפי 50-60 דק׳ עד פריך']}},
+];
+const shabbatLunch=[
+{id:'sl1',name:'קציצות עוף ברוטב עגבניות',calA:{rest:490,train:520},calB:{rest:645,train:710},protein:42,fiber:6,prep:'45 דק',isShab:true,desc:'קציצות עוף ברוטב עשיר + אורז',recipe:{ings:['עוף טחון','ביצה','פירורי לחם','שום + מלח + כמון + פפריקה','רוטב: עגבניות + בצל + שום + כמון','אורז'],steps:['ערבבי עוף + ביצה + פירורי + תבלינים, צרי קציצות, הזהיבי','רוטב: בצל + שום + עגבניות + תבלינים 10 דק׳','הכניסי קציצות, בשלי 20 דק׳ מכוסה, הגישי עם אורז']}},
+{id:'sl2',name:'עוף בסיר עם תפוחי אדמה',calA:{rest:510,train:545},calB:{rest:670,train:735},protein:43,fiber:5,prep:'50 דק',isShab:true,desc:'עוף שלם בסיר עם תפו"א — הסיר של שבת',recipe:{ings:['ירכי עוף','תפוחי אדמה לרבעים','בצל גדול','שיני שום','מרק עוף','כורכום + פפריקה + כמון + מלח + שמן זית'],steps:['הצהיבי בצל, הזהיבי עוף 4 דק׳ לצד','הוספי שום + תפוחי אדמה + תבלינים','שפכי מרק, בשלי 40 דק׳ מכוסה']}},
+{id:'sl3',name:'אסאדו בשר עגל בסיר',calA:{rest:480,train:510},calB:{rest:630,train:695},protein:48,fiber:3,prep:'120 דק',isShab:true,desc:'אסאדו ישראלי קלאסי בסיר — חתכי חצי מנה לאתאל',recipe:{ings:['אסאדו עגל','בצלים','שיני שום','עגבניות','פפריקה + כמון + מלח + שמן זית','יין אדום / מרק','רוזמרין + תימין'],steps:['הזהיבי בשר מכל הצדדים 8-10 דק׳','טגני בצל + שום, החזירי בשר + עגבניות + תבלינים + יין','בשלי 1.5-2 שעות מכוסה על אש נמוכה']}},
+];
+const desserts=[
+{id:'des1',name:'מוס שוקולד קל',calA:{rest:180},calB:{rest:240},protein:6,fiber:2,prep:'15 דק׳ + קירור',isShab:true,desc:'מוס שוקולד על בסיס יוגורט',recipe:{ings:['יוגורט יווני 5%','קקאו מאמיר','דבש','ונילה','חלמונים','שמנת 38% לקצפת'],steps:['ערבבי יוגורט + קקאו + דבש + ונילה + חלמונים','הקציפי שמנת לקצף, קפלי בעדינות','חלקי לכוסות, קררי 2 שעות']}},
+{id:'des2',name:'עוגת גבינה ניו-יורק (פרוסה)',calA:{rest:210},calB:{rest:280},protein:7,fiber:1,prep:'מוכן מראש',isShab:true,desc:'פרוסת עוגת גבינה קלאסית',recipe:{ings:['גבינת שמנת 30%','גבינה לבנה 9%','ביצים','סוכר','ונילה','לימון','עוגיות שמנת + חמאה לבסיס'],steps:['בסיס: פוררי עוגיות + חמאה, לחצי לתחתית תבנית','מלית: ערבבי גבינות + ביצים + סוכר + ונילה + לימון, מזגי','אפי 160° שעה וחצי, כבי תנור, קררי לילה במקרר']}},
+{id:'des3',name:'מלבי ביתי ברוטב ורדים',calA:{rest:170},calB:{rest:225},protein:5,fiber:0,prep:'20 דק׳ + קירור',isShab:true,desc:'מלבי קלאסי ישראלי + רוטב ורדים + פיסטוק',recipe:{ings:['חלב 1%','עמילן תירס','סוכר','ונילה','מי ורדים + סוכר + מים לרוטב','פיסטוק קצוץ'],steps:['ערבבי עמילן + סוכר + מעט חלב, חממי שאר החלב','הוספי תערובת תוך ערבוב עד שמסמיך','שפכי לכוסות, קררי 2 שעות','רוטב: בשלי מי ורדים + סוכר, מזגי + פיסטוק לפני הגשה']}},
+{id:'des4',name:'סלט פירות חגיגי',calA:{rest:120},calB:{rest:160},protein:2,fiber:4,prep:'10 דק',isShab:true,desc:'פירות טריים + מיץ תפוז + נענע',recipe:{ings:['ענבים + תות + מנגו + אוכמניות','מיץ מ-2 תפוזים','נענע','דבש'],steps:['קצצי פירות, ערבבי עם מיץ תפוז + דבש','פזרי נענע, הגישי קר']}},
+{id:'des5',name:'תפוח אפוי עם קינמון',calA:{rest:145},calB:{rest:190},protein:2,fiber:4,prep:'30 דק',isShab:true,desc:'תפוחים אפויים ממולאים בקינמון + אגוזים',recipe:{ings:['תפוחים','אגוזי מלך קצוצים','קינמון + דבש','מיץ לימון + מוסקט'],steps:['חממי תנור ל-180°, חצי תפוחים, הוצאי גרעינים','ערבבי אגוזים + קינמון + דבש + לימון, מלאי תפוחים','אפי 25-30 דק׳, הגישי חם עם יוגורט יווני']}},
+];
+
+const shopping={
+'🥩 בשר ודגים':['חזה עוף 700 גר׳','ירך עוף ללא עור 300 גר׳','ירכי עוף שלמות 600 גר׳ (שבת)','עוף טחון 400 גר׳','הודו טחון 200 גר׳','נקניק הודו 200 גר׳','פילה לברק/בורי 300 גר׳','סלמון 300 גר׳ (יונה 220 גר׳ | אתאל 150 גר׳)','טונה מעושנת 2 קופסאות'],
+'🥚 ביצים וחלב':['ביצים 30 יחידות (יונה אוכל יותר)','חלב 1% ליטר','חלב 3% ½ ליטר (לקינוחים)','יוגורט יווני 2% 500 גר׳','יוגורט יווני 5% 400 גר׳','יוגורט 3% 400 גר׳','גבינה לבנה 5% 500 גר׳','גבינה בולגרית 5% 200 גר׳','גבינה גאודה 30% 100 גר׳','קוטג׳ 3% 500 גר׳','שמנת 10% 200 מ״ל','שמנת 38% 200 מ״ל (קינוחי שבת)','ריקוטה 200 גר׳','מוצרלה דל שומן 150 גר׳','גבינת שמנת 30% (לעוגת גבינה)'],
+'🥦 ירקות ופירות':['ברוקולי ראש','זוקיני 2','חצילים 1 גדול','פלפלים 3','עגבניות 6','עגבניות שרי מגש','מלפפונים 4','חסה ראש','תרד שקית 200 גר׳','גזר 4','בטטה 2','תפוחי אדמה 8 (שבת+שישי)','אספרגוס אגד','בצל 3','שום ראש','כרובית ראש','אבוקדו 3','בננות 8 (יונה אוכל יותר)','תפוחים 5','לימונים 4','תותים 300 גר׳','פירות עונתיים'],
+'🌾 דגנים ולחם':['שיבולת שועל גרוסה 750 גר׳','קינואה 250 גר׳','אורז בסמטי 750 גר׳ (יונה אוכל יותר)','קוסקוס 250 גר׳','פסטה מחיטה מלאה 500 גר׳','לחם שיפון כיכר','לחם מחיטה מלאה כיכר','פיתות מחיטה מלאה שקית','לאפות שקית 6','פירורי לחם מלאים 200 גר׳','פצפוצי אורז'],
+'🫘 קטניות ושימורים':['עדשים כתומות 500 גר׳','עדשים שחורות 500 גר׳','שעועית לבנה שימורים 2 קופסאות','חומוס שימורים 3 קופסאות','עגבניות מרוסקות שימורים 3 קופסאות'],
+'🧂 תבלינים ושמנים':['שמן זית','שמן לטיגון','רוטב סויה','חרדל','פפריקה מתוקה ומעושנת','כמון','כורכום','קינמון','ראס אל-חנות','אורגנו + תימין + רוזמרין','אגוז מוסקט','מי ורדים','דבש','קקאו מאמיר','סוכר','עמילן תירס','ונילה'],
+'🌰 אגוזים ושונות':['אגוזי מלך 150 גר׳','שקדים מולבנים 150 גר׳','פיסטוק 50 גר׳','חמאת בוטנים טבעית','תמרים 300 גר׳','שומשום','זיתים שחורים','כפרס צנצנת','שוקולד מריר 85%','גרנולה/מוסלי דלת סוכר','זרעי פשתן','עוגיות שמנת'],
+};
+
+// ---- CYCLE PHASES ----
+const CYCLE_PHASES=[
+  {
+    id:'menstrual', name:'שלב הווסת', days:[1,2,3,4,5], emoji:'🔴',
+    calBonus:0, // אותה כמות קלוריות
+    focus:'ברזל + מגנזיום + אנטי-דלקתי',
+    notes:'הגוף מאבד ברזל — תעדיפי מזונות עשירים בברזל ומגנזיום. הימנעי ממלח מוגזם (נפיחות).',
+    prefer:['b2','b5','b7','l4','l7','d2','d4','s4','s10'], // ביצים, יוגורט, עדשים, ירקות שורש
+    avoid:['s3'], // פחות קפאין/שוקולד מריר בכמות גדולה
+    extraTips:['תוסיפי תרד לכל ארוחה אפשרית','שתי הרבה מים חמים עם לימון','אגוזי מלך — מגנזיום טבעי','שוקולד מריר 85% — מותר, מגנזיום + מצב רוח 😊'],
+    calNote:'קלוריות רגילות — אל תורידי, הגוף עובד קשה'
+  },
+  {
+    id:'follicular', name:'שלב פוליקולרי', days:[6,7,8,9,10,11,12,13], emoji:'🌱',
+    calBonus:0,
+    focus:'אסטרוגן עולה — אנרגיה גבוהה, חילוף חומרים מהיר',
+    notes:'האנרגיה שלך גבוהה! זה הזמן לאימונים אינטנסיביים ומנות גבוהות חלבון.',
+    prefer:['b3','b4','l1','l3','l5','l6','d6','d8','s2','s5'],
+    avoid:[],
+    extraTips:['הכי טוב לאימונים עצימים עכשיו','חלבון גבוה במיוחד — תמיכה בבניית שריר','ירקות טריים וצבעוניים','פחמימות מורכבות לפני אימון'],
+    calNote:'הגוף שורף יותר — יכולה להוסיף 100-150 קל ביום אימון'
+  },
+  {
+    id:'ovulation', name:'שלב הביוץ', days:[14,15,16,17], emoji:'✨',
+    calBonus:100,
+    focus:'שיא האנרגיה — ייצור אסטרוגן בשיא',
+    notes:'אנרגיה מקסימלית! גם חילוף החומרים בשיא — אפשר להוסיף מעט קלוריות.',
+    prefer:['b1','b3','b4','l1','l5','l8','d1','d6','d8','s1','s2'],
+    avoid:[],
+    extraTips:['ימים הכי טובים לאימונים — נצלי אותם!','הוסיפי +100 קל ביום אימון','הרבה ירקות צבעוניים — נוגדי חמצון','פשתן ושומשום — תמיכה הורמונלית'],
+    calNote:'+100 קל ביום אימון — הגוף דורש יותר'
+  },
+  {
+    id:'luteal', name:'שלב לוטאלי', days:[18,19,20,21,22,23,24,25,26,27,28], emoji:'🌙',
+    calBonus:150,
+    focus:'PMS — הגוף דורש יותר קלוריות, פחמימות מורכבות, מגנזיום',
+    notes:'תסמיני PMS נפוצים — נפיחות, עצבנות, תשוקה למתוק. תאכלי קצת יותר, אל תתעמרי בעצמך.',
+    prefer:['b7','b17','l4','l9','l18','d2','d4','d9','s3','s6','s10'],
+    avoid:[],
+    extraTips:['מגנזיום גבוה — אגוזים, שוקולד מריר, קטניות','פחמימות מורכבות — מפחיתות תשוקה למתוק','הפחיתי מלח — נפיחות','שוקולד מריר 85% מותר ורצוי 😊','הפחיתי קפאין — מגביר גירוי'],
+    calNote:'+150 קל ביום — זה תקין ובריא, הגוף עובד קשה'
+  },
+];
+
+function getCyclePhase(dayOfCycle){
+  if(!dayOfCycle||dayOfCycle<1)return null;
+  return CYCLE_PHASES.find(p=>p.days.includes(dayOfCycle))||CYCLE_PHASES[3];
+}
+function getDayOfCycle(startDateStr){
+  if(!startDateStr)return null;
+  const start=new Date(startDateStr);
+  const today=new Date();
+  const diff=Math.floor((today-start)/(1000*60*60*24))+1;
+  if(diff<1||diff>35)return null;
+  return diff;
+}
+
+// ---- CALORIE ESTIMATES (free-text day planner) ----
+const CALORIE_ESTIMATES=[
+  {keys:['סטייק','אנטריקוט','פילה בקר'],base:550,perExtra:100},
+  {keys:['פסטה','ספגטי','ניוקי'],base:600,perExtra:80},
+  {keys:['פיצה'],base:700,perExtra:150},
+  {keys:['סושי','מגש סושי'],base:500,perExtra:100},
+  {keys:['בשר','קבב','מנגל','אסאדו'],base:600,perExtra:100},
+  {keys:['דג','סלמון','לברק','בורי'],base:400,perExtra:80},
+  {keys:['עוף','שניצל','שאורמה'],base:480,perExtra:80},
+  {keys:['סלט','ירקות'],base:200,perExtra:50},
+  {keys:['המבורגר','בורגר'],base:650,perExtra:120},
+  {keys:['שוקולד','קינוח','עוגה','טירמיסו'],base:250,perExtra:80},
+  {keys:['אורז','קוסקוס'],base:200,perExtra:60},
+  {keys:['תפוח אדמה','תפוחי אדמה'],base:200,perExtra:60},
+];
+
+// ---- expose ----
+window.MENU = {
+  USERS, PORTIONS, meals, shabbatFridayLunch, shabbatLunch, desserts, shopping,
+  CYCLE_PHASES, CALORIE_ESTIMATES,
+  getCyclePhase, getDayOfCycle,
+  DAYS7: ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'],
+  DAYS_S: ['א','ב','ג','ד','ה','ו','ש'],
+};
+</script>
+<script>
+/* ===== js/icons.js ===== */
+/* =====================================================================
+   icons.js — clean line icons (Lucide-derived paths).
+   Exposes window.iconSvg(name, {size, stroke, cls}) -> svg string,
+   and a React component window.Icon (if React is present).
+   ===================================================================== */
+(function(){
+  const P = {
+    utensils:'<path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
+    calendar:'<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 2v4"/><path d="M16 2v4"/>',
+    cart:'<circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>',
+    sparkles:'<path d="M9.94 14.66A2 2 0 0 0 8.5 13.2l-5.2-1.35a.5.5 0 0 1 0-.96L8.5 9.55a2 2 0 0 0 1.44-1.44l1.35-5.2a.5.5 0 0 1 .96 0l1.35 5.2a2 2 0 0 0 1.44 1.44l5.2 1.34a.5.5 0 0 1 0 .97l-5.2 1.35a2 2 0 0 0-1.44 1.44l-1.35 5.2a.5.5 0 0 1-.96 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>',
+    fridge:'<path d="M5 6a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z"/><path d="M5 10h14"/><path d="M9 7v0"/><path d="M9 14v2"/>',
+    plus:'<path d="M5 12h14"/><path d="M12 5v14"/>',
+    minus:'<path d="M5 12h14"/>',
+    sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+    moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+    sunrise:'<path d="M12 2v6"/><path d="m4.93 10.93 1.41 1.41"/><path d="M2 18h2"/><path d="M20 18h2"/><path d="m19.07 10.93-1.41 1.41"/><path d="M22 22H2"/><path d="m8 6 4-4 4 4"/><path d="M16 18a4 4 0 0 0-8 0"/>',
+    apple:'<path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/><path d="M10 2c1 .5 2 2 2 5"/>',
+    flame:'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+    egg:'<path d="M12 22c4.42 0 8-3.58 8-8 0-5-3.5-12-8-12S4 9 4 14c0 4.42 3.58 8 8 8Z"/>',
+    leaf:'<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/>',
+    clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+    book:'<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+    swap:'<path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+    dumbbell:'<path d="M6 7v10"/><path d="M9 5v14"/><path d="M15 5v14"/><path d="M18 7v10"/><path d="M9 12h6"/><path d="M3 9v6"/><path d="M21 9v6"/>',
+    droplet:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C4 11.1 3 13 3 15a7 7 0 0 0 7 7z"/>',
+    check:'<path d="M20 6 9 17l-5-5"/>',
+    chevronDown:'<path d="m6 9 6 6 6-6"/>',
+    chevronLeft:'<path d="m15 18-6-6 6-6"/>',
+    chevronRight:'<path d="m9 18 6-6-6-6"/>',
+    x:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+    user:'<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    target:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+    trash:'<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+    pencil:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+    info:'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+    search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    candle:'<path d="M9 21h6"/><path d="M12 21V9"/><path d="M9 9a3 3 0 0 1 6 0Z"/><path d="M12 6c0-1 1-1.4 1-2.4C13 2.7 12 2 12 2s-1 .7-1 1.6c0 1 1 1.4 1 2.4Z"/>',
+    sliders:'<line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/>',
+    heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+    bookmark:'<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>',
+    grid:'<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
+    list:'<path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/>',
+    arrowLeft:'<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
+    arrowUpRight:'<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
+    wand:'<path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/>',
+    bell:'<path d="M10.27 21a1.94 1.94 0 0 0 3.46 0"/><path d="M3.26 15.59A2 2 0 0 0 5 18h14a2 2 0 0 0 1.74-2.41 11.73 11.73 0 0 1-.97-4.59 7.77 7.77 0 0 0-15.54 0c0 1.6-.34 3.16-.97 4.59"/>',
+  };
+
+  function iconSvg(name, opts){
+    opts = opts || {};
+    const size = opts.size || 20;
+    const stroke = opts.stroke || 2;
+    const cls = opts.cls ? ' class="'+opts.cls+'"' : '';
+    const inner = P[name] || P.info;
+    return '<svg'+cls+' width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" '
+      + 'stroke="currentColor" stroke-width="'+stroke+'" stroke-linecap="round" stroke-linejoin="round" '
+      + 'aria-hidden="true">'+inner+'</svg>';
+  }
+  window.iconSvg = iconSvg;
+  window.ICON_NAMES = Object.keys(P);
+
+  if(window.React){
+    window.Icon = function Icon(props){
+      const {name, size=20, stroke=2, className, style} = props;
+      return window.React.createElement('svg', {
+        width:size, height:size, viewBox:'0 0 24 24', fill:'none',
+        stroke:'currentColor', strokeWidth:stroke, strokeLinecap:'round',
+        strokeLinejoin:'round', className, style, 'aria-hidden':true,
+        dangerouslySetInnerHTML:{__html: P[name] || P.info}
+      });
+    };
+  }
+})();
+</script>
+<script type="text/babel">
+/* ===== js/store.jsx ===== */
+/* =====================================================================
+   store.jsx — state, persistence, and pure domain helpers.
+   Exposes window.MH (helpers), window.FRIDGE (ingredient catalog),
+   and window.useMenuStore() (React hook with localStorage persistence).
+   ===================================================================== */
+(function(){
+const M = window.MENU;
+const LS_KEY = 'menuapp.v2';
+const CATS = ['breakfast','lunch','snack','dinner'];
+
+// ---------------- pure helpers ----------------
+function calOf(meal, user, train){
+  if(!meal) return 0;
+  const key = user==='atael' ? 'calA' : 'calB';
+  if(!meal[key]) return 0;
+  return train ? (meal[key].train || meal[key].rest) : meal[key].rest;
+}
+function portionOf(meal, user, train){
+  if(!meal) return '';
+  if(meal.custom) return meal.portion || '';
+  const t = train ? 'train' : 'rest';
+  const P = M.PORTIONS[user];
+  return (P && P[t] && P[t][meal.id]) || '';
+}
+function targetCal(user, train){
+  const u = M.USERS[user];
+  return train ? u.trainCal : u.restCal;
+}
+function isWorkout(user, dayIdx){ return M.USERS[user].workoutDays.includes(dayIdx); }
+
+// merged meal pools (built-in + custom)
+function pool(catKey, customMeals){
+  return [...(M.meals[catKey]||[]), ...((customMeals && customMeals[catKey])||[])];
+}
+function allFlat(customMeals){
+  const arr = [];
+  CATS.forEach(c=> pool(c, customMeals).forEach(m=> arr.push({...m, _cat:c})));
+  M.shabbatFridayLunch.forEach(m=>arr.push({...m,_cat:'lunch'}));
+  M.shabbatLunch.forEach(m=>arr.push({...m,_cat:'lunch'}));
+  M.desserts.forEach(m=>arr.push({...m,_cat:'dessert'}));
+  return arr;
+}
+function findMeal(id, customMeals){ return allFlat(customMeals).find(m=>m.id===id); }
+function catOf(id, customMeals){ const m = findMeal(id, customMeals); return m? m._cat : 'breakfast'; }
+
+// month plan (respects custom meals + swaps)
+function monthPlan(user, customMeals, swaps){
+  const sw = swaps||{};
+  const B = pool('breakfast',customMeals), L = pool('lunch',customMeals),
+        S = pool('snack',customMeals), D = pool('dinner',customMeals);
+  return Array.from({length:30},(_,i)=>{
+    const di=i%7, wk=Math.floor(i/7);
+    const fri=di===5, shab=di===6, wo=isWorkout(user,di);
+    let lunch, lunchShab=false, lunchCat='lunch';
+    if(fri){ lunch=M.shabbatFridayLunch[wk%M.shabbatFridayLunch.length]; lunchShab=true; lunchCat='lunch'; }
+    else if(shab){ lunch=M.shabbatLunch[wk%M.shabbatLunch.length]; lunchShab=true; }
+    else { lunch=L[i%L.length]; }
+    const slot=(arr,key,base)=>{ const k='plan_'+key+'_'+i; const s=sw[k]; return s? (arr.find(m=>m.id===s)||base):base; };
+    return {
+      day:i+1, di, dayName:M.DAYS_S[di], fullDay:M.DAYS7[di], wo, fri, shab, lunchShab,
+      breakfast: slot(B,'breakfast',B[i%B.length]),
+      lunch: lunchShab? lunch : slot(L,'lunch',lunch),
+      snack: slot(S,'snack',S[i%S.length]),
+      dinner: slot(D,'dinner',D[i%D.length]),
+      dessert: (fri||shab)? M.desserts[wk%M.desserts.length] : null,
+    };
+  });
+}
+
+// pick a swap candidate close in calories, not equal to current
+function swapCandidate(catKey, currentId, user, train, customMeals, count, cycle){
+  const p = pool(catKey, customMeals).filter(m=>m.id!==currentId);
+  if(!p.length) return null;
+  const cur = pool(catKey, customMeals).find(m=>m.id===currentId);
+  const cal = cur? calOf(cur,user,train) : 400;
+  let cand = p.filter(m=>Math.abs(calOf(m,user,train)-cal)<=90);
+  if(!cand.length) cand = p;
+  if(cycle && cycle.phase && cycle.phase.prefer && cycle.phase.prefer.length){
+    const pref = cand.filter(m=>cycle.phase.prefer.includes(m.id));
+    if(pref.length) cand = pref;
+  }
+  return cand[(count||0) % cand.length];
+}
+
+// planner free-text → day plan
+function estimateCal(text){
+  let total=0; const lower=(text||'').toLowerCase();
+  M.CALORIE_ESTIMATES.forEach(e=>{ if(e.keys.some(k=>lower.includes(k))) total+=e.base; });
+  if(total===0) total=500;
+  if(lower.includes('קינוח')||lower.includes('מתוק')) total+=200;
+  if(lower.includes('הרבה')||lower.includes('גדול')) total=Math.round(total*1.2);
+  return total;
+}
+function buildDayPlan(fixedCal, mealType, user, train, customMeals){
+  const target=targetCal(user,train), rem=target-fixedCal;
+  const best=(cat,want)=> pool(cat,customMeals).reduce((p,c)=>Math.abs(calOf(c,user,train)-want)<Math.abs(calOf(p,user,train)-want)?c:p);
+  const mk=(label,cat,want,note)=>{ const m=best(cat,want); return {label,catKey:cat,meal:m,cal:calOf(m,user,train),note}; };
+  const fixed=(label)=>({label,fixed:true,cal:fixedCal});
+  if(mealType==='dinner') return [mk('ארוחת בוקר','breakfast',rem*0.25,'קל + חלבון גבוה'),mk('ארוחת צהריים','lunch',rem*0.45,'מאוזן — שומר מקום לערב'),mk('נשנוש','snack',rem*0.15,'משביע, לא ישאיר אותך רעבה'),fixed('ארוחת ערב')];
+  if(mealType==='lunch') return [mk('ארוחת בוקר','breakfast',rem*0.3,'בוקר קל'),fixed('ארוחת צהריים'),mk('נשנוש','snack',rem*0.15,'קטן ומשביע'),mk('ארוחת ערב','dinner',rem*0.45,'ארוחת ערב קלה')];
+  return [fixed('ארוחת בוקר'),mk('ארוחת צהריים','lunch',rem*0.45,'עשיר + ממלא'),mk('נשנוש','snack',rem*0.12,'קטן ומשביע'),mk('ארוחת ערב','dinner',rem*0.35,'קל יחסית')];
+}
+
+// cycle
+function cycleInfo(startDate){
+  if(!startDate) return null;
+  const day = M.getDayOfCycle(startDate);
+  const phase = M.getCyclePhase(day);
+  return phase ? {day, phase} : null;
+}
+
+// fridge matching — ALL selected ingredients must appear in the recipe (extras like sauces/seasoning are fine)
+function fridgeMatches(selected, user, customMeals, train){
+  if(!selected || !selected.length) return [];
+  const sel = selected;
+  const scored = [];
+  CATS.forEach(cat=>{
+    pool(cat,customMeals).forEach(meal=>{
+      const ings = (meal.recipe && meal.recipe.ings) || [];
+      if(!ings.length) return;
+      // ALL selected ingredients must be found in recipe ingredients
+      const allPresent = sel.every(s => ings.some(ing => ing.includes(s)));
+      if(!allPresent) return;
+      let matched=0; const used=new Set();
+      ings.forEach(ing=>{
+        for(const s of sel){ if(ing.includes(s)){ matched++; used.add(s); break; } }
+      });
+      const coverage = matched/ings.length;
+      const selUse = used.size/sel.length;
+      const score = coverage*0.7 + selUse*0.3;
+      scored.push({meal, cat, matched, total:ings.length, pct:Math.round(selUse*100), score, usedCount:used.size});
+    });
+  });
+  scored.sort((a,b)=> b.score-a.score || b.usedCount-a.usedCount);
+  return scored;
+}
+
+window.MH = {
+  CATS, calOf, portionOf, targetCal, isWorkout, pool, allFlat, findMeal, catOf,
+  monthPlan, swapCandidate, estimateCal, buildDayPlan, cycleInfo, fridgeMatches,
+  catMeta:{breakfast:{label:'בוקר',icon:'sunrise',tone:'breakfast'},lunch:{label:'צהריים',icon:'sun',tone:'lunch'},
+    snack:{label:'נשנוש',icon:'apple',tone:'snack'},dinner:{label:'ערב',icon:'moon',tone:'dinner'}},
+  userLabel:{atael:'אתאל',yona:'יונה'},
+};
+
+// ---------------- fridge ingredient catalog ----------------
+window.FRIDGE = [
+  {group:'חלבונים', icon:'egg', items:['עוף','הודו','ביצים','טונה','סלמון','לברק','עדשים','שעועית','חומוס','גבינה לבנה','גבינה בולגרית','יוגורט','קוטג׳','ריקוטה','מוצרלה','פרמזן','פטה']},
+  {group:'פחמימות', icon:'sunrise', items:['אורז','פסטה','קינואה','שעורה','בטטה','תפוחי אדמה','שיבולת שועל','לחם','לחם שיפון','פיתה','לאפה','לחמניה','קוסקוס','גרנולה','פצפוצי אורז']},
+  {group:'ירקות', icon:'leaf', items:['עגבניות','עגבניות שרי','מלפפון','פלפל','גמבה','ברוקולי','תרד','חציל','זוקיני','קישוא','בצל','שום','גזר','פטריות','כרובית','חסה','אספרגוס','דלעת','אבוקדו']},
+  {group:'פירות', icon:'apple', items:['בננה','תפוח','תותים','פירות יער','לימון','תמרים','אבטיח']},
+  {group:'תוספות ושומנים', icon:'sparkles', items:['שמן זית','טחינה','חמאת בוטנים','אגוזי מלך','שקדים','זיתים','דבש','שוקולד מריר','קקאו','חלב']},
+];
+
+// ---------------- persistence + store hook ----------------
+const DEFAULTS = {
+  theme:'light', user:'atael', view:'catalog', catalogCat:'breakfast', shopView:'weekly',
+  cycle:{active:false, startDate:null},
+  swaps:{}, swapCounts:{}, customMeals:{breakfast:[],lunch:[],snack:[],dinner:[]}, shopChecked:{}, fridgeSelected:[], fridgeUserItems:{},
+  modal:null, toast:null, selectedDay:null,
+  planner:{mealType:'dinner', text:'', result:null, loading:false},
+  fridgeResults:null,
+  myLists:[], // [{id, date, items:[{text,done}]}]
+};
+const PERSIST = ['theme','user','view','catalogCat','shopView','cycle','swaps','swapCounts','customMeals','shopChecked','fridgeSelected','fridgeUserItems','myLists'];
+
+function loadState(){
+  let saved={};
+  try{ saved = JSON.parse(localStorage.getItem(LS_KEY)||'{}'); }catch(e){}
+  const s = {...DEFAULTS, ...saved};
+  s.cycle = {...DEFAULTS.cycle, ...(saved.cycle||{})};
+  s.customMeals = {...DEFAULTS.customMeals, ...(saved.customMeals||{})};
+  s.myLists = saved.myLists || [];
+  return s;
+}
+
+window.useMenuStore = function(){
+  const [state, setState] = React.useState(loadState);
+  React.useEffect(()=>{
+    const out={}; PERSIST.forEach(k=> out[k]=state[k]);
+    try{ localStorage.setItem(LS_KEY, JSON.stringify(out)); }catch(e){}
+  }, PERSIST.map(k=>state[k]));
+  const patch = (p)=> setState(s=> typeof p==='function' ? {...s, ...p(s)} : {...s, ...p});
+  return [state, patch, setState];
+};
+})();
+</script>
+<script type="text/babel">
+/* ===== js/ui.jsx ===== */
+/* =====================================================================
+   ui.jsx — shared interactive presentational components.
+   Reads window.MENU, window.MH, window.Icon. Attaches to window.
+   ===================================================================== */
+(function(){
+const {createElement:h, useState, useEffect, useRef} = React;
+const M = window.MENU, MH = window.MH, Icon = window.Icon;
+const UL = MH.userLabel;
+
+function Logo({size=34, sub=true}){
+  return h('div',{style:{display:'flex',alignItems:'center',gap:11}},
+    h('div',{style:{width:size,height:size,borderRadius:'11px',display:'grid',placeItems:'center',
+      background:'linear-gradient(135deg,var(--accent),var(--accent-deep))',color:'#fff',boxShadow:'var(--shadow-1)'}},
+      h(Icon,{name:'utensils',size:size*0.55})),
+    h('div',{style:{lineHeight:1.05}},
+      h('div',{style:{fontSize:'17px',fontWeight:800,color:'var(--ink)',letterSpacing:'-.01em'}},'תפריט'),
+      sub && h('div',{style:{fontSize:'11px',color:'var(--ink-3)',fontWeight:600,marginTop:'2px'}},'אתאל ויונה')));
+}
+
+function CalPill({cal}){
+  return h('span',{className:'cal-pill tnum'}, h(Icon,{name:'flame'}), cal, ' ', h('span',{className:'u'},'קל'));
+}
+function Meta({meal}){
+  return h('div',{className:'meta'},
+    h('span',{className:'m tnum'}, h(Icon,{name:'egg'}), meal.protein+' ג׳ חלבון'),
+    h('span',{className:'m tnum'}, h(Icon,{name:'leaf'}), meal.fiber+' ג׳ סיבים'),
+    h('span',{className:'m'}, h(Icon,{name:'clock'}), meal.prep));
+}
+
+function MealCard({meal, catKey='breakfast', user='atael', train=false, onRecipe, onSwap, onDelete, canSwap=true, recommended}){
+  const [pulse,setPulse]=useState(false);
+  const cal = MH.calOf(meal,user,train);
+  const portion = MH.portionOf(meal,user,train);
+  const tone = (MH.catMeta[catKey]||{}).tone || 'breakfast';
+  const icon = (MH.catMeta[catKey]||{}).icon || 'utensils';
+  useEffect(()=>{ if(!pulse) return; const t=setTimeout(()=>setPulse(false),360); return ()=>clearTimeout(t); },[pulse]);
+  return h('div',{className:'card meal'+(meal.isShab?' shab':''), style:pulse?{animation:'riseIn .36s var(--ease)'}:null},
+    meal.isShab && h('span',{className:'tag-shab'}, h(Icon,{name:'candle'}),'שישי / שבת'),
+    recommended && h('span',{className:'tag-cycle'}, h(Icon,{name:'droplet'}),'מומלץ למחזור שלך'),
+    h('div',{className:'meal-head'},
+      h('div',{className:'meal-id'},
+        h('div',{className:'token '+(meal.isShab?'amber':tone)}, h(Icon,{name:meal.isShab?'candle':icon})),
+        h('div',{style:{minWidth:0}},
+          h('div',{className:'meal-name'}, meal.name),
+          meal.custom && h('span',{style:{fontSize:11,fontWeight:700,color:'var(--accent-deep)'}},'מנה שלי'))),
+      h(CalPill,{cal})),
+    h('div',{className:'meal-desc'}, meal.desc),
+    h(Meta,{meal}),
+    portion && h('div',{className:'portion'}, h('span',{className:'who'}, UL[user]+' ·'), h('span',null, portion)),
+    h('div',{className:'meal-actions'},
+      onRecipe && h('button',{className:'act', onClick:()=>onRecipe(meal)}, h(Icon,{name:'book'}),'מתכון'),
+      canSwap && onSwap && h('button',{className:'act rose', onClick:()=>{ onSwap(); setPulse(true); }}, h(Icon,{name:'swap'}),'החלף מנה'),
+      meal.custom && onDelete && h('button',{className:'act', style:{marginInlineStart:'auto'}, onClick:()=>onDelete(meal), title:'מחק מנה'}, h(Icon,{name:'trash'}))));
+}
+
+function AddTile({label='הוסיפי מנה משלך', onClick}){
+  return h('button',{className:'addtile', onClick}, h(Icon,{name:'plus'}), label);
+}
+
+function Ring({pct=0, size=104, stroke=10, val, lbl, color='var(--accent)'}){
+  const r=(size-stroke)/2, c=2*Math.PI*r, off=c*(1-Math.max(0,Math.min(100,pct))/100);
+  return h('div',{className:'ring-wrap',style:{width:size,height:size}},
+    h('svg',{className:'ring-svg',width:size,height:size},
+      h('circle',{cx:size/2,cy:size/2,r,fill:'none',stroke:'var(--line)',strokeWidth:stroke}),
+      h('circle',{cx:size/2,cy:size/2,r,fill:'none',stroke:color,strokeWidth:stroke,strokeLinecap:'round',
+        strokeDasharray:c,strokeDashoffset:off,style:{transition:'stroke-dashoffset .6s var(--ease)'}})),
+    h('div',{className:'ring-center'}, h('div',{className:'rc-val tnum'}, val), lbl && h('div',{className:'rc-lbl'}, lbl)));
+}
+
+/* girl SVG (dress silhouette) */
+const GirlIcon = ({size=20}) => h('svg',{width:size,height:size,viewBox:'0 0 24 24',fill:'currentColor','aria-hidden':true},
+  h('circle',{cx:12,cy:4,r:2.5}),
+  h('path',{d:'M8 10 Q12 8 16 10 L15 17 H9 Z'}),
+  h('path',{d:'M9 17 L7 22 H11 L12 19 L13 22 H17 L15 17 Z'}));
+/* boy SVG (pants silhouette) */
+const BoyIcon = ({size=20}) => h('svg',{width:size,height:size,viewBox:'0 0 24 24',fill:'currentColor','aria-hidden':true},
+  h('circle',{cx:12,cy:4,r:2.5}),
+  h('rect',{x:9,y:8,width:6,height:8,rx:1}),
+  h('rect',{x:9,y:15,width:2.5,height:7,rx:1}),
+  h('rect',{x:12.5,y:15,width:2.5,height:7,rx:1}));
+
+function ProfileSwitch({user, onPick, vertical, compact}){
+  const subs={atael:'1,400–1,600 קל', yona:'1,800–2,000 קל'};
+  const fullNames={atael:'אתאל', yona:'יונה'};
+  if(compact){
+    return h('div',{style:{display:'flex',gap:6,alignItems:'center'}},
+      ['atael','yona'].map(uid=> h('button',{key:uid,
+        className:'iconbtn'+(user===uid?' on':''),
+        style: user===uid
+          ? (uid==='atael'?{background:'var(--plum-soft)',borderColor:'var(--plum-line)',color:'var(--plum-deep)'}
+                          :{background:'var(--teal-soft)',borderColor:'var(--teal-line)',color:'var(--teal-deep)'})
+          : null,
+        onClick:()=>onPick&&onPick(uid),
+        title:fullNames[uid]+' · '+subs[uid]},
+        h('div',{style:{display:'flex',flexDirection:'column',alignItems:'center',gap:1}},
+          uid==='atael'?h(GirlIcon,{size:16}):h(BoyIcon,{size:16}),
+          h('span',{style:{fontSize:'9px',fontWeight:700,lineHeight:1}},'יונה'===fullNames[uid]?'יונה':'אתאל')))));
+  }
+  return h('div',{className:'prof-switch', style:vertical?{flexDirection:'column'}:null},
+    ['atael','yona'].map(uid=> h('button',{key:uid, className:'prof '+uid+(user===uid?' on':''), onClick:()=>onPick&&onPick(uid)},
+      h('div',{className:'avatar '+uid, style:{display:'flex',alignItems:'center',justifyContent:'center'}},
+        uid==='atael'?h(GirlIcon,{size:18}):h(BoyIcon,{size:18})),
+      h('div',{style:{minWidth:0}},
+        h('div',{className:'prof-name'}, fullNames[uid]),
+        h('div',{className:'prof-sub'}, subs[uid])))));
+}
+
+const NAV=[
+  {id:'catalog',label:'מנות',icon:'utensils'},
+  {id:'plan',label:'תוכנית חודשית',icon:'calendar'},
+  {id:'fridge',label:'מה במקרר?',icon:'fridge'},
+  {id:'shopping',label:'רשימת קניות',icon:'cart'},
+  {id:'planner',label:'תכנון יום',icon:'sparkles'},
+];
+function NavRail({view, onNav, customCount}){
+  return NAV.map(n=> h('button',{key:n.id, className:'nav-item'+(view===n.id?' on':''), onClick:()=>onNav(n.id)},
+    h(Icon,{name:n.icon}), n.label,
+    n.id==='catalog' && customCount>0 && h('span',{className:'badge tnum'}, customCount)));
+}
+function BottomTabs({view, onNav}){
+  const items=[
+    {id:'catalog',label:'מנות',icon:'utensils'},
+    {id:'plan',label:'תוכנית',icon:'calendar'},
+    {id:'fridge',label:'מקרר',icon:'fridge'},
+    {id:'shopping',label:'קניות',icon:'cart'},
+    {id:'planner',label:'תכנון',icon:'sparkles'},
+  ];
+  return h('div',{className:'tabbar'}, items.map(t=> h('button',{key:t.id,
+    className:(view===t.id?'on ':'')+' tab-'+t.id, onClick:()=>onNav(t.id)},
+    h(Icon,{name:t.icon}), t.label)));
+}
+
+function CatTabs({active, onPick}){
+  return h('div',{className:'cat-tabs'}, MH.CATS.map(k=> h('button',{key:k, className:'cat-tab'+(active===k?' on':''), onClick:()=>onPick(k)},
+    h(Icon,{name:MH.catMeta[k].icon}), MH.catMeta[k].label)));
+}
+
+function StatRow({catKey, user, customMeals}){
+  const list = MH.pool(catKey, customMeals);
+  const c = list.length? Math.round(list.reduce((a,m)=>a+MH.calOf(m,user,false),0)/list.length):0;
+  const p = list.length? Math.round(list.reduce((a,m)=>a+(m.protein||0),0)/list.length):0;
+  return h('div',{className:'card stat-row',style:{padding:'14px 4px'}},
+    h('div',{className:'stat-cell'}, h('div',{className:'stat-val tnum'}, c), h('div',{className:'stat-lbl'},'ממוצע קלוריות')),
+    h('div',{className:'stat-cell'}, h('div',{className:'stat-val tnum'}, list.length), h('div',{className:'stat-lbl'},'מנות בקטגוריה')),
+    h('div',{className:'stat-cell'}, h('div',{className:'stat-val tnum'}, p, h('small',null,' ג׳')), h('div',{className:'stat-lbl'},'ממוצע חלבון')));
+}
+
+function Hero({eyebrow, eyebrowIcon, title, children, tone, right}){
+  return h('div',{className:'hero'+(tone?(' '+tone):''), style:{marginBottom:22}},
+    h('div',{className:'hero-row'},
+      h('div',{style:{minWidth:0, flex:1, width:'100%', direction:'rtl', textAlign:'right'}},
+        eyebrow && h('div',{className:'hero-eyebrow'}, eyebrowIcon && h(Icon,{name:eyebrowIcon,size:17}), eyebrow),
+        h('div',{className:'hero-title'}, title),
+        children && h('div',{className:'hero-sub'}, children)),
+      right));
+}
+
+function Modal({open, onClose, title, titleRight, children, maxWidth}){
+  useEffect(()=>{ const k=e=>{ if(e.key==='Escape') onClose&&onClose(); }; window.addEventListener('keydown',k); return ()=>window.removeEventListener('keydown',k); },[onClose]);
+  return h('div',{className:'modal-bg'+(open?' open':''), onClick:e=>{ if(e.target===e.currentTarget) onClose&&onClose(); }},
+    h('div',{className:'modal', style:maxWidth?{maxWidth}:null},
+      h('div',{className:'modal-pad'},
+        h('div',{className:'modal-head'},
+          h('div',{style:{minWidth:0}}, h('div',{className:'modal-title'}, title), titleRight),
+          h('button',{className:'modal-x', onClick:onClose}, h(Icon,{name:'x'}))),
+        open && children)));
+}
+
+function Seg({options, value, onChange}){
+  return h('div',{className:'seg'}, options.map(o=> h('button',{key:o.value, className:value===o.value?'on':'', onClick:()=>onChange(o.value)},
+    o.icon && h(Icon,{name:o.icon}), o.label)));
+}
+
+function Toast({msg, show}){
+  return h('div',{className:'toast'+(show?' show':'')}, h(Icon,{name:'check'}), msg);
+}
+
+Object.assign(window, {
+  UI:{Logo, CalPill, Meta, MealCard, AddTile, Ring, ProfileSwitch, NavRail, BottomTabs, CatTabs,
+      StatRow, Hero, Modal, Seg, Toast},
+});
+})();
+</script>
+<script type="text/babel">
+/* ===== js/modals.jsx ===== */
+/* modals.jsx — RecipeModal, AddMealModal, CycleModal */
+(function(){
+const {createElement:h, useState, useEffect} = React;
+const M = window.MENU, MH = window.MH, UI = window.UI, Icon = window.Icon;
+
+/* ---------------- Recipe ---------------- */
+function RecipeModal({open, meal, user, train, onClose}){
+  if(!meal) return h(UI.Modal,{open:false, onClose});
+  const cal = MH.calOf(meal,user,train);
+  const portion = MH.portionOf(meal,user,train);
+  const ings = (meal.recipe&&meal.recipe.ings)||[];
+  const steps = (meal.recipe&&meal.recipe.steps)||[];
+  return h(UI.Modal,{open, onClose, title:meal.name,
+    titleRight:h('div',{className:'hero-sub',style:{marginTop:9}},
+      h('span',{className:'chip accent tnum'}, h(Icon,{name:'flame',size:14}), cal+' קל'),
+      h('span',{className:'chip tnum'}, h(Icon,{name:'egg',size:14}), meal.protein+' ג׳ חלבון'),
+      h('span',{className:'chip tnum'}, h(Icon,{name:'leaf',size:14}), meal.fiber+' ג׳ סיבים'),
+      h('span',{className:'chip'}, h(Icon,{name:'clock',size:14}), meal.prep))},
+    portion && h('div',{className:'portion',style:{marginBottom:18}},
+      h('span',{className:'who'}, MH.userLabel[user]+' ·'), h('span',null, portion)),
+    h('div',{className:'sec-head'}, h(Icon,{name:'cart'}),'מרכיבים'),
+    h('div',{style:{marginBottom:18}}, ings.map((i,k)=>h('div',{key:k,className:'ing-line'}, h('span',{className:'b'},'•'), i))),
+    h('div',{className:'sec-head'}, h(Icon,{name:'book'}),'אופן ההכנה'),
+    h('div',null, steps.map((s,k)=>h('div',{key:k,className:'step-line'}, h('span',{className:'n tnum'}, k+1), s))));
+}
+
+/* ---------------- Add custom meal ---------------- */
+function AddMealModal({open, presetCat, user, onClose, onSave}){
+  const [f,setF]=useState(null);
+  useEffect(()=>{ if(open) setF({name:'',cat:presetCat||'dinner',desc:'',cal:'',protein:'',fiber:'',prep:'15 דק',portion:'',ings:'',steps:''}); },[open,presetCat]);
+  if(!f) return h(UI.Modal,{open:false,onClose});
+  const set=(k,v)=>setF(s=>({...s,[k]:v}));
+  const valid = f.name.trim() && f.cal && Number(f.cal)>0;
+  function save(){
+    if(!valid) return;
+    const base=Math.round(Number(f.cal)); const tr=v=>Math.round(v*1.08);
+    const A = user==='atael'? base : Math.round(base/1.3);
+    const Bc = user==='atael'? Math.round(base*1.3) : base;
+    const meal={ id:'c_'+Date.now(), name:f.name.trim(), desc:f.desc.trim()||'מנה אישית', prep:f.prep.trim()||'—',
+      protein:Number(f.protein)||0, fiber:Number(f.fiber)||0, custom:true, portion:f.portion.trim(),
+      calA:{rest:A,train:tr(A)}, calB:{rest:Bc,train:tr(Bc)},
+      recipe:{ ings:f.ings.split('\n').map(s=>s.trim()).filter(Boolean), steps:f.steps.split('\n').map(s=>s.trim()).filter(Boolean) } };
+    onSave(f.cat, meal);
+  }
+  return h(UI.Modal,{open, onClose, title:'מנה חדשה משלי',
+    titleRight:h('div',{className:'page-sub',style:{marginTop:6}},'תתווסף לקטלוג ולתוכנית החודשית')},
+    h('div',{className:'field'}, h('label',null,'שם המנה'),
+      h('input',{className:'input', value:f.name, placeholder:'למשל: סלט קינואה עם חלומי', onChange:e=>set('name',e.target.value)})),
+    h('div',{className:'field-row'},
+      h('div',{className:'field'}, h('label',null,'קטגוריה'),
+        h('select',{className:'select', value:f.cat, onChange:e=>set('cat',e.target.value)},
+          MH.CATS.map(c=>h('option',{key:c,value:c}, MH.catMeta[c].label)))),
+      h('div',{className:'field'}, h('label',null,'קלוריות ('+MH.userLabel[user]+')'),
+        h('input',{className:'input tnum', type:'number', value:f.cal, placeholder:'420', onChange:e=>set('cal',e.target.value)}))),
+    h('div',{className:'field'}, h('label',null,'תיאור קצר'),
+      h('input',{className:'input', value:f.desc, placeholder:'מה יש במנה', onChange:e=>set('desc',e.target.value)})),
+    h('div',{className:'field-row'},
+      h('div',{className:'field'}, h('label',null,'חלבון (ג׳)'), h('input',{className:'input tnum',type:'number',value:f.protein,placeholder:'30',onChange:e=>set('protein',e.target.value)})),
+      h('div',{className:'field'}, h('label',null,'סיבים (ג׳)'), h('input',{className:'input tnum',type:'number',value:f.fiber,placeholder:'6',onChange:e=>set('fiber',e.target.value)})),
+      h('div',{className:'field'}, h('label',null,'זמן הכנה'), h('input',{className:'input',value:f.prep,placeholder:'20 דק',onChange:e=>set('prep',e.target.value)}))),
+    h('div',{className:'field'}, h('label',null,'כמות / מנה (אופציונלי)'),
+      h('input',{className:'input', value:f.portion, placeholder:'½ כוס קינואה | 100 גר׳ חלומי', onChange:e=>set('portion',e.target.value)})),
+    h('div',{className:'field'}, h('label',null,'מרכיבים — שורה לכל מרכיב'),
+      h('textarea',{className:'textarea', value:f.ings, placeholder:'קינואה\nחלומי\nעגבניות שרי\nלימון', onChange:e=>set('ings',e.target.value)})),
+    h('div',{className:'field'}, h('label',null,'אופן הכנה — שורה לכל שלב'),
+      h('textarea',{className:'textarea', value:f.steps, placeholder:'בשלי קינואה\nצלי חלומי\nערבבי הכל עם לימון', onChange:e=>set('steps',e.target.value)})),
+    h('div',{style:{display:'flex',gap:10,marginTop:6}},
+      h('button',{className:'btn primary', style:{flex:1, opacity:valid?1:.5, pointerEvents:valid?'auto':'none'}, onClick:save},
+        h(Icon,{name:'plus'}),'הוסיפי לקטלוג'),
+      h('button',{className:'btn', onClick:onClose},'ביטול')));
+}
+
+/* ---------------- Cycle setup ---------------- */
+function CycleModal({open, onClose, onActivate}){
+  const today=new Date().toISOString().split('T')[0];
+  const [date,setDate]=useState(today);
+  useEffect(()=>{ if(open) setDate(today); },[open]);
+  const info = MH.cycleInfo(date);
+  return h(UI.Modal,{open, onClose, title:'מצב מחזור', maxWidth:420,
+    titleRight:h('div',{className:'page-sub',style:{marginTop:6}},'נתאים את התפריט וההמלצות לשלב שאת נמצאת בו')},
+    h('div',{className:'field'}, h('label',null,'תאריך תחילת המחזור האחרון'),
+      h('input',{className:'input', type:'date', max:today, value:date, dir:'ltr', style:{textAlign:'right'}, onChange:e=>setDate(e.target.value)})),
+    info ? h('div',{className:'cycle-banner', style:{marginBottom:16}},
+      h('div',{className:'cb-top'}, h(Icon,{name:'droplet'}), info.phase.name+' · יום '+info.day),
+      h('div',{style:{fontSize:13,color:'var(--ink-2)',marginTop:6,lineHeight:1.5}}, info.phase.focus),
+      h('div',{className:'cycle-tags'}, h('span',{className:'cycle-tag'}, info.phase.calNote)))
+      : h('div',{className:'page-sub',style:{marginBottom:16}},'בחרי תאריך בטווח 35 הימים האחרונים'),
+    h('div',{style:{display:'flex',gap:10}},
+      h('button',{className:'btn primary', style:{flex:1, opacity:info?1:.5, pointerEvents:info?'auto':'none'}, onClick:()=>onActivate(date)},
+        h(Icon,{name:'heart'}),'הפעילי מצב מחזור'),
+      h('button',{className:'btn', onClick:onClose},'ביטול')));
+}
+
+window.Modals = {RecipeModal, AddMealModal, CycleModal};
+})();
+</script>
+<script type="text/babel">
+/* ===== js/view-catalog.jsx ===== */
+/* view-catalog.jsx — meal catalog + per-card swap + add-your-own tile */
+(function(){
+const {createElement:h} = React;
+const MH = window.MH, UI = window.UI, Icon = window.Icon;
+
+function Catalog({state, api}){
+  const {user, catalogCat:cat, customMeals, swaps} = state;
+  const train = false; // catalog shows baseline (rest) portions
+  const cyc = api.cycle; // {day,phase} or null
+  const meta = MH.catMeta[cat];
+  const base = MH.pool(cat, customMeals);
+
+  return h('div',{className:'rise'},
+    h(UI.Hero,{tone:meta.tone, eyebrow:'קטלוג מנות', eyebrowIcon:meta.icon, title:'ארוחות '+meta.label},
+      h('span',null, base.length+' מנות'),
+      h('span',{className:'chip accent'}, h(Icon,{name:'user',size:14}), 'כמות מותאמת ל'+MH.userLabel[user])),
+
+    cyc && h('div',{style:{marginBottom:18}}, h(CycleStrip,{cyc})),
+
+    h('div',{style:{marginBottom:16}}, h(UI.CatTabs,{active:cat, onPick:api.setCat})),
+    h('div',{style:{marginBottom:18}}, h(UI.StatRow,{catKey:cat, user, customMeals})),
+
+    h('div',{className:'meal-grid'},
+      base.map(m=>{
+        const key='catalog_'+m.id;
+        const dispId = swaps[key]; 
+        const disp = dispId ? (base.find(x=>x.id===dispId)||m) : m;
+        const rec = !!(cyc && cyc.phase.prefer.includes(disp.id));
+        return h(UI.MealCard,{key:m.id, meal:disp, catKey:cat, user, train,
+          recommended:rec, canSwap:base.length>1,
+          onRecipe:api.openRecipe, onSwap:()=>api.swap(key, cat, disp.id), onDelete:api.deleteCustomMeal});
+      }),
+      h(UI.AddTile,{key:'__add', onClick:()=>api.openAddMeal(cat)})));
+}
+
+function CycleStrip({cyc}){
+  const p=cyc.phase;
+  return h('div',{className:'cycle-banner'},
+    h('div',{className:'cb-top'}, h(Icon,{name:'droplet'}), p.name+' · יום '+cyc.day+' למחזור'),
+    h('div',{style:{fontSize:13.5,color:'var(--ink-2)',marginTop:7,lineHeight:1.5}}, p.notes),
+    h('div',{className:'cycle-tags'},
+      h('span',{className:'cycle-tag'}, p.calNote),
+      p.extraTips.slice(0,2).map((t,i)=>h('span',{key:i,className:'cycle-tag'}, t))));
+}
+
+window.Views = window.Views || {};
+window.Views.Catalog = Catalog;
+})();
+</script>
+<script type="text/babel">
+/* ===== js/view-plan.jsx ===== */
+/* view-plan.jsx — monthly plan: workout strip, day grid, day detail with totals */
+(function(){
+const {createElement:h, useState} = React;
+const M = window.MENU, MH = window.MH, UI = window.UI, Icon = window.Icon;
+
+function dayIconName(d){ if(d.shab) return 'candle'; if(d.fri) return 'candle'; if(d.wo) return 'dumbbell'; return null; }
+
+function Plan({state, api}){
+  const {user, customMeals, swaps} = state;
+  const [modalDay, setModalDay] = useState(null);
+  const plan = MH.monthPlan(user, customMeals, swaps);
+  const cyc = api.cycle;
+  const woDays = M.USERS[user].workoutDays.map(i=>M.DAYS7[i]).join(' · ');
+  const openDay = d => setModalDay(d.day);
+  const closeDay = () => setModalDay(null);
+  const dayData = modalDay ? plan[modalDay-1] : null;
+
+  return h('div',{className:'rise'},
+    h(UI.Hero,{eyebrow:'תוכנית חודשית', eyebrowIcon:'calendar', title:'התפריט החודשי שלכם'},
+      h('span',{className:'chip accent'}, h(Icon,{name:'dumbbell',size:14}), 'ימי אימון: '+woDays),
+      h('span',{className:'chip'}, h(Icon,{name:'flame',size:14}), 'יעד '+M.USERS[user].restCal+'–'+M.USERS[user].trainCal+' קל')),
+
+    h('div',{className:'sec-head'}, h(Icon,{name:'calendar'}),'לוח אימונים שבועי'),
+    h('div',{className:'card', style:{padding:16, marginBottom:20}},
+      h('div',{className:'wk-strip'},
+        [0,1,2,3,4,5,6].map(di=>{
+          const a=M.USERS.atael.workoutDays.includes(di), b=M.USERS.yona.workoutDays.includes(di), shab=di===6;
+          const cls=a&&b?'both':a?'a':b?'b':shab?'shab':'';
+          const ic=a&&b?'users':a?'dumbbell':b?'dumbbell':shab?'candle':null;
+          return h('div',{key:di, className:'wk-cell '+cls},
+            h('div',{className:'wl'}, M.DAYS_S[di]),
+            h('div',{className:'wi'}, ic && h(Icon,{name:ic})));
+        })),
+      h('div',{className:'legend'},
+        h('span',{className:'lg'}, h('span',{className:'dot a'}),'אתאל'),
+        h('span',{className:'lg'}, h('span',{className:'dot b'}),'יונה'),
+        h('span',{className:'lg'}, h('span',{className:'dot both'}),'שניהם'),
+        h('span',{className:'lg'}, h('span',{className:'dot shab'}),'שבת'))),
+
+    h('div',{className:'sec-head'}, h(Icon,{name:'sparkles'}),'לחצי על יום לתפריט המלא'),
+    h('div',{className:'day-grid'},
+      plan.map(d=>{
+        const ic=dayIconName(d);
+        return h('button',{key:d.day, className:'day-btn'+((d.shab||d.fri)?' shab':''),
+          onClick:()=>openDay(d)},
+          h('div',{className:'dl'}, d.dayName),
+          h('div',{className:'dn tnum'}, d.day),
+          h('div',{className:'di'}, ic && h(Icon,{name:ic})));
+      })),
+
+    dayData && h(DayModal,{day:dayData, user, cyc, api, swaps, customMeals, onClose:closeDay}));
+}
+
+function DayModal({day:d, user, cyc, api, swaps, customMeals, onClose}){
+  const i = d.day-1;
+  const train = MH.isWorkout(user, d.di);
+  const target = MH.targetCal(user, train);
+  const special = d.shab||d.fri;
+  const items = [
+    {k:'breakfast', label:'ארוחת בוקר', meal:d.breakfast, cat:'breakfast', swapKey:'plan_breakfast_'+i, canSwap:true},
+    {k:'lunch', label:'ארוחת צהריים'+(d.lunchShab?' · חגיגי':''), meal:d.lunch, cat:'lunch', swapKey:'plan_lunch_'+i, canSwap:!d.lunchShab},
+    {k:'snack', label:'נשנוש', meal:d.snack, cat:'snack', swapKey:'plan_snack_'+i, canSwap:true},
+    {k:'dinner', label:'ארוחת ערב', meal:d.dinner, cat:'dinner', swapKey:'plan_dinner_'+i, canSwap:true},
+  ];
+  if(d.dessert) items.push({k:'dessert', label:'קינוח שבת', meal:d.dessert, cat:'dessert', swapKey:null, canSwap:false});
+  const total = items.reduce((a,it)=>a+MH.calOf(it.meal,user,train),0);
+  const pct = Math.min(100, Math.round(total/target*100));
+  const ctxLabel = d.shab?'שבת':d.fri?'ערב שבת':train?'יום אימון':'יום רגיל';
+
+  return h(UI.Modal,{open:true, onClose, title:'יום '+d.day+' · '+d.fullDay,
+    titleRight:h('div',{style:{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap',marginTop:6}},
+      h('span',{className:'chip'+(special?' amber':'')}, ctxLabel),
+      h('span',{className:'chip accent tnum'}, h(Icon,{name:'flame',size:14}), total+' / '+target+' קל'))},
+    h('div',{className:'dd-body', style:{padding:0}},
+      h('div',{className:'bar',style:{marginBottom:14}}, h('i',{style:{width:pct+'%'}})),
+      items.map(it=>{
+        const rec = !!(cyc && cyc.phase.prefer.includes(it.meal.id));
+        return h('div',{key:it.k,style:{marginBottom:14}},
+          h('div',{className:'sec-head',style:{margin:'0 0 8px'}}, h(Icon,{name:MH.catMeta[it.cat]?MH.catMeta[it.cat].icon:'utensils'}), it.label),
+          h(UI.MealCard,{meal:it.meal, catKey:it.cat, user, train, recommended:rec, canSwap:it.canSwap,
+            onRecipe:api.openRecipe, onSwap:it.canSwap?()=>api.swap(it.swapKey, it.cat, it.meal.id):null}));
+      })));
+}
+
+window.Views = window.Views || {};
+window.Views.Plan = Plan;
+})();
+</script>
+<script type="text/babel">
+/* ===== js/view-shopping.jsx ===== */
+/* view-shopping.jsx — categorized weekly list + per-day list, checkboxes persist */
+(function(){
+const {createElement:h, useState} = React;
+const M = window.MENU, MH = window.MH, UI = window.UI, Icon = window.Icon;
+
+function sectionIcon(name){
+  if(name.includes('בשר')||name.includes('דגים')) return 'egg';
+  if(name.includes('ביצים')||name.includes('חלב')) return 'egg';
+  if(name.includes('ירקות')||name.includes('פירות')) return 'leaf';
+  if(name.includes('דגנים')||name.includes('לחם')) return 'sunrise';
+  if(name.includes('קטניות')||name.includes('שימורים')) return 'egg';
+  if(name.includes('תבלינים')||name.includes('שמנים')) return 'sparkles';
+  return 'apple';
+}
+const strip = s => s.replace(/^[^\u0590-\u05FF]+/, '').trim();
+
+function Section({title, items, keyer, checked, onToggle, open, onOpen}){
+  const done = items.filter((_,i)=>checked[keyer(i)]).length;
+  return h('div',{className:'shop-sec'},
+    h('div',{className:'shop-head', onClick:onOpen},
+      h('div',{className:'sh-l'},
+        h('div',{className:'sh-tok'}, h(Icon,{name:sectionIcon(title)})),
+        strip(title)),
+      h('div',{className:'shop-prog'},
+        h('span',{className:'tnum'}, done+'/'+items.length),
+        h(Icon,{name:open?'chevronDown':'chevronLeft', size:18}))),
+    open && h('div',{className:'shop-items'},
+      items.map((it,i)=>{ const k=keyer(i); const on=!!checked[k];
+        return h('div',{key:i, className:'shop-item'+(on?' done':''), onClick:()=>onToggle(k)},
+          h('div',{className:'cb'}, h(Icon,{name:'check'})),
+          h('span',{className:'si-txt'}, it)); })));
+}
+
+function MyListPanel({myLists, api}){
+  const [draft, setDraft] = useState('');
+  const [showNew, setShowNew] = useState(false);
+  function createList(){
+    const lines = draft.split('\n').map(l=>l.trim()).filter(Boolean);
+    if(!lines.length) return;
+    api.addMyList(lines);
+    setDraft('');
+    setShowNew(false);
+  }
+  return h('div',null,
+    h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14}},
+      h('div',{style:{fontSize:14,fontWeight:700,color:'var(--ink-2)'}},
+        h(Icon,{name:'bookmark',size:16,style:{display:'inline',verticalAlign:'middle',marginLeft:6}}),'הרשימות שלי'),
+      h('button',{className:'btn',style:{fontSize:13,padding:'7px 12px'},onClick:()=>setShowNew(v=>!v)},
+        h(Icon,{name:'plus',size:15}),showNew?'ביטול':'רשימה חדשה')),
+
+    showNew && h('div',{className:'card',style:{padding:16,marginBottom:16}},
+      h('div',{className:'field'},
+        h('label',null,'פריטים לרשימה (שורה לכל פריט)'),
+        h('textarea',{className:'textarea',rows:5,value:draft,placeholder:'חלב\nביצים\nלחם...',onChange:e=>setDraft(e.target.value)})),
+      h('button',{className:'btn primary',style:{width:'100%'},onClick:createList},
+        h(Icon,{name:'check'}),'שמרי רשימה')),
+
+    myLists.length===0 && !showNew && h('div',{style:{padding:'20px',textAlign:'center',color:'var(--ink-3)',fontSize:13}},
+      'עדיין אין רשימות — צרי רשימה חדשה'),
+
+    myLists.map(list=> h('div',{key:list.id,className:'shop-sec',style:{marginBottom:10}},
+      h('div',{className:'shop-head',style:{cursor:'default'}},
+        h('div',{className:'sh-l'},
+          h('div',{className:'sh-tok'}, h(Icon,{name:'cart'})),
+          h('div',null,
+            h('div',{style:{fontSize:15,fontWeight:700}},list.items.filter(it=>it.done).length+'/'+list.items.length+' פריטים'),
+            h('div',{style:{fontSize:11,color:'var(--ink-3)',marginTop:2}},'קנייה: '+list.date))),
+        h('button',{className:'btn ghost',style:{padding:'4px 8px',fontSize:12},onClick:()=>api.deleteMyList(list.id)},
+          h(Icon,{name:'trash',size:14}),'מחקי')),
+      h('div',{className:'shop-items'},
+        list.items.map((it,idx)=>h('div',{key:idx,className:'shop-item'+(it.done?' done':''),onClick:()=>api.toggleMyListItem(list.id,idx)},
+          h('div',{className:'cb'},h(Icon,{name:'check'})),
+          h('span',{className:'si-txt'},it.text)))))));
+}
+
+function Shopping({state, api}){
+  const {shopView, shopChecked, user, customMeals, swaps, myLists=[]} = state;
+  const [open,setOpen]=useState({});
+  const [showMyList, setShowMyList]=useState(false);
+  const toggleOpen = id => setOpen(o=>({...o,[id]:!o[id]}));
+
+  let body;
+  if(shopView==='weekly'){
+    body = h('div',null,
+      Object.entries(M.shopping).map(([sec,items])=>
+        h(Section,{key:sec, title:sec, items, keyer:i=>'w_'+sec+'_'+i, checked:shopChecked,
+          onToggle:api.toggleShop, open:open[sec]!==false?open[sec]:false, onOpen:()=>toggleOpen(sec)})),
+      h('div',{className:'tip', style:{marginTop:6}},
+        h('div',{className:'tip-title'}, h(Icon,{name:'sparkles'}),'טיפים להכנות מראש'),
+        h('div',{className:'tip-list'},
+          ['בשלי עדשים לכל השבוע בבת אחת','כדורי אנרגיה — מכינים מראש לכל השבוע','שיבולת שועל לילית — 2 דקות בערב','קציצות — הכיני כפול והקפיאי חצי'].map((t,i)=>
+            h('div',{key:i}, h('span',{className:'b'}, h(Icon,{name:'check',size:15})), t)))));
+  } else {
+    const plan = MH.monthPlan(user, customMeals, swaps).slice(0,7);
+    body = h('div',null, plan.map(d=>{
+      const lbl = d.fri?'ערב שבת':d.shab?'שבת':d.wo?d.fullDay+' · אימון':d.fullDay;
+      const meals=[d.breakfast,d.lunch,d.snack,d.dinner]; if(d.dessert) meals.push(d.dessert);
+      const items=[...new Set(meals.filter(Boolean).flatMap(m=> (m.recipe&&m.recipe.ings)||[]))];
+      const id='day'+d.day;
+      return h(Section,{key:id, title:'יום '+lbl, items, keyer:i=>'d_'+d.day+'_'+i, checked:shopChecked,
+        onToggle:api.toggleShop, open:!!open[id], onOpen:()=>toggleOpen(id)});
+    }));
+  }
+
+  return h('div',{className:'rise'},
+    h(UI.Hero,{tone:'amber', eyebrow:'רשימת קניות', eyebrowIcon:'cart', title:'הכול ברשימה אחת',
+      right:h('button',{className:'btn', onClick:api.resetShop}, h(Icon,{name:'check'}),'איפוס סימונים')},
+      h('span',null,'משותפת לשניכם · לחצי על פריט לסימון')),
+    h('div',{style:{marginBottom:16}},
+      h(UI.Seg,{value:shopView, onChange:api.setShopView,
+        options:[{value:'weekly',label:'לפי קטגוריה',icon:'grid'},{value:'daily',label:'לפי יום',icon:'calendar'}]})),
+    body,
+    h('div',{style:{marginTop:22,borderTop:'1px solid var(--line)',paddingTop:16}},
+      h('button',{style:{display:'flex',alignItems:'center',gap:8,fontSize:13,fontWeight:700,color:'var(--ink-3)',background:'none',border:'none',cursor:'pointer',marginBottom:12},
+        onClick:()=>setShowMyList(v=>!v)},
+        h(Icon,{name:showMyList?'chevronDown':'chevronLeft',size:16}),
+        'הרשימות האישיות שלי',
+        myLists.length>0&&h('span',{className:'badge tnum',style:{background:'var(--amber)',fontSize:11,padding:'1px 7px',borderRadius:999,color:'#fff',marginRight:4}},myLists.length)),
+      showMyList && h(MyListPanel,{myLists, api})));
+}
+
+window.Views = window.Views || {};
+window.Views.Shopping = Shopping;
+})();
+</script>
+<script type="text/babel">
+/* ===== js/view-planner.jsx ===== */
+/* view-planner.jsx — free-text "what will you eat" → full balanced day */
+(function(){
+const {createElement:h} = React;
+const M = window.MENU, MH = window.MH, UI = window.UI, Icon = window.Icon;
+
+function Planner({state, api}){
+  const {user, planner, customMeals, swaps} = state;
+  const todayIdx = new Date().getDay();
+  const train = MH.isWorkout(user, todayIdx);
+  const target = MH.targetCal(user, train);
+  const cyc = api.cycle;
+  const types=[{value:'breakfast',label:'בוקר',icon:'sunrise'},{value:'lunch',label:'צהריים',icon:'sun'},{value:'dinner',label:'ערב',icon:'moon'}];
+
+  return h('div',{className:'rise'},
+    h(UI.Hero,{eyebrow:'תכנון יום חכם', eyebrowIcon:'sparkles', title:'יש לך ארוחה ביומן?'},
+      h('span',null,'כתבי מה את מתכננת לאכול — ונבנה סביבה יום מאוזן'),
+      h('span',{className:'chip accent'}, h(Icon,{name:train?'dumbbell':'leaf',size:14}), (train?'יום אימון':'יום רגיל')+' · יעד '+target+' קל')),
+
+    cyc && h('div',{style:{marginBottom:18}}, h(CycleBanner,{cyc})),
+
+    h('div',{className:'card', style:{padding:'20px 22px', marginBottom:18}},
+      h('div',{className:'field'}, h('label',null,'איזו ארוחה כבר מתוכננת?'),
+        h(UI.Seg,{value:planner.mealType, onChange:api.setPlannerType, options:types})),
+      h('div',{className:'field', style:{marginBottom:6}}, h('label',null,'מה את מתכננת לאכול?'),
+        h('textarea',{className:'textarea', value:planner.text, placeholder:'למשל: "סטייק ותפוחי אדמה", "פסטה עם חברים", "שבת אצל ההורים"...',
+          onChange:e=>api.setPlannerText(e.target.value)})),
+      h('button',{className:'btn primary', style:{width:'100%', marginTop:10}, onClick:api.runPlanner},
+        h(Icon,{name:'wand'}),'תכנני לי את היום')),
+
+    planner.loading && h('div',{className:'card', style:{padding:10}}, h('div',{className:'dots'}, h('i'),h('i'),h('i'))),
+    planner.result && h(Result,{res:planner.result, user, train, target, cyc, swaps, api}));
+}
+
+function CycleBanner({cyc}){
+  const p=cyc.phase;
+  return h('div',{className:'cycle-banner'},
+    h('div',{className:'cb-top'}, h(Icon,{name:'droplet'}), p.name+' · יום '+cyc.day),
+    h('div',{style:{fontSize:13.5,color:'var(--ink-2)',marginTop:7,lineHeight:1.5}}, p.notes),
+    h('div',{className:'cycle-tags'}, h('span',{className:'cycle-tag'}, p.calNote), p.extraTips.map((t,i)=>h('span',{key:i,className:'cycle-tag'}, t))));
+}
+
+function Result({res, user, train, target, cyc, swaps, api}){
+  const total = res.plan.reduce((a,p)=>a+p.cal,0);
+  const pct = Math.min(100, Math.round(total/target*100));
+  return h('div',{className:'rise'},
+    h('div',{className:'card', style:{padding:'14px 16px', marginBottom:14, display:'flex', justifyContent:'space-between', alignItems:'center', gap:12,
+      background:'linear-gradient(118deg,var(--accent-soft),var(--surface-2) 80%)', borderColor:'var(--accent-line)'}},
+      h('div',null, h('div',{style:{fontSize:12.5,fontWeight:700,color:'var(--accent-deep)'}},'הערכת קלוריות לארוחה שלך'),
+        h('div',{style:{fontSize:14,color:'var(--ink-2)',marginTop:3}}, res.text)),
+      h('span',{className:'cal-pill tnum', style:{fontSize:16}}, h(Icon,{name:'flame'}),'~'+res.est)),
+    h('div',{className:'sec-head'}, h(Icon,{name:'sparkles'}),'התפריט שלך להיום · יעד '+target+' קל'),
+    res.plan.map((p,idx)=>{
+      if(p.fixed) return h('div',{key:idx, className:'card meal shab', style:{marginBottom:10}},
+        h('span',{className:'tag-shab'}, h(Icon,{name:'bookmark'}),'מתוכנן על ידך'),
+        h('div',{className:'meal-head'},
+          h('div',{className:'meal-id'},
+            h('div',{className:'token amber'}, h(Icon,{name:'bookmark'})),
+            h('div',null, h('div',{className:'meal-name'}, p.label), h('div',{className:'meal-desc'}, res.text))),
+          h('span',{className:'cal-pill tnum'}, h(Icon,{name:'flame'}),'~'+p.cal)));
+      const key='planner_'+idx+'_'+p.catKey;
+      const disp = swaps[key] ? (MH.pool(p.catKey, api.customMeals).find(m=>m.id===swaps[key])||p.meal) : p.meal;
+      const rec = !!(cyc && cyc.phase.prefer.includes(disp.id));
+      return h('div',{key:idx, style:{marginBottom:10}},
+        h('div',{className:'sec-head', style:{margin:'6px 0 8px'}}, h(Icon,{name:MH.catMeta[p.catKey].icon}), p.label+' · ', h('span',{className:'count'}, p.note)),
+        h(UI.MealCard,{meal:disp, catKey:p.catKey, user, train, recommended:rec,
+          onRecipe:api.openRecipe, onSwap:()=>api.swap(key, p.catKey, disp.id)}));
+    }),
+    h('div',{className:'total', style:{marginTop:4}},
+      h('div',{className:'total-top'}, h('div',{className:'total-lbl'},'סך הקלוריות ביום'), h('div',{className:'total-num tnum'}, total+' / '+target+' קל')),
+      h('div',{className:'bar'}, h('i',{style:{width:pct+'%'}}))),
+    h('button',{className:'btn', style:{width:'100%', marginTop:12}, onClick:api.clearPlanner}, h(Icon,{name:'swap'}),'תכנון חדש'));
+}
+
+window.Views = window.Views || {};
+window.Views.Planner = Planner;
+})();
+</script>
+<script type="text/babel">
+/* ===== js/view-fridge.jsx ===== */
+/* view-fridge.jsx — pick what you have → meals that fit (and your calories).
+   Each category has its own "add ingredient" field; added items persist
+   permanently in that category and are removable. */
+(function(){
+const {createElement:h, useState} = React;
+const M = window.MENU, MH = window.MH, UI = window.UI, Icon = window.Icon;
+
+function CategoryGroup({g, sel, userItems, api, query}){
+  const [draft, setDraft] = useState('');
+  function add(){ const v=draft.trim(); if(!v) return; api.addFridgeItem(g.group, v); setDraft(''); }
+  const all = g.items.map(it=>({name:it, custom:false})).concat((userItems||[]).map(it=>({name:it, custom:true})));
+  const q = (query||'').trim();
+  const items = q ? all.filter(it=>it.name.includes(q)) : all;
+  if(q && items.length===0) return null;   // hide categories with no match while searching
+  return h('div',{style:{marginBottom:18}},
+    h('div',{className:'sec-head'}, h(Icon,{name:g.icon}), g.group,
+      h('span',{className:'count'}, '· '+items.length)),
+    h('div',{className:'fridge-grid'},
+      items.map(({name,custom})=>{ const on=sel.includes(name);
+        return h('button',{key:name, className:'ing-chip'+(on?' on':'')+(custom?' usr':''), onClick:()=>api.toggleFridge(name)},
+          h('span',{className:'ic-box'}, h(Icon,{name:'check'})),
+          h('span',{style:{flex:1,minWidth:0,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}, name),
+          custom && h('span',{className:'ing-x', onClick:e=>{ e.stopPropagation(); api.removeFridgeItem(g.group, name); }, title:'הסר'}, h(Icon,{name:'x',size:13}))); }),
+      // inline add field, styled like a chip (hidden while searching)
+      !q && h('div',{className:'ing-add'},
+        h('input',{className:'ing-add-input', value:draft, placeholder:'הוסיפי מרכיב…',
+          onChange:e=>setDraft(e.target.value), onKeyDown:e=>{ if(e.key==='Enter') add(); }}),
+        h('button',{className:'ing-add-btn', onClick:add, disabled:!draft.trim(), title:'הוסיפי'}, h(Icon,{name:'plus',size:16})))));
+}
+
+function Fridge({state, api}){
+  const {user, fridgeSelected, fridgeResults, fridgeUserItems, customMeals} = state;
+  const sel = fridgeSelected;
+  const todayIdx = new Date().getDay();
+  const train = MH.isWorkout(user, todayIdx);
+  const [query, setQuery] = useState('');
+
+  if(fridgeResults){
+    return h('div',{className:'rise'},
+      h(UI.Hero,{eyebrow:'מה במקרר?', eyebrowIcon:'fridge', title:'מצאנו מנות בשבילך',
+        right:h('button',{className:'btn', onClick:api.editFridge}, h(Icon,{name:'pencil'}),'ערכי מרכיבים')},
+        h('span',null, fridgeResults.length+' מתכונים הכוללים את כל '+sel.length+' המרכיבים שבחרת · '+MH.userLabel[user])),
+      fridgeResults.length===0
+        ? h('div',{className:'card', style:{padding:'40px 24px', textAlign:'center', color:'var(--ink-3)'}},
+            h(Icon,{name:'search', size:34}),
+            h('div',{style:{marginTop:12,fontWeight:600}},'לא נמצאו מתכונים שמכילים את כל המרכיבים שבחרת'),
+            h('div',{style:{marginTop:8,fontSize:13,color:'var(--ink-3)'}},'נסי להסיר מרכיב אחד ולחפש שוב'))
+        : h('div',{className:'meal-grid'},
+            fridgeResults.map(r=>{
+              const used = sel.filter(s=> (r.meal.recipe.ings||[]).some(i=>i.includes(s)));
+              const tier = r.pct>=60?'':r.pct>=35?'mid':'low';
+              return h('div',{key:r.meal.id+r.cat},
+                h('div',{style:{display:'flex',alignItems:'center',gap:9,margin:'0 2px 8px',flexWrap:'wrap'}},
+                  h('span',{className:'match-badge '+tier}, h(Icon,{name:'check',size:13}), r.pct+'% התאמה'),
+                  h('span',{style:{fontSize:12,color:'var(--ink-3)',fontWeight:600}}, 'יש לך: '+used.join(' · '))),
+                h(UI.MealCard,{meal:r.meal, catKey:r.cat, user, train, canSwap:false, onRecipe:api.openRecipe}));
+            })));
+  }
+
+  const q = query.trim();
+  // does anything match across builtin + user items?
+  const totalMatches = q ? window.FRIDGE.reduce((n,g)=>{
+    const all = g.items.concat(fridgeUserItems[g.group]||[]);
+    return n + all.filter(it=>it.includes(q)).length;
+  },0) : 1;
+
+  return h('div',{className:'rise'},
+    h(UI.Hero,{eyebrow:'מה במקרר?', eyebrowIcon:'fridge', title:'בחרי מה יש לך — נמצא מנה'},
+      h('span',null,'סמני מרכיבים שיש לך בבית — ובכל קטגוריה אפשר להוסיף מרכיבים משלך')),
+
+    h('div',{className:'ing-search'},
+      h(Icon,{name:'search', size:18}),
+      h('input',{className:'ing-search-input', value:query, placeholder:'חיפוש מרכיב…',
+        onChange:e=>setQuery(e.target.value)}),
+      query && h('button',{className:'ing-search-x', onClick:()=>setQuery(''), title:'נקה חיפוש'}, h(Icon,{name:'x', size:16}))),
+
+    window.FRIDGE.map(g=> h(CategoryGroup,{key:g.group, g, sel, userItems:fridgeUserItems[g.group], api, query})),
+
+    q && totalMatches===0 && h('div',{className:'card', style:{padding:'26px 22px', textAlign:'center'}},
+      h('div',{style:{color:'var(--ink-3)', fontWeight:600, marginBottom:14}}, 'אין מרכיב בשם "'+q+'"'),
+      h('div',{style:{display:'flex', gap:9, flexWrap:'wrap', justifyContent:'center'}},
+        window.FRIDGE.map(g=> h('button',{key:g.group, className:'btn', onClick:()=>{ api.addFridgeItem(g.group, q); setQuery(''); }},
+          h(Icon,{name:g.icon, size:15}), 'הוסיפי ל'+g.group)))),
+
+    h('div',{className:'fridge-bar'},
+      h('div',{style:{fontSize:14,fontWeight:700}},
+        sel.length ? h('span',{className:'tnum'}, sel.length+' מרכיבים נבחרו') : h('span',{style:{color:'var(--ink-3)'}},'לא נבחרו מרכיבים')),
+      h('div',{style:{display:'flex',gap:9}},
+        sel.length>0 && h('button',{className:'btn', onClick:api.clearFridge}, h(Icon,{name:'x'}),'נקה'),
+        h('button',{className:'btn primary', onClick:api.runFridge}, h(Icon,{name:'sparkles'}),'מצאי מנות'))));
+}
+
+window.Views = window.Views || {};
+window.Views.Fridge = Fridge;
+})();
+</script>
+
+<script type="text/babel">
+const {createElement:h, useEffect} = React;
+const M = window.MENU, MH = window.MH, UI = window.UI, Icon = window.Icon, Views = window.Views, Modals = window.Modals;
+
+function trainForKey(key, user){
+  if(key.indexOf('plan_')===0){ const i=parseInt(key.split('_').pop(),10)||0; return MH.isWorkout(user, i%7); }
+  if(key.indexOf('planner_')===0) return MH.isWorkout(user, new Date().getDay());
+  return false;
+}
+
+function App(){
+  const [state, patch, setState] = window.useMenuStore();
+
+  useEffect(()=>{ document.body.dataset.user = state.user; }, [state.user]);
+  useEffect(()=>{ const el=document.documentElement; if(state.theme==='dark') el.dataset.theme='dark'; else delete el.dataset.theme; }, [state.theme]);
+  useEffect(()=>{ if(!state.toast) return; const t=setTimeout(()=>patch({toast:null}), 2200); return ()=>clearTimeout(t); }, [state.toast]);
+
+  const cycle = (state.cycle.active && state.user==='atael') ? MH.cycleInfo(state.cycle.startDate) : null;
+
+  const api = {
+    cycle, customMeals: state.customMeals,
+    setUser:(uid)=>patch({user:uid}),
+    setView:(v)=>patch({view:v}),
+    setCat:(k)=>patch({catalogCat:k}),
+    setShopView:(v)=>patch({shopView:v}),
+    selectDay:(d)=>patch({selectedDay:d}),
+    toast:(msg)=>patch({toast:{msg, n:Date.now()}}),
+    toggleTheme:()=>patch(s=>({theme:s.theme==='dark'?'light':'dark'})),
+    openRecipe:(meal)=>patch({modal:{type:'recipe', meal}}),
+    openAddMeal:(cat)=>patch({modal:{type:'add', cat}}),
+    closeModal:()=>patch({modal:null}),
+    addCustomMeal:(cat, meal)=>patch(s=>({customMeals:{...s.customMeals,[cat]:[...s.customMeals[cat], meal]}, modal:null, toast:{msg:'המנה "'+meal.name+'" נוספה', n:Date.now()}})),
+    deleteCustomMeal:(meal)=>patch(s=>{ const cat=meal._cat||MH.catOf(meal.id, s.customMeals); return {customMeals:{...s.customMeals,[cat]:(s.customMeals[cat]||[]).filter(m=>m.id!==meal.id)}, toast:{msg:'המנה נמחקה', n:Date.now()}}; }),
+    toggleShop:(key)=>patch(s=>({shopChecked:{...s.shopChecked,[key]:!s.shopChecked[key]}})),
+    resetShop:()=>patch({shopChecked:{}}),
+    // my lists
+    addMyList:(items)=>patch(s=>{ const id='list_'+Date.now(); const today=new Date(); const dateStr=today.toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'numeric'}); return {myLists:[{id,date:dateStr,items:items.map(t=>({text:t,done:false}))}, ...s.myLists]}; }),
+    toggleMyListItem:(listId,idx)=>patch(s=>({myLists:s.myLists.map(l=>l.id===listId?{...l,items:l.items.map((it,i)=>i===idx?{...it,done:!it.done}:it)}:l)})),
+    deleteMyList:(listId)=>patch(s=>({myLists:s.myLists.filter(l=>l.id!==listId)})),
+    swap:(key, cat, currentId)=>patch(s=>{
+      const n=(s.swapCounts[key]||0);
+      const cyc=(s.cycle.active && s.user==='atael')?MH.cycleInfo(s.cycle.startDate):null;
+      const cand=MH.swapCandidate(cat, currentId, s.user, trainForKey(key, s.user), s.customMeals, n, cyc);
+      if(!cand) return {};
+      return {swaps:{...s.swaps,[key]:cand.id}, swapCounts:{...s.swapCounts,[key]:n+1}};
+    }),
+    // cycle
+    toggleCycle:()=>{ if(state.cycle.active) patch({cycle:{active:false,startDate:null}, toast:{msg:'מצב מחזור כובה', n:Date.now()}});
+      else patch({modal:{type:'cycle'}}); },
+    activateCycle:(date)=>patch({cycle:{active:true,startDate:date}, modal:null, toast:{msg:'מצב מחזור הופעל', n:Date.now()}}),
+    // planner
+    setPlannerType:(t)=>patch(s=>({planner:{...s.planner, mealType:t}})),
+    setPlannerText:(t)=>patch(s=>({planner:{...s.planner, text:t}})),
+    runPlanner:()=>{ const text=(state.planner.text||'').trim(); if(!text){ patch({toast:{msg:'כתבי מה תכננת לאכול 🙂'.replace('🙂',''), n:Date.now()}}); return; }
+      patch(s=>({planner:{...s.planner, loading:true, result:null}}));
+      setTimeout(()=>patch(s=>{ const est=MH.estimateCal(s.planner.text); const train=MH.isWorkout(s.user, new Date().getDay());
+        const plan=MH.buildDayPlan(est, s.planner.mealType, s.user, train, s.customMeals);
+        return {planner:{...s.planner, loading:false, result:{est, plan, text:s.planner.text}}}; }), 1050); },
+    clearPlanner:()=>patch(s=>({planner:{...s.planner, result:null, text:'', loading:false}})),
+    // fridge
+    toggleFridge:(it)=>patch(s=>({fridgeSelected: s.fridgeSelected.includes(it)? s.fridgeSelected.filter(x=>x!==it):[...s.fridgeSelected, it]})),
+    addFridgeItem:(group, it)=>patch(s=>{ const v=(it||'').trim(); if(!v) return {};
+      const groupItems = s.fridgeUserItems[group]||[];
+      const builtin = (window.FRIDGE.find(g=>g.group===group)||{}).items||[];
+      if(groupItems.includes(v)||builtin.includes(v)){ return {fridgeSelected: s.fridgeSelected.includes(v)?s.fridgeSelected:[...s.fridgeSelected, v], toast:{msg:'"'+v+'" כבר קיים', n:Date.now()}}; }
+      return {fridgeUserItems:{...s.fridgeUserItems,[group]:[...groupItems, v]}, fridgeSelected:[...s.fridgeSelected, v], toast:{msg:'"'+v+'" נוסף ל'+group, n:Date.now()}}; }),
+    removeFridgeItem:(group, it)=>patch(s=>({fridgeUserItems:{...s.fridgeUserItems,[group]:(s.fridgeUserItems[group]||[]).filter(x=>x!==it)}, fridgeSelected:s.fridgeSelected.filter(x=>x!==it)})),
+    clearFridge:()=>patch({fridgeSelected:[], fridgeResults:null}),
+    runFridge:()=>{ if(!state.fridgeSelected.length){ patch({toast:{msg:'בחרי לפחות מרכיב אחד', n:Date.now()}}); return; }
+      patch(s=>({fridgeResults: MH.fridgeMatches(s.fridgeSelected, s.user, s.customMeals, MH.isWorkout(s.user,new Date().getDay()))})); },
+    editFridge:()=>patch({fridgeResults:null}),
+  };
+
+  const customCount = MH.CATS.reduce((a,c)=>a+state.customMeals[c].length, 0);
+  const ViewComp = { catalog:Views.Catalog, plan:Views.Plan, shopping:Views.Shopping, planner:Views.Planner, fridge:Views.Fridge }[state.view] || Views.Catalog;
+  const train = MH.isWorkout(state.user, new Date().getDay());
+
+  const CycleBtnDesktop = state.user==='atael' && h('button',{
+    className: cycle? 'btn' : 'chip', onClick:api.toggleCycle,
+    style: cycle? {width:'100%',justifyContent:'center',background:'var(--rose-soft)',borderColor:'var(--rose-line)',color:'var(--rose-deep)'}
+                 : {width:'100%',justifyContent:'center',padding:'10px'}},
+    h(Icon,{name:'droplet',size:16}), cycle? (cycle.phase.name+' · יום '+cycle.day) : 'מצב מחזור');
+
+  return h('div',null,
+    h('div',{className:'app'},
+      h('aside',{className:'sidebar'},
+        h(UI.Logo,null),
+        h(UI.ProfileSwitch,{user:state.user, onPick:api.setUser, vertical:true}),
+        h('nav',{style:{display:'flex',flexDirection:'column',gap:4}}, h(UI.NavRail,{view:state.view, onNav:api.setView, customCount})),
+        h('div',{className:'sidebar-foot'},
+          CycleBtnDesktop || null,
+          h('button',{className:'btn', style:{width:'100%',justifyContent:'center'}, onClick:api.toggleTheme},
+            h(Icon,{name:state.theme==='dark'?'sun':'moon'}), state.theme==='dark'?'מצב בהיר':'מצב כהה'))),
+      h('main',{className:'main'},
+        h('header',{className:'topbar'},
+          h(UI.Logo,{size:30, sub:false}),
+          h('div',{style:{display:'flex',gap:8,alignItems:'center'}},
+            h(UI.ProfileSwitch,{user:state.user, onPick:api.setUser, compact:true}),
+            state.user==='atael' && h('button',{className:'iconbtn', onClick:api.toggleCycle,
+              style: cycle?{background:'var(--rose-soft)',borderColor:'var(--rose-line)',color:'var(--rose-deep)'}:null},
+              h(Icon,{name:'droplet'})),
+            h('button',{className:'iconbtn', onClick:api.toggleTheme}, h(Icon,{name:state.theme==='dark'?'sun':'moon'})))),
+        h('div',{className:'main-inner'}, h(ViewComp,{state, api})))),
+
+    h('div',{className:'tabbar-wrap'}, h(UI.BottomTabs,{view:state.view, onNav:api.setView})),
+
+    h(Modals.RecipeModal,{open:state.modal&&state.modal.type==='recipe', meal:state.modal&&state.modal.meal, user:state.user, train, onClose:api.closeModal}),
+    h(Modals.AddMealModal,{open:state.modal&&state.modal.type==='add', presetCat:state.modal&&state.modal.cat, user:state.user, onClose:api.closeModal, onSave:api.addCustomMeal}),
+    h(Modals.CycleModal,{open:state.modal&&state.modal.type==='cycle', onClose:api.closeModal, onActivate:api.activateCycle}),
+    h(UI.Toast,{msg:state.toast&&state.toast.msg, show:!!state.toast}));
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body>
+</html>
