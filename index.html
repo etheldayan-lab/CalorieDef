@@ -250,6 +250,11 @@ input,textarea,select{font-family:inherit}
   font-size:10.5px;font-weight:600;color:var(--ink-3);transition:color .15s}
 .tabbar button svg{width:22px;height:22px}
 .tabbar button.on{color:var(--accent-deep)}
+.tabbar button.on.tab-catalog{color:var(--plum-deep)}
+.tabbar button.on.tab-plan{color:var(--teal-deep)}
+.tabbar button.on.tab-fridge{color:var(--sage-deep)}
+.tabbar button.on.tab-shopping{color:var(--amber-deep)}
+.tabbar button.on.tab-planner{color:var(--indigo-deep)}
 
 /* ---------- category tabs ---------- */
 .cat-tabs{display:flex;gap:6px;flex-wrap:wrap}
@@ -533,7 +538,8 @@ input,textarea,select{font-family:inherit}
     padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line);gap:10px}
   .main-inner{padding:16px 16px 110px;max-width:640px}
   .tabbar-wrap{display:block;position:fixed;bottom:0;left:0;right:0;z-index:60;
-    box-shadow:0 -6px 22px -14px rgba(0,0,0,.35);padding-bottom:env(safe-area-inset-bottom)}
+    box-shadow:0 -6px 22px -14px rgba(0,0,0,.35);padding-bottom:env(safe-area-inset-bottom);
+    background:var(--surface-2)}
   .hero{padding:18px 19px;border-radius:var(--radius)}
   .hero-title{font-size:22px}
   .hero-row{gap:14px}
@@ -828,7 +834,7 @@ Object.keys(PORTIONS).forEach(u=>{
 // ============================================================
 const meals={
 breakfast:[
-{id:'b1',name:'פנקייק שיבולת שועל',calA:{rest:320,train:340},calB:{rest:420,train:460},protein:22,fiber:5,prep:'10 דק',desc:'פנקייקים עם יוגורט 5% ותות טרי',recipe:{ings:['שיבולת שועל','ביצה','יוגורט 3%','אבקת אפייה','דבש','יוגורט 5% לגבייה','פירות טריים'],steps:['ערבבי שיבולת + ביצה + יוגורט + אבקת אפייה + דבש','חממי מחבת נון-סטיק בלי שמן','צקי עיגולים, צלי 2-3 דק׳ לצד','הגישי עם יוגורט ופירות']}},
+{id:'b1',name:'פנקייק שיבולת שועל',calA:{rest:340,train:365},calB:{rest:430,train:470},protein:22,fiber:5,prep:'10 דק',desc:'פנקייקים עם יוגורט 5% ותות טרי',recipe:{ings:['שיבולת שועל','ביצה','יוגורט 3%','אבקת אפייה','דבש','יוגורט 5% לגבייה','פירות טריים'],steps:['ערבבי שיבולת + ביצה + יוגורט + אבקת אפייה + דבש','חממי מחבת נון-סטיק בלי שמן','צקי עיגולים, צלי 2-3 דק׳ לצד','הגישי עם יוגורט ופירות']}},
 {id:'b2',name:'ביצים מקושקשות עם גבינה בולגרית',calA:{rest:290,train:310},calB:{rest:390,train:430},protein:20,fiber:2,prep:'8 דק',desc:'ביצים + גבינה 5% + עגבנייה + לחם שיפון',recipe:{ings:['ביצים','גבינה בולגרית 5%','עגבנייה','חמאה','לחם שיפון','מלח + פלפל'],steps:['טרפי ביצים עם מלח ופלפל','חממי מחבת עם חמאה','ערבבי לאט עד שמתייצבות','הגישי עם עגבנייה + גבינה על לחם']}},
 {id:'b3',name:'לחם מלא עם אבוקדו וביצה עלומה',calA:{rest:370,train:390},calB:{rest:460,train:510},protein:18,fiber:8,prep:'12 דק',desc:'לחם מחיטה מלאה + אבוקדו + ביצה עלומה',recipe:{ings:['לחם מחיטה מלאה','אבוקדו','ביצה','מלח ים','פלפל','לימון'],steps:['הרתיחי מים עם כפית חומץ, צרפי ביצה, בשלי 3-4 דק׳','קלי לחם, מעכי אבוקדו + לימון + מלח','מרחי על לחם, הניחי ביצה מעל']}},
 {id:'b4',name:'שייק בננה ושיבולת שועל',calA:{rest:340,train:360},calB:{rest:450,train:490},protein:24,fiber:6,prep:'3 דק',desc:'בננה + שיבולת שועל + חלב + גבינה לבנה',recipe:{ings:['בננה','שיבולת שועל','חלב 1%','גבינה לבנה 5%','קינמון'],steps:['הכניסי הכל לבלנדר, טחני 40 שניות']}},
@@ -837,13 +843,13 @@ breakfast:[
 {id:'b7',name:'שיבולת שועל לילית',calA:{rest:295,train:315},calB:{rest:400,train:440},protein:14,fiber:8,prep:'2 דק׳ (בבוקר)',desc:'מוכן ערב קודם: שיבולת + חלב + יוגורט + פירות יער',recipe:{ings:['שיבולת שועל','חלב 1%','יוגורט 3%','דבש','פירות יער (קפוא מצוין!)','זרעי פשתן'],steps:['ערב לפני: ערבבי הכל בצנצנת, שמי במקרר','בבוקר: פרשי פירות יער + פשתן מעל']}},
 {id:'b8',name:'חביתת ירקות אפויה',calA:{rest:275,train:295},calB:{rest:380,train:420},protein:21,fiber:3,prep:'20 דק',desc:'ביצים + גמבה + תרד + בצל ירוק, בתנור',recipe:{ings:['ביצים','גמבה','תרד','בצל ירוק','גבינה בולגרית','מלח + פלפל + פפריקה'],steps:['חממי תנור ל-180°, רססי תבנית','פזרי ירקות, שפכי ביצים טרופות + גבינה','אפי 15-18 דק׳']}},
 {id:'b9',name:'לחמניה מלאה עם נקניק הודו',calA:{rest:305,train:325},calB:{rest:400,train:440},protein:24,fiber:5,prep:'5 דק',desc:'לחמניה מלאה + נקניק הודו + חרדל + ירקות',recipe:{ings:['לחמניה מחיטה מלאה','נקניק הודו','חרדל','חסה + עגבנייה + מלפפון'],steps:['חתכי לחמניה, מרחי חרדל, שכבי ירקות + נקניק']}},
-{id:'b10',name:'גרנולה עם חלב ותות',calA:{rest:355,train:375},calB:{rest:470,train:510},protein:12,fiber:6,prep:'3 דק',desc:'גרנולה דלת סוכר + חלב 1% + תות טרי',recipe:{ings:['גרנולה','חלב 1%','תותים','קינמון'],steps:['שפכי גרנולה לקערה, הוספי חלב + תותים + קינמון']}},
+{id:'b10',name:'גרנולה עם חלב ותות',calA:{rest:295,train:315},calB:{rest:410,train:450},protein:12,fiber:6,prep:'3 דק',desc:'גרנולה דלת סוכר + חלב 1% + תות טרי',recipe:{ings:['גרנולה','חלב 1%','תותים','קינמון'],steps:['שפכי גרנולה לקערה, הוספי חלב + תותים + קינמון']}},
 ],
 lunch:[
 {id:'l1',name:'קערת עוף צלוי וקינואה',calA:{rest:475,train:510},calB:{rest:620,train:680},protein:38,fiber:8,prep:'30 דק',desc:'עוף צלוי + קינואה + בטטה + חומוס + טחינה',recipe:{ings:['חזה עוף','קינואה','בטטה','חומוס','טחינה גולמית','לימון + שמן זית + פפריקה'],steps:['בשלי קינואה 1:2 עם מים 15 דק׳','עוף + בטטה מתובלים בתנור 200° 25 דק׳','הרכיבי קערה + טחינה']}},
 {id:'l2',name:'פסטה מחיטה מלאה עם עגבניות ותרד',calA:{rest:415,train:445},calB:{rest:560,train:620},protein:18,fiber:10,prep:'20 דק',desc:'פסטה + רוטב עגבניות + תרד + שום',recipe:{ings:['פסטה מחיטה מלאה','עגבניות מרוסקות','שיני שום','תרד','שמן זית + אורגנו + ריחן','פרמזן'],steps:['בשלי פסטה, טגני שום, הוספי עגבניות + תבלינים 10 דק׳','הוספי תרד, מזגי על פסטה + פרמזן']}},
 {id:'l3',name:'שניצל הודו בתנור',calA:{rest:455,train:490},calB:{rest:600,train:660},protein:42,fiber:6,prep:'35 דק',desc:'חזה הודו בפירורי לחם + ברוקולי + גזר + בטטה',recipe:{ings:['חזה הודו','פירורי לחם','ביצה','ברוקולי + גזר + בטטה','שמן זית + פפריקה + מלח'],steps:['חממי תנור ל-200°, עטפי הודו: ביצה → פירורי + פפריקה','שמי עם ירקות מתובלים בתבנית, אפי 25-30 דק׳']}},
-{id:'l4',name:'מרק עדשים עם לחם שיפון',calA:{rest:345,train:370},calB:{rest:480,train:530},protein:20,fiber:13,prep:'30 דק',desc:'עדשים כתומות + כמון + שום + לחם שיפון',recipe:{ings:['עדשים כתומות','בצל','שיני שום','גזר','כמון + כורכום + מלח + שמן זית + לימון','לחם שיפון + טחינה'],steps:['טגני בצל + שום + גזר 5 דק׳','הוספי עדשים + 4 כוסות מים + תבלינים, בשלי 20 דק׳','טחני חצי מהמרק, סחטי לימון, הגישי עם לחם']}},
+{id:'l4',name:'מרק עדשים עם לחם שיפון',calA:{rest:390,train:415},calB:{rest:510,train:560},protein:20,fiber:13,prep:'30 דק',desc:'עדשים כתומות + כמון + שום + לחם שיפון',recipe:{ings:['עדשים כתומות','בצל','שיני שום','גזר','כמון + כורכום + מלח + שמן זית + לימון','לחם שיפון + טחינה'],steps:['טגני בצל + שום + גזר 5 דק׳','הוספי עדשים + 4 כוסות מים + תבלינים, בשלי 20 דק׳','טחני חצי מהמרק, סחטי לימון, הגישי עם לחם']}},
 {id:'l5',name:'בורגר עוף ביתי עם קולסלאו',calA:{rest:465,train:500},calB:{rest:610,train:670},protein:40,fiber:5,prep:'25 דק',desc:'קציצת עוף + לחמניה מלאה + קולסלאו יוגורט',recipe:{ings:['עוף טחון','לחמניה מלאה','כרוב לבן מגורר','גזר מגורר','יוגורט + חרדל + מלח'],steps:['ערבבי עוף + שום + מלח + פפריקה, צרי קציצה, צלי 5-6 דק׳','קולסלאו: כרוב + גזר + יוגורט + חרדל','הרכיבי בורגר']}},
 {id:'l6',name:'עטרה של טונה מעושנת ואבוקדו',calA:{rest:405,train:435},calB:{rest:560,train:615},protein:30,fiber:7,prep:'15 דק',desc:'לאפה + טונה מעושנת + אבוקדו + כרוב + יוגורט-לימון',recipe:{ings:['לאפה','טונה מעושנת','אבוקדו','כרוב סגול','יוגורט + לימון + מלח'],steps:['ערבבי יוגורט + לימון + מלח, חממי לאפה','מרחי אבוקדו, שכבי כרוב + טונה, גלגלי']}},
 {id:'l7',name:'ריזוטו שעורה עם פטריות',calA:{rest:385,train:415},calB:{rest:520,train:575},protein:16,fiber:9,prep:'35 דק',desc:'שעורה (סיבים כפולים) + פטריות + תרד + פרמזן',recipe:{ings:['שעורה','ציר ירקות','פטריות שמפיניון','תרד','שאלוט','פרמזן','שמן זית + תימין'],steps:['טגני שאלוט, הוספי שעורה, הוספי ציר מצקת בכל פעם תוך ערבוב 25-30 דק׳','טגני פטריות + תרד בנפרד, ערבבי יחד + פרמזן']}},
@@ -1179,7 +1185,7 @@ function cycleInfo(startDate){
   return phase ? {day, phase} : null;
 }
 
-// fridge matching
+// fridge matching — ALL selected ingredients must appear in the recipe (extras like sauces/seasoning are fine)
 function fridgeMatches(selected, user, customMeals, train){
   if(!selected || !selected.length) return [];
   const sel = selected;
@@ -1188,20 +1194,21 @@ function fridgeMatches(selected, user, customMeals, train){
     pool(cat,customMeals).forEach(meal=>{
       const ings = (meal.recipe && meal.recipe.ings) || [];
       if(!ings.length) return;
+      // ALL selected ingredients must be found in recipe ingredients
+      const allPresent = sel.every(s => ings.some(ing => ing.includes(s)));
+      if(!allPresent) return;
       let matched=0; const used=new Set();
       ings.forEach(ing=>{
-        const low = ing; 
-        for(const s of sel){ if(low.includes(s)){ matched++; used.add(s); break; } }
+        for(const s of sel){ if(ing.includes(s)){ matched++; used.add(s); break; } }
       });
-      if(matched===0) return;
       const coverage = matched/ings.length;
       const selUse = used.size/sel.length;
       const score = coverage*0.7 + selUse*0.3;
-      scored.push({meal, cat, matched, total:ings.length, pct:Math.round(coverage*100), score, usedCount:used.size});
+      scored.push({meal, cat, matched, total:ings.length, pct:Math.round(selUse*100), score, usedCount:used.size});
     });
   });
   scored.sort((a,b)=> b.score-a.score || b.usedCount-a.usedCount);
-  return scored.filter(s=>s.usedCount>=1).slice(0,9);
+  return scored;
 }
 
 window.MH = {
@@ -1229,8 +1236,9 @@ const DEFAULTS = {
   modal:null, toast:null, selectedDay:null,
   planner:{mealType:'dinner', text:'', result:null, loading:false},
   fridgeResults:null,
+  myLists:[], // [{id, date, items:[{text,done}]}]
 };
-const PERSIST = ['theme','user','view','catalogCat','shopView','cycle','swaps','swapCounts','customMeals','shopChecked','fridgeSelected','fridgeUserItems'];
+const PERSIST = ['theme','user','view','catalogCat','shopView','cycle','swaps','swapCounts','customMeals','shopChecked','fridgeSelected','fridgeUserItems','myLists'];
 
 function loadState(){
   let saved={};
@@ -1238,6 +1246,7 @@ function loadState(){
   const s = {...DEFAULTS, ...saved};
   s.cycle = {...DEFAULTS.cycle, ...(saved.cycle||{})};
   s.customMeals = {...DEFAULTS.customMeals, ...(saved.customMeals||{})};
+  s.myLists = saved.myLists || [];
   return s;
 }
 
@@ -1323,13 +1332,41 @@ function Ring({pct=0, size=104, stroke=10, val, lbl, color='var(--accent)'}){
     h('div',{className:'ring-center'}, h('div',{className:'rc-val tnum'}, val), lbl && h('div',{className:'rc-lbl'}, lbl)));
 }
 
+/* girl SVG (dress silhouette) */
+const GirlIcon = ({size=20}) => h('svg',{width:size,height:size,viewBox:'0 0 24 24',fill:'currentColor','aria-hidden':true},
+  h('circle',{cx:12,cy:4,r:2.5}),
+  h('path',{d:'M8 10 Q12 8 16 10 L15 17 H9 Z'}),
+  h('path',{d:'M9 17 L7 22 H11 L12 19 L13 22 H17 L15 17 Z'}));
+/* boy SVG (pants silhouette) */
+const BoyIcon = ({size=20}) => h('svg',{width:size,height:size,viewBox:'0 0 24 24',fill:'currentColor','aria-hidden':true},
+  h('circle',{cx:12,cy:4,r:2.5}),
+  h('rect',{x:9,y:8,width:6,height:8,rx:1}),
+  h('rect',{x:9,y:15,width:2.5,height:7,rx:1}),
+  h('rect',{x:12.5,y:15,width:2.5,height:7,rx:1}));
+
 function ProfileSwitch({user, onPick, vertical, compact}){
   const subs={atael:'1,400–1,600 קל', yona:'1,800–2,000 קל'};
+  const fullNames={atael:'אתאל', yona:'יונה'};
+  if(compact){
+    return h('div',{style:{display:'flex',gap:6,alignItems:'center'}},
+      ['atael','yona'].map(uid=> h('button',{key:uid,
+        className:'iconbtn'+(user===uid?' on':''),
+        style: user===uid
+          ? (uid==='atael'?{background:'var(--plum-soft)',borderColor:'var(--plum-line)',color:'var(--plum-deep)'}
+                          :{background:'var(--teal-soft)',borderColor:'var(--teal-line)',color:'var(--teal-deep)'})
+          : null,
+        onClick:()=>onPick&&onPick(uid),
+        title:fullNames[uid]+' · '+subs[uid]},
+        h('div',{style:{display:'flex',flexDirection:'column',alignItems:'center',gap:1}},
+          uid==='atael'?h(GirlIcon,{size:16}):h(BoyIcon,{size:16}),
+          h('span',{style:{fontSize:'9px',fontWeight:700,lineHeight:1}},'יונה'===fullNames[uid]?'יונה':'אתאל')))));
+  }
   return h('div',{className:'prof-switch', style:vertical?{flexDirection:'column'}:null},
     ['atael','yona'].map(uid=> h('button',{key:uid, className:'prof '+uid+(user===uid?' on':''), onClick:()=>onPick&&onPick(uid)},
-      h('div',{className:'avatar '+uid}, uid==='atael'?'א':'י'),
-      !compact && h('div',{style:{minWidth:0}},
-        h('div',{className:'prof-name'}, UL[uid]),
+      h('div',{className:'avatar '+uid, style:{display:'flex',alignItems:'center',justifyContent:'center'}},
+        uid==='atael'?h(GirlIcon,{size:18}):h(BoyIcon,{size:18})),
+      h('div',{style:{minWidth:0}},
+        h('div',{className:'prof-name'}, fullNames[uid]),
         h('div',{className:'prof-sub'}, subs[uid])))));
 }
 
@@ -1353,7 +1390,8 @@ function BottomTabs({view, onNav}){
     {id:'shopping',label:'קניות',icon:'cart'},
     {id:'planner',label:'תכנון',icon:'sparkles'},
   ];
-  return h('div',{className:'tabbar'}, items.map(t=> h('button',{key:t.id, className:view===t.id?'on':'', onClick:()=>onNav(t.id)},
+  return h('div',{className:'tabbar'}, items.map(t=> h('button',{key:t.id,
+    className:(view===t.id?'on ':'')+' tab-'+t.id, onClick:()=>onNav(t.id)},
     h(Icon,{name:t.icon}), t.label)));
 }
 
@@ -1561,16 +1599,20 @@ window.Views.Catalog = Catalog;
 /* ===== js/view-plan.jsx ===== */
 /* view-plan.jsx — monthly plan: workout strip, day grid, day detail with totals */
 (function(){
-const {createElement:h} = React;
+const {createElement:h, useState} = React;
 const M = window.MENU, MH = window.MH, UI = window.UI, Icon = window.Icon;
 
 function dayIconName(d){ if(d.shab) return 'candle'; if(d.fri) return 'candle'; if(d.wo) return 'dumbbell'; return null; }
 
 function Plan({state, api}){
-  const {user, customMeals, swaps, selectedDay} = state;
+  const {user, customMeals, swaps} = state;
+  const [modalDay, setModalDay] = useState(null);
   const plan = MH.monthPlan(user, customMeals, swaps);
   const cyc = api.cycle;
   const woDays = M.USERS[user].workoutDays.map(i=>M.DAYS7[i]).join(' · ');
+  const openDay = d => setModalDay(d.day);
+  const closeDay = () => setModalDay(null);
+  const dayData = modalDay ? plan[modalDay-1] : null;
 
   return h('div',{className:'rise'},
     h(UI.Hero,{eyebrow:'תוכנית חודשית', eyebrowIcon:'calendar', title:'התפריט החודשי שלכם'},
@@ -1594,21 +1636,21 @@ function Plan({state, api}){
         h('span',{className:'lg'}, h('span',{className:'dot both'}),'שניהם'),
         h('span',{className:'lg'}, h('span',{className:'dot shab'}),'שבת'))),
 
-    h('div',{className:'sec-head'}, h(Icon,{name:'sparkles'}),'בחרי יום לתפריט המלא'),
-    h('div',{className:'day-grid', style:{marginBottom:selectedDay?20:0}},
+    h('div',{className:'sec-head'}, h(Icon,{name:'sparkles'}),'לחצי על יום לתפריט המלא'),
+    h('div',{className:'day-grid'},
       plan.map(d=>{
         const ic=dayIconName(d);
-        return h('button',{key:d.day, className:'day-btn'+(selectedDay===d.day?' sel':'')+((d.shab||d.fri)?' shab':''),
-          onClick:()=>api.selectDay(selectedDay===d.day?null:d.day)},
+        return h('button',{key:d.day, className:'day-btn'+((d.shab||d.fri)?' shab':''),
+          onClick:()=>openDay(d)},
           h('div',{className:'dl'}, d.dayName),
           h('div',{className:'dn tnum'}, d.day),
           h('div',{className:'di'}, ic && h(Icon,{name:ic})));
       })),
 
-    selectedDay && h(DayDetail,{day:plan[selectedDay-1], user, cyc, api, swaps, customMeals}));
+    dayData && h(DayModal,{day:dayData, user, cyc, api, swaps, customMeals, onClose:closeDay}));
 }
 
-function DayDetail({day:d, user, cyc, api, swaps, customMeals}){
+function DayModal({day:d, user, cyc, api, swaps, customMeals, onClose}){
   const i = d.day-1;
   const train = MH.isWorkout(user, d.di);
   const target = MH.targetCal(user, train);
@@ -1624,28 +1666,19 @@ function DayDetail({day:d, user, cyc, api, swaps, customMeals}){
   const pct = Math.min(100, Math.round(total/target*100));
   const ctxLabel = d.shab?'שבת':d.fri?'ערב שבת':train?'יום אימון':'יום רגיל';
 
-  return h('div',{className:'day-detail rise'},
-    h('div',{className:'dd-head'+(special?' shab':'')},
-      h('div',{style:{display:'flex',justifyContent:'space-between',alignItems:'flex-start',gap:14,flexWrap:'wrap'}},
-        h('div',null,
-          h('div',{className:'dd-title'}, 'יום '+d.day+' · '+d.fullDay),
-          h('div',{className:'dd-sub'}, ctxLabel+' · יעד '+target+' קל · '+MH.userLabel[user])),
-        h(UI.Ring,{pct, size:74, stroke:8, color:'#fff', val:h('span',{className:'tnum',style:{fontSize:17,color:'#fff'}}, total),
-          lbl:null}))),
-    h('div',{className:'dd-body'},
+  return h(UI.Modal,{open:true, onClose, title:'יום '+d.day+' · '+d.fullDay,
+    titleRight:h('div',{style:{display:'flex',gap:8,alignItems:'center',flexWrap:'wrap',marginTop:6}},
+      h('span',{className:'chip'+(special?' amber':'')}, ctxLabel),
+      h('span',{className:'chip accent tnum'}, h(Icon,{name:'flame',size:14}), total+' / '+target+' קל'))},
+    h('div',{className:'dd-body', style:{padding:0}},
+      h('div',{className:'bar',style:{marginBottom:14}}, h('i',{style:{width:pct+'%'}})),
       items.map(it=>{
-        const dispId = it.swapKey ? swaps[it.swapKey] : null;
         const rec = !!(cyc && cyc.phase.prefer.includes(it.meal.id));
-        return h('div',{key:it.k},
-          h('div',{className:'sec-head',style:{margin:'8px 0 8px'}}, h(Icon,{name:MH.catMeta[it.cat]?MH.catMeta[it.cat].icon:'utensils'}), it.label),
+        return h('div',{key:it.k,style:{marginBottom:14}},
+          h('div',{className:'sec-head',style:{margin:'0 0 8px'}}, h(Icon,{name:MH.catMeta[it.cat]?MH.catMeta[it.cat].icon:'utensils'}), it.label),
           h(UI.MealCard,{meal:it.meal, catKey:it.cat, user, train, recommended:rec, canSwap:it.canSwap,
             onRecipe:api.openRecipe, onSwap:it.canSwap?()=>api.swap(it.swapKey, it.cat, it.meal.id):null}));
-      }),
-      h('div',{className:'total', style:{marginTop:8}},
-        h('div',{className:'total-top'},
-          h('div',{className:'total-lbl'},'סך הקלוריות ביום'),
-          h('div',{className:'total-num tnum'}, total+' / '+target+' קל')),
-        h('div',{className:'bar'}, h('i',{style:{width:pct+'%'}})))));
+      })));
 }
 
 window.Views = window.Views || {};
@@ -1687,9 +1720,52 @@ function Section({title, items, keyer, checked, onToggle, open, onOpen}){
           h('span',{className:'si-txt'}, it)); })));
 }
 
+function MyListPanel({myLists, api}){
+  const [draft, setDraft] = useState('');
+  const [showNew, setShowNew] = useState(false);
+  function createList(){
+    const lines = draft.split('\n').map(l=>l.trim()).filter(Boolean);
+    if(!lines.length) return;
+    api.addMyList(lines);
+    setDraft('');
+    setShowNew(false);
+  }
+  return h('div',null,
+    h('div',{style:{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14}},
+      h('div',{style:{fontSize:14,fontWeight:700,color:'var(--ink-2)'}},
+        h(Icon,{name:'bookmark',size:16,style:{display:'inline',verticalAlign:'middle',marginLeft:6}}),'הרשימות שלי'),
+      h('button',{className:'btn',style:{fontSize:13,padding:'7px 12px'},onClick:()=>setShowNew(v=>!v)},
+        h(Icon,{name:'plus',size:15}),showNew?'ביטול':'רשימה חדשה')),
+
+    showNew && h('div',{className:'card',style:{padding:16,marginBottom:16}},
+      h('div',{className:'field'},
+        h('label',null,'פריטים לרשימה (שורה לכל פריט)'),
+        h('textarea',{className:'textarea',rows:5,value:draft,placeholder:'חלב\nביצים\nלחם...',onChange:e=>setDraft(e.target.value)})),
+      h('button',{className:'btn primary',style:{width:'100%'},onClick:createList},
+        h(Icon,{name:'check'}),'שמרי רשימה')),
+
+    myLists.length===0 && !showNew && h('div',{style:{padding:'20px',textAlign:'center',color:'var(--ink-3)',fontSize:13}},
+      'עדיין אין רשימות — צרי רשימה חדשה'),
+
+    myLists.map(list=> h('div',{key:list.id,className:'shop-sec',style:{marginBottom:10}},
+      h('div',{className:'shop-head',style:{cursor:'default'}},
+        h('div',{className:'sh-l'},
+          h('div',{className:'sh-tok'}, h(Icon,{name:'cart'})),
+          h('div',null,
+            h('div',{style:{fontSize:15,fontWeight:700}},list.items.filter(it=>it.done).length+'/'+list.items.length+' פריטים'),
+            h('div',{style:{fontSize:11,color:'var(--ink-3)',marginTop:2}},'קנייה: '+list.date))),
+        h('button',{className:'btn ghost',style:{padding:'4px 8px',fontSize:12},onClick:()=>api.deleteMyList(list.id)},
+          h(Icon,{name:'trash',size:14}),'מחקי')),
+      h('div',{className:'shop-items'},
+        list.items.map((it,idx)=>h('div',{key:idx,className:'shop-item'+(it.done?' done':''),onClick:()=>api.toggleMyListItem(list.id,idx)},
+          h('div',{className:'cb'},h(Icon,{name:'check'})),
+          h('span',{className:'si-txt'},it.text)))))));
+}
+
 function Shopping({state, api}){
-  const {shopView, shopChecked, user, customMeals, swaps} = state;
+  const {shopView, shopChecked, user, customMeals, swaps, myLists=[]} = state;
   const [open,setOpen]=useState({});
+  const [showMyList, setShowMyList]=useState(false);
   const toggleOpen = id => setOpen(o=>({...o,[id]:!o[id]}));
 
   let body;
@@ -1722,7 +1798,14 @@ function Shopping({state, api}){
     h('div',{style:{marginBottom:16}},
       h(UI.Seg,{value:shopView, onChange:api.setShopView,
         options:[{value:'weekly',label:'לפי קטגוריה',icon:'grid'},{value:'daily',label:'לפי יום',icon:'calendar'}]})),
-    body);
+    body,
+    h('div',{style:{marginTop:22,borderTop:'1px solid var(--line)',paddingTop:16}},
+      h('button',{style:{display:'flex',alignItems:'center',gap:8,fontSize:13,fontWeight:700,color:'var(--ink-3)',background:'none',border:'none',cursor:'pointer',marginBottom:12},
+        onClick:()=>setShowMyList(v=>!v)},
+        h(Icon,{name:showMyList?'chevronDown':'chevronLeft',size:16}),
+        'הרשימות האישיות שלי',
+        myLists.length>0&&h('span',{className:'badge tnum',style:{background:'var(--amber)',fontSize:11,padding:'1px 7px',borderRadius:999,color:'#fff',marginRight:4}},myLists.length)),
+      showMyList && h(MyListPanel,{myLists, api})));
 }
 
 window.Views = window.Views || {};
@@ -1851,10 +1934,12 @@ function Fridge({state, api}){
     return h('div',{className:'rise'},
       h(UI.Hero,{eyebrow:'מה במקרר?', eyebrowIcon:'fridge', title:'מצאנו מנות בשבילך',
         right:h('button',{className:'btn', onClick:api.editFridge}, h(Icon,{name:'pencil'}),'ערכי מרכיבים')},
-        h('span',null, fridgeResults.length+' מנות מתאימות ל-'+sel.length+' המרכיבים שבחרת · בכמות של '+MH.userLabel[user])),
+        h('span',null, fridgeResults.length+' מתכונים הכוללים את כל '+sel.length+' המרכיבים שבחרת · '+MH.userLabel[user])),
       fridgeResults.length===0
         ? h('div',{className:'card', style:{padding:'40px 24px', textAlign:'center', color:'var(--ink-3)'}},
-            h(Icon,{name:'search', size:34}), h('div',{style:{marginTop:12,fontWeight:600}},'לא נמצאו התאמות — נסי לבחור עוד מרכיבים'))
+            h(Icon,{name:'search', size:34}),
+            h('div',{style:{marginTop:12,fontWeight:600}},'לא נמצאו מתכונים שמכילים את כל המרכיבים שבחרת'),
+            h('div',{style:{marginTop:8,fontSize:13,color:'var(--ink-3)'}},'נסי להסיר מרכיב אחד ולחפש שוב'))
         : h('div',{className:'meal-grid'},
             fridgeResults.map(r=>{
               const used = sel.filter(s=> (r.meal.recipe.ings||[]).some(i=>i.includes(s)));
@@ -1940,6 +2025,10 @@ function App(){
     deleteCustomMeal:(meal)=>patch(s=>{ const cat=meal._cat||MH.catOf(meal.id, s.customMeals); return {customMeals:{...s.customMeals,[cat]:(s.customMeals[cat]||[]).filter(m=>m.id!==meal.id)}, toast:{msg:'המנה נמחקה', n:Date.now()}}; }),
     toggleShop:(key)=>patch(s=>({shopChecked:{...s.shopChecked,[key]:!s.shopChecked[key]}})),
     resetShop:()=>patch({shopChecked:{}}),
+    // my lists
+    addMyList:(items)=>patch(s=>{ const id='list_'+Date.now(); const today=new Date(); const dateStr=today.toLocaleDateString('he-IL',{day:'2-digit',month:'2-digit',year:'numeric'}); return {myLists:[{id,date:dateStr,items:items.map(t=>({text:t,done:false}))}, ...s.myLists]}; }),
+    toggleMyListItem:(listId,idx)=>patch(s=>({myLists:s.myLists.map(l=>l.id===listId?{...l,items:l.items.map((it,i)=>i===idx?{...it,done:!it.done}:it)}:l)})),
+    deleteMyList:(listId)=>patch(s=>({myLists:s.myLists.filter(l=>l.id!==listId)})),
     swap:(key, cat, currentId)=>patch(s=>{
       const n=(s.swapCounts[key]||0);
       const cyc=(s.cycle.active && s.user==='atael')?MH.cycleInfo(s.cycle.startDate):null;
