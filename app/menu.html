@@ -26,23 +26,47 @@
     var LS="menuapp.cloud.v1";
     var sb=window.supabase.createClient(SB_URL,SB_KEY);
     window.__cdSB=sb;
-    var origSet=Storage.prototype.setItem, timer=null;
+    var origSet=Storage.prototype.setItem, pushTimer=null;
+    // PUSH: when the app saves locally, send it up to the cloud (debounced)
     Storage.prototype.setItem=function(k,v){
       origSet.apply(this,arguments);
-      if(k===LS){ clearTimeout(timer); timer=setTimeout(function(){ pushCloud(v); },800); }
+      if(k===LS){ clearTimeout(pushTimer); pushTimer=setTimeout(function(){ pushCloud(v); },700); }
     };
     async function pushCloud(v){
-      try{
-        var u=(await sb.auth.getUser()).data.user; if(!u) return;
+      try{ var u=(await sb.auth.getUser()).data.user; if(!u) return;
         var data; try{ data=JSON.parse(v); }catch(e){ data={}; }
         await sb.from("app_state").upsert({user_id:u.id,data:data,updated_at:new Date().toISOString()});
       }catch(e){}
     }
-    sb.auth.getSession().then(function(r){
-      var s=r.data.session;
-      if(!s){ location.replace("./"); return; }
-      if(!localStorage.getItem(LS) && !sessionStorage.getItem("cd_entered")){ location.replace("./"); }
+    // PULL: fetch latest cloud data; if it differs, update local and refresh
+    var pulling=false;
+    async function pullCloud(){
+      if(pulling) return; pulling=true;
+      try{
+        var u=(await sb.auth.getUser()).data.user; if(u){
+          var r=await sb.from("app_state").select("data").eq("user_id",u.id).maybeSingle();
+          var cloud=(r.data && r.data.data) ? r.data.data : null;
+          if(cloud && Object.keys(cloud).length){
+            var cloudStr=JSON.stringify(cloud);
+            if(cloudStr!==localStorage.getItem(LS)){
+              origSet.call(localStorage, LS, cloudStr); // write without re-triggering a push
+              location.reload();
+            }
+          }
+        }
+      }catch(e){}
+      pulling=false;
+    }
+    // session gate + initial pull
+    sb.auth.getSession().then(function(res){
+      if(!res.data.session){ location.replace("./"); return; }
+      if(!localStorage.getItem(LS) && !sessionStorage.getItem("cd_entered")){ location.replace("./"); return; }
+      pullCloud();
     });
+    // re-pull whenever the user returns to the app
+    document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="visible") pullCloud(); });
+    window.addEventListener("focus", pullCloud);
+    // logout button
     setTimeout(function(){
       if(document.getElementById("cd-logout")) return;
       var b=document.createElement("button");
