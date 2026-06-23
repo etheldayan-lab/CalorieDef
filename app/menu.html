@@ -47,7 +47,7 @@
         var u=(await sb.auth.getUser()).data.user; if(u){
           var r=await sb.from("app_state").select("data,updated_at").eq("user_id",u.id).maybeSingle();
           if(r.data && r.data.updated_at && r.data.updated_at!==lastSyncAt){
-            if(typing()){ pulling=false; return; } // dont interrupt active editing; retry next cycle
+            if(typing()){ pulling=false; return; }
             lastSyncAt=r.data.updated_at;
             origSet.call(localStorage,SYNC,lastSyncAt);
             if(r.data.data && Object.keys(r.data.data).length){ origSet.call(localStorage,LS,JSON.stringify(r.data.data)); }
@@ -58,14 +58,21 @@
       pulling=false;
     }
     sb.auth.getSession().then(function(res){
-      if(!res.data.session){ location.replace("./"); return; }
+      var s=res.data.session;
+      if(!s){ location.replace("./"); return; }
       if(!localStorage.getItem(LS) && !sessionStorage.getItem("cd_entered")){ location.replace("./"); return; }
       pullCloud();
+      // LIVE updates: subscribe to changes on this users row and pull instantly
+      try{
+        sb.realtime.setAuth(s.access_token);
+        sb.channel("cd_app_state")
+          .on("postgres_changes",{event:"*",schema:"public",table:"app_state",filter:"user_id=eq."+s.user.id}, function(){ pullCloud(); })
+          .subscribe();
+      }catch(e){}
     });
     document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="visible") pullCloud(); });
     window.addEventListener("focus", pullCloud);
-    // auto-check the cloud every 5s while the app is open and visible
-    setInterval(function(){ if(document.visibilityState==="visible") pullCloud(); }, 5000);
+    setInterval(function(){ if(document.visibilityState==="visible") pullCloud(); }, 5000); // fallback
     setTimeout(function(){
       if(document.getElementById("cd-logout")) return;
       var b=document.createElement("button");
