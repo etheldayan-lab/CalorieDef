@@ -27,22 +27,22 @@
   .msg.err{background:#fdecef;color:#c0395b}
   .msg.ok{background:#e9f7ee;color:#268a52}
   .hidden{display:none}
-  /* logged-in view */
-  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
-  .who{font-size:13px;color:#7a7393}
-  .out{background:#f1eefc;color:#5b5478;width:auto;margin:0;padding:8px 14px;font-size:13px}
-  textarea{width:100%;min-height:120px;padding:12px 14px;border-radius:12px;border:1.5px solid #e2def5;
-    background:#faf9ff;font-size:15px;font-family:inherit;line-height:1.5;outline:none;resize:vertical;margin-top:6px}
-  textarea:focus{border-color:#7c6cf0;box-shadow:0 0 0 3px #ece9ff}
-  .saved{font-size:12px;color:#9a93b3;text-align:left;margin-top:6px;height:16px}
-  .note-title{font-weight:800;font-size:16px;margin-top:18px}
-  .note-help{font-size:12.5px;color:#7a7393;margin-top:4px;line-height:1.5}
+  .loading{text-align:center;padding:20px 0}
+  .spin{width:34px;height:34px;border:3px solid #ece9ff;border-top-color:#7c6cf0;border-radius:50%;
+    margin:0 auto 12px;animation:sp .8s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
   <div class="card">
-    <!-- AUTH VIEW -->
-    <div id="auth">
+    <!-- LOADING (checking session / loading data) -->
+    <div id="loading" class="loading">
+      <div class="spin"></div>
+      <div class="sub">טוען…</div>
+    </div>
+
+    <!-- AUTH FORM -->
+    <div id="auth" class="hidden">
       <div class="logo">🍽️</div>
       <h1 id="authTitle">התחברות</h1>
       <div class="sub" id="authSub">היכנסי כדי לראות את התפריט שלך מכל מכשיר</div>
@@ -54,33 +54,35 @@
       <button class="link" id="toggleBtn">אין לך חשבון עדיין? הירשמי</button>
       <div id="authMsg" class="msg hidden"></div>
     </div>
-
-    <!-- LOGGED-IN VIEW -->
-    <div id="app" class="hidden">
-      <div class="row">
-        <div class="who" id="who"></div>
-        <button class="out" id="logoutBtn">התנתקי</button>
-      </div>
-      <div class="msg ok" style="margin-top:8px">✅ מחוברת! החשבון והנתונים שלך מסונכרנים בענן.</div>
-      <div class="note-title">פתק מסונכרן (בדיקה)</div>
-      <div class="note-help">כתבי כאן משהו, פתחי את הקישור הזה גם בטלפון של יונה או במחשב — תראו את אותו הטקסט. כך נדע שהסנכרון עובד. בשלב הבא נעביר לכאן את אפליקציית התפריט המלאה.</div>
-      <textarea id="note" placeholder="כתבי כאן…"></textarea>
-      <div class="saved" id="saved"></div>
-    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-  // ---- Supabase connection (publishable key — safe to be public) ----
   const SUPABASE_URL = "https://teatxctcpkpgjmzaekvf.supabase.co";
   const SUPABASE_KEY = "sb_publishable_wxd55OXrjrrgdg_xXROrEg_AWJhTzuK";
+  const LS = "menuapp.cloud.v1";
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   const $ = id => document.getElementById(id);
-  let mode = "login"; // or "signup"
+  let mode = "login", entering = false;
 
-  function showMsg(text, kind){ const m=$("authMsg"); m.textContent=text; m.className="msg "+kind; }
+  function showForm(){ $("loading").classList.add("hidden"); $("auth").classList.remove("hidden"); }
+  function showMsg(t,k){ const m=$("authMsg"); m.textContent=t; m.className="msg "+k; }
   function clearMsg(){ $("authMsg").className="msg hidden"; }
+
+  // Pull the user's data from the cloud into local storage, then open the full app.
+  async function enterApp(user){
+    if(entering) return; entering = true;
+    $("auth").classList.add("hidden"); $("loading").classList.remove("hidden");
+    try{
+      const { data } = await sb.from("app_state").select("data").eq("user_id", user.id).maybeSingle();
+      if(data && data.data && Object.keys(data.data).length){
+        localStorage.setItem(LS, JSON.stringify(data.data));
+      }
+    }catch(e){}
+    sessionStorage.setItem("cd_entered","1");
+    location.replace("./menu.html");
+  }
 
   $("toggleBtn").onclick = () => {
     mode = mode === "login" ? "signup" : "login";
@@ -92,16 +94,15 @@
   };
 
   $("submitBtn").onclick = async () => {
-    const email = $("email").value.trim();
-    const password = $("password").value;
-    if(!email || !password){ showMsg("מלאי אימייל וסיסמה", "err"); return; }
+    const email = $("email").value.trim(), password = $("password").value;
+    if(!email || !password){ showMsg("מלאי אימייל וסיסמה","err"); return; }
     $("submitBtn").disabled = true; clearMsg();
     try{
       if(mode === "signup"){
         const { data, error } = await sb.auth.signUp({ email, password });
         if(error) throw error;
-        if(!data.session){ showMsg("נשלח אלייך אימייל לאישור — אשרי אותו ואז התחברי.", "ok"); }
-        // if session exists (email confirmation off), onAuthStateChange will switch the view
+        if(!data.session){ showMsg("נשלח אלייך אימייל לאישור — אשרי אותו ואז התחברי.","ok"); }
+        // if a session is returned, onAuthStateChange handles entry
       } else {
         const { error } = await sb.auth.signInWithPassword({ email, password });
         if(error) throw error;
@@ -111,52 +112,18 @@
       if(/Invalid login/i.test(m)) m = "אימייל או סיסמה שגויים";
       else if(/already registered/i.test(m)) m = "האימייל כבר רשום — נסי להתחבר";
       else if(/at least 6/i.test(m)) m = "הסיסמה חייבת להיות לפחות 6 תווים";
-      showMsg(m, "err");
-    }finally{
+      showMsg(m,"err");
       $("submitBtn").disabled = false;
     }
   };
 
-  $("logoutBtn").onclick = async () => { await sb.auth.signOut(); };
+  sb.auth.onAuthStateChange((_e, session) => { if(session && session.user) enterApp(session.user); });
 
-  // ---- synced note (proves cloud sync) ----
-  let saveTimer = null;
-  $("note").addEventListener("input", () => {
-    $("saved").textContent = "שומר…";
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(saveNote, 700);
+  // On load: if already logged in, go straight in; otherwise show the form.
+  sb.auth.getSession().then(({ data }) => {
+    if(data.session && data.session.user) enterApp(data.session.user);
+    else showForm();
   });
-  async function saveNote(){
-    const { data: u } = await sb.auth.getUser();
-    if(!u || !u.user) return;
-    const { error } = await sb.from("app_state").upsert({
-      user_id: u.user.id,
-      data: { note: $("note").value },
-      updated_at: new Date().toISOString()
-    });
-    $("saved").textContent = error ? ("שגיאת שמירה: " + error.message) : "נשמר ✓";
-  }
-  async function loadNote(){
-    const { data: u } = await sb.auth.getUser();
-    if(!u || !u.user) return;
-    const { data, error } = await sb.from("app_state").select("data").eq("user_id", u.user.id).maybeSingle();
-    if(!error && data && data.data) $("note").value = data.data.note || "";
-  }
-
-  // ---- switch views on auth state ----
-  sb.auth.onAuthStateChange(async (_event, session) => {
-    if(session && session.user){
-      $("auth").classList.add("hidden");
-      $("app").classList.remove("hidden");
-      $("who").textContent = session.user.email;
-      await loadNote();
-    } else {
-      $("app").classList.add("hidden");
-      $("auth").classList.remove("hidden");
-    }
-  });
-  // initial check
-  sb.auth.getSession();
   </script>
 </body>
 </html>

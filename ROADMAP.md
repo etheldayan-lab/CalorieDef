@@ -121,7 +121,8 @@ multi-user features on Track B. Some features (login, husband's shared data, a s
 - **Current phase:** **Phase 1 in progress — login + cloud sync PROVEN ✅**
 - **Supabase project:** created — URL `https://teatxctcpkpgjmzaekvf.supabase.co` (publishable key embedded in `/app/index.html`). Table `app_state` + RLS created; email confirmation OFF for dev.
 - **Track B app:** lives at `/app/` → https://etheldayan-lab.github.io/CalorieDef/app/ (login + cloud-synced note). Tested working across devices with a shared login.
-- **Next concrete step:** PORT the full meal-planner UI onto this foundation (replace the test note with the real app, backed by cloud data).
+- **Full app ported:** `/app/` now = login gate (`app/index.html`) → full meal-planner (`app/menu.html`) backed by cloud data. Track B uses its own localStorage key `menuapp.cloud.v1` (isolated from the prototype) and pushes changes to Supabase `app_state`. Logout button injected top-left.
+- **Next concrete step:** test the full app at `/app/` (login, use the app, confirm data syncs across devices).
 - **After that:** household sharing — give Ethel & Yona their own separate logins that share one household's data (needed for selling: each customer = one household).
 - **Before launch:** turn email confirmation back ON.
 - **Open questions:** none blocking.
