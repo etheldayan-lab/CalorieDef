@@ -118,12 +118,15 @@ multi-user features on Track B. Some features (login, husband's shared data, a s
 ---
 
 ## Status Tracker  ← update this as we go
-- **Current phase:** Phase 0 complete; **Phase 1 not started.**
-- **Prototype:** live on GitHub Pages (branch `claude/nice-planck-2j2rpn`, deploys from `main`).
-- **Next concrete step:** Phase 1, step 1 — create a free Supabase account and a project
-  (assistant will provide click-by-click instructions).
+- **Current phase:** **Phase 1 in progress.**
+- **Supabase project:** created — URL `https://teatxctcpkpgjmzaekvf.supabase.co` (publishable key embedded in `/app/index.html`).
+- **Track B app:** lives at `/app/` in this repo (login + cloud-synced test page) — `app/index.html`.
+- **Next concrete step:** user runs the database SQL + disables email confirmation (dev), then assistant merges so `/app/` goes live for cross-device sync testing.
+- **After that:** add household sharing (so Yona sees the same data), then port the full meal-planner UI into Track B.
 - **Open questions:** none blocking.
 
 ### Progress log
 - 2026-06-21 — Repo cleaned up; prototype fixes shipped; Gemini AI recipe button added (BYO key);
   this roadmap created.
+- 2026-06-21 — Phase 1 started: Supabase project created; built Track B login + cloud-sync page at
+  `/app/`; database schema (table `app_state` + RLS) provided for the user to run.

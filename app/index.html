@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>תפריט חודשי · התחברות</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#eceafb;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#2a2342}
+  .card{background:#fff;width:100%;max-width:420px;border-radius:22px;padding:30px 26px;
+    box-shadow:0 12px 40px rgba(124,108,240,.18);border:1px solid #e7e3fb}
+  .logo{width:52px;height:52px;border-radius:15px;background:linear-gradient(135deg,#7c6cf0,#41a7e4);
+    display:grid;place-items:center;margin:0 auto 14px;color:#fff;font-size:26px}
+  h1{font-size:21px;font-weight:800;text-align:center;letter-spacing:-.01em}
+  .sub{font-size:13.5px;color:#7a7393;text-align:center;margin-top:6px;line-height:1.5}
+  label{display:block;font-size:13px;font-weight:700;color:#5b5478;margin:16px 0 6px}
+  input{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid #e2def5;background:#faf9ff;
+    font-size:15px;outline:none;transition:border-color .15s,box-shadow .15s}
+  input:focus{border-color:#7c6cf0;box-shadow:0 0 0 3px #ece9ff}
+  button{width:100%;padding:13px;border-radius:12px;border:none;font-size:15px;font-weight:800;cursor:pointer;
+    margin-top:18px;background:#7c6cf0;color:#fff;transition:filter .15s}
+  button:hover{filter:brightness(1.05)}
+  button:disabled{opacity:.55;cursor:default}
+  .link{background:none;color:#7c6cf0;font-weight:700;font-size:13.5px;width:auto;margin:14px auto 0;display:block;padding:4px}
+  .msg{margin-top:14px;font-size:13px;font-weight:600;text-align:center;line-height:1.5;padding:10px 12px;border-radius:10px}
+  .msg.err{background:#fdecef;color:#c0395b}
+  .msg.ok{background:#e9f7ee;color:#268a52}
+  .hidden{display:none}
+  /* logged-in view */
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+  .who{font-size:13px;color:#7a7393}
+  .out{background:#f1eefc;color:#5b5478;width:auto;margin:0;padding:8px 14px;font-size:13px}
+  textarea{width:100%;min-height:120px;padding:12px 14px;border-radius:12px;border:1.5px solid #e2def5;
+    background:#faf9ff;font-size:15px;font-family:inherit;line-height:1.5;outline:none;resize:vertical;margin-top:6px}
+  textarea:focus{border-color:#7c6cf0;box-shadow:0 0 0 3px #ece9ff}
+  .saved{font-size:12px;color:#9a93b3;text-align:left;margin-top:6px;height:16px}
+  .note-title{font-weight:800;font-size:16px;margin-top:18px}
+  .note-help{font-size:12.5px;color:#7a7393;margin-top:4px;line-height:1.5}
+</style>
+</head>
+<body>
+  <div class="card">
+    <!-- AUTH VIEW -->
+    <div id="auth">
+      <div class="logo">🍽️</div>
+      <h1 id="authTitle">התחברות</h1>
+      <div class="sub" id="authSub">היכנסי כדי לראות את התפריט שלך מכל מכשיר</div>
+      <label for="email">אימייל</label>
+      <input id="email" type="email" inputmode="email" placeholder="name@example.com" autocomplete="email">
+      <label for="password">סיסמה</label>
+      <input id="password" type="password" placeholder="לפחות 6 תווים" autocomplete="current-password">
+      <button id="submitBtn">התחברי</button>
+      <button class="link" id="toggleBtn">אין לך חשבון עדיין? הירשמי</button>
+      <div id="authMsg" class="msg hidden"></div>
+    </div>
+
+    <!-- LOGGED-IN VIEW -->
+    <div id="app" class="hidden">
+      <div class="row">
+        <div class="who" id="who"></div>
+        <button class="out" id="logoutBtn">התנתקי</button>
+      </div>
+      <div class="msg ok" style="margin-top:8px">✅ מחוברת! החשבון והנתונים שלך מסונכרנים בענן.</div>
+      <div class="note-title">פתק מסונכרן (בדיקה)</div>
+      <div class="note-help">כתבי כאן משהו, פתחי את הקישור הזה גם בטלפון של יונה או במחשב — תראו את אותו הטקסט. כך נדע שהסנכרון עובד. בשלב הבא נעביר לכאן את אפליקציית התפריט המלאה.</div>
+      <textarea id="note" placeholder="כתבי כאן…"></textarea>
+      <div class="saved" id="saved"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+  // ---- Supabase connection (publishable key — safe to be public) ----
+  const SUPABASE_URL = "https://teatxctcpkpgjmzaekvf.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_wxd55OXrjrrgdg_xXROrEg_AWJhTzuK";
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const $ = id => document.getElementById(id);
+  let mode = "login"; // or "signup"
+
+  function showMsg(text, kind){ const m=$("authMsg"); m.textContent=text; m.className="msg "+kind; }
+  function clearMsg(){ $("authMsg").className="msg hidden"; }
+
+  $("toggleBtn").onclick = () => {
+    mode = mode === "login" ? "signup" : "login";
+    $("authTitle").textContent = mode === "login" ? "התחברות" : "הרשמה";
+    $("authSub").textContent = mode === "login" ? "היכנסי כדי לראות את התפריט שלך מכל מכשיר" : "צרי חשבון חדש (חינם)";
+    $("submitBtn").textContent = mode === "login" ? "התחברי" : "הירשמי";
+    $("toggleBtn").textContent = mode === "login" ? "אין לך חשבון עדיין? הירשמי" : "כבר יש לך חשבון? התחברי";
+    clearMsg();
+  };
+
+  $("submitBtn").onclick = async () => {
+    const email = $("email").value.trim();
+    const password = $("password").value;
+    if(!email || !password){ showMsg("מלאי אימייל וסיסמה", "err"); return; }
+    $("submitBtn").disabled = true; clearMsg();
+    try{
+      if(mode === "signup"){
+        const { data, error } = await sb.auth.signUp({ email, password });
+        if(error) throw error;
+        if(!data.session){ showMsg("נשלח אלייך אימייל לאישור — אשרי אותו ואז התחברי.", "ok"); }
+        // if session exists (email confirmation off), onAuthStateChange will switch the view
+      } else {
+        const { error } = await sb.auth.signInWithPassword({ email, password });
+        if(error) throw error;
+      }
+    }catch(err){
+      let m = err.message || "שגיאה";
+      if(/Invalid login/i.test(m)) m = "אימייל או סיסמה שגויים";
+      else if(/already registered/i.test(m)) m = "האימייל כבר רשום — נסי להתחבר";
+      else if(/at least 6/i.test(m)) m = "הסיסמה חייבת להיות לפחות 6 תווים";
+      showMsg(m, "err");
+    }finally{
+      $("submitBtn").disabled = false;
+    }
+  };
+
+  $("logoutBtn").onclick = async () => { await sb.auth.signOut(); };
+
+  // ---- synced note (proves cloud sync) ----
+  let saveTimer = null;
+  $("note").addEventListener("input", () => {
+    $("saved").textContent = "שומר…";
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveNote, 700);
+  });
+  async function saveNote(){
+    const { data: u } = await sb.auth.getUser();
+    if(!u || !u.user) return;
+    const { error } = await sb.from("app_state").upsert({
+      user_id: u.user.id,
+      data: { note: $("note").value },
+      updated_at: new Date().toISOString()
+    });
+    $("saved").textContent = error ? ("שגיאת שמירה: " + error.message) : "נשמר ✓";
+  }
+  async function loadNote(){
+    const { data: u } = await sb.auth.getUser();
+    if(!u || !u.user) return;
+    const { data, error } = await sb.from("app_state").select("data").eq("user_id", u.user.id).maybeSingle();
+    if(!error && data && data.data) $("note").value = data.data.note || "";
+  }
+
+  // ---- switch views on auth state ----
+  sb.auth.onAuthStateChange(async (_event, session) => {
+    if(session && session.user){
+      $("auth").classList.add("hidden");
+      $("app").classList.remove("hidden");
+      $("who").textContent = session.user.email;
+      await loadNote();
+    } else {
+      $("app").classList.add("hidden");
+      $("auth").classList.remove("hidden");
+    }
+  });
+  // initial check
+  sb.auth.getSession();
+  </script>
+</body>
+</html>
