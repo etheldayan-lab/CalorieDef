@@ -28,7 +28,6 @@
     window.__cdSB=sb;
     var lastSyncAt=localStorage.getItem(SYNC)||"";
     var origSet=Storage.prototype.setItem, pushTimer=null;
-    // PUSH local changes up; remember the servers timestamp so our own change wont reload us
     Storage.prototype.setItem=function(k,v){
       origSet.apply(this,arguments);
       if(k===LS){ clearTimeout(pushTimer); pushTimer=setTimeout(function(){ pushCloud(v); },700); }
@@ -40,7 +39,7 @@
         if(r.data && r.data.updated_at){ lastSyncAt=r.data.updated_at; origSet.call(localStorage,SYNC,lastSyncAt); }
       }catch(e){}
     }
-    // PULL: only act when the cloud timestamp is different from the last one we applied
+    function typing(){ var a=document.activeElement; return a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName); }
     var pulling=false;
     async function pullCloud(){
       if(pulling) return; pulling=true;
@@ -48,6 +47,7 @@
         var u=(await sb.auth.getUser()).data.user; if(u){
           var r=await sb.from("app_state").select("data,updated_at").eq("user_id",u.id).maybeSingle();
           if(r.data && r.data.updated_at && r.data.updated_at!==lastSyncAt){
+            if(typing()){ pulling=false; return; } // dont interrupt active editing; retry next cycle
             lastSyncAt=r.data.updated_at;
             origSet.call(localStorage,SYNC,lastSyncAt);
             if(r.data.data && Object.keys(r.data.data).length){ origSet.call(localStorage,LS,JSON.stringify(r.data.data)); }
@@ -64,6 +64,8 @@
     });
     document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="visible") pullCloud(); });
     window.addEventListener("focus", pullCloud);
+    // auto-check the cloud every 5s while the app is open and visible
+    setInterval(function(){ if(document.visibilityState==="visible") pullCloud(); }, 5000);
     setTimeout(function(){
       if(document.getElementById("cd-logout")) return;
       var b=document.createElement("button");
