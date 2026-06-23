@@ -75,10 +75,11 @@
     if(entering) return; entering = true;
     $("auth").classList.add("hidden"); $("loading").classList.remove("hidden");
     try{
-      const { data } = await sb.from("app_state").select("data").eq("user_id", user.id).maybeSingle();
+      const { data } = await sb.from("app_state").select("data,updated_at").eq("user_id", user.id).maybeSingle();
       if(data && data.data && Object.keys(data.data).length){
         localStorage.setItem(LS, JSON.stringify(data.data));
       }
+      if(data && data.updated_at){ localStorage.setItem("cd_sync_at", data.updated_at); }
     }catch(e){}
     sessionStorage.setItem("cd_entered","1");
     location.replace("./menu.html");

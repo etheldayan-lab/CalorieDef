@@ -23,11 +23,12 @@
   (function(){
     var SB_URL="https://teatxctcpkpgjmzaekvf.supabase.co";
     var SB_KEY="sb_publishable_wxd55OXrjrrgdg_xXROrEg_AWJhTzuK";
-    var LS="menuapp.cloud.v1";
+    var LS="menuapp.cloud.v1", SYNC="cd_sync_at";
     var sb=window.supabase.createClient(SB_URL,SB_KEY);
     window.__cdSB=sb;
+    var lastSyncAt=localStorage.getItem(SYNC)||"";
     var origSet=Storage.prototype.setItem, pushTimer=null;
-    // PUSH: when the app saves locally, send it up to the cloud (debounced)
+    // PUSH local changes up; remember the servers timestamp so our own change wont reload us
     Storage.prototype.setItem=function(k,v){
       origSet.apply(this,arguments);
       if(k===LS){ clearTimeout(pushTimer); pushTimer=setTimeout(function(){ pushCloud(v); },700); }
@@ -35,44 +36,40 @@
     async function pushCloud(v){
       try{ var u=(await sb.auth.getUser()).data.user; if(!u) return;
         var data; try{ data=JSON.parse(v); }catch(e){ data={}; }
-        await sb.from("app_state").upsert({user_id:u.id,data:data,updated_at:new Date().toISOString()});
+        var r=await sb.from("app_state").upsert({user_id:u.id,data:data,updated_at:new Date().toISOString()}).select("updated_at").maybeSingle();
+        if(r.data && r.data.updated_at){ lastSyncAt=r.data.updated_at; origSet.call(localStorage,SYNC,lastSyncAt); }
       }catch(e){}
     }
-    // PULL: fetch latest cloud data; if it differs, update local and refresh
+    // PULL: only act when the cloud timestamp is different from the last one we applied
     var pulling=false;
     async function pullCloud(){
       if(pulling) return; pulling=true;
       try{
         var u=(await sb.auth.getUser()).data.user; if(u){
-          var r=await sb.from("app_state").select("data").eq("user_id",u.id).maybeSingle();
-          var cloud=(r.data && r.data.data) ? r.data.data : null;
-          if(cloud && Object.keys(cloud).length){
-            var cloudStr=JSON.stringify(cloud);
-            if(cloudStr!==localStorage.getItem(LS)){
-              origSet.call(localStorage, LS, cloudStr); // write without re-triggering a push
-              location.reload();
-            }
+          var r=await sb.from("app_state").select("data,updated_at").eq("user_id",u.id).maybeSingle();
+          if(r.data && r.data.updated_at && r.data.updated_at!==lastSyncAt){
+            lastSyncAt=r.data.updated_at;
+            origSet.call(localStorage,SYNC,lastSyncAt);
+            if(r.data.data && Object.keys(r.data.data).length){ origSet.call(localStorage,LS,JSON.stringify(r.data.data)); }
+            location.reload();
           }
         }
       }catch(e){}
       pulling=false;
     }
-    // session gate + initial pull
     sb.auth.getSession().then(function(res){
       if(!res.data.session){ location.replace("./"); return; }
       if(!localStorage.getItem(LS) && !sessionStorage.getItem("cd_entered")){ location.replace("./"); return; }
       pullCloud();
     });
-    // re-pull whenever the user returns to the app
     document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="visible") pullCloud(); });
     window.addEventListener("focus", pullCloud);
-    // logout button
     setTimeout(function(){
       if(document.getElementById("cd-logout")) return;
       var b=document.createElement("button");
       b.id="cd-logout"; b.textContent="התנתקות";
       b.style.cssText="position:fixed;top:8px;left:8px;z-index:99999;background:rgba(124,108,240,.92);color:#fff;border:none;border-radius:10px;padding:7px 11px;font:700 12px -apple-system,sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18)";
-      b.onclick=async function(){ sessionStorage.removeItem("cd_entered"); try{await sb.auth.signOut();}catch(e){} location.replace("./"); };
+      b.onclick=async function(){ sessionStorage.removeItem("cd_entered"); localStorage.removeItem(SYNC); try{await sb.auth.signOut();}catch(e){} location.replace("./"); };
       document.body.appendChild(b);
     },2800);
   })();
