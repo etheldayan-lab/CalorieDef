@@ -26,16 +26,29 @@
     var LS="menuapp.cloud.v1", SYNC="cd_sync_at";
     var sb=window.supabase.createClient(SB_URL,SB_KEY);
     window.__cdSB=sb;
-    var lastSyncAt=localStorage.getItem(SYNC)||"";
     var origSet=Storage.prototype.setItem, pushTimer=null;
+    // deep-sort keys so different orderings of the SAME data compare equal
+    function norm(o){
+      if(Array.isArray(o)) return o.map(norm);
+      if(o && typeof o==="object"){ var ks=Object.keys(o).sort(), r={}; for(var i=0;i<ks.length;i++) r[ks[i]]=norm(o[ks[i]]); return r; }
+      return o;
+    }
+    function normStr(o){ try{ return JSON.stringify(norm(o)); }catch(e){ return ""; } }
+    function parse(s){ try{ return JSON.parse(s); }catch(e){ return {}; } }
+    var lastSyncAt=localStorage.getItem(SYNC)||"";
+    var lastDataNorm=normStr(parse(localStorage.getItem(LS)||"{}"));
+
     Storage.prototype.setItem=function(k,v){
       origSet.apply(this,arguments);
       if(k===LS){ clearTimeout(pushTimer); pushTimer=setTimeout(function(){ pushCloud(v); },700); }
     };
     async function pushCloud(v){
-      try{ var u=(await sb.auth.getUser()).data.user; if(!u) return;
-        var data; try{ data=JSON.parse(v); }catch(e){ data={}; }
-        var r=await sb.from("app_state").upsert({user_id:u.id,data:data,updated_at:new Date().toISOString()}).select("updated_at").maybeSingle();
+      try{
+        var n=normStr(parse(v));
+        if(n===lastDataNorm) return;            // nothing really changed -> dont churn the cloud
+        var u=(await sb.auth.getUser()).data.user; if(!u) return;
+        var r=await sb.from("app_state").upsert({user_id:u.id,data:parse(v),updated_at:new Date().toISOString()}).select("updated_at").maybeSingle();
+        lastDataNorm=n;
         if(r.data && r.data.updated_at){ lastSyncAt=r.data.updated_at; origSet.call(localStorage,SYNC,lastSyncAt); }
       }catch(e){}
     }
@@ -47,11 +60,14 @@
         var u=(await sb.auth.getUser()).data.user; if(u){
           var r=await sb.from("app_state").select("data,updated_at").eq("user_id",u.id).maybeSingle();
           if(r.data && r.data.updated_at && r.data.updated_at!==lastSyncAt){
-            if(typing()){ pulling=false; return; }
-            lastSyncAt=r.data.updated_at;
-            origSet.call(localStorage,SYNC,lastSyncAt);
-            if(r.data.data && Object.keys(r.data.data).length){ origSet.call(localStorage,LS,JSON.stringify(r.data.data)); }
-            location.reload();
+            lastSyncAt=r.data.updated_at; origSet.call(localStorage,SYNC,lastSyncAt);
+            var cloudNorm=normStr(r.data.data||{});
+            if(cloudNorm!==lastDataNorm){            // only reload on a REAL data difference
+              if(typing()){ pulling=false; return; } // dont interrupt typing; retry next event
+              lastDataNorm=cloudNorm;
+              if(r.data.data && Object.keys(r.data.data).length){ origSet.call(localStorage,LS,JSON.stringify(r.data.data)); }
+              location.reload();
+            }
           }
         }
       }catch(e){}
@@ -62,7 +78,6 @@
       if(!s){ location.replace("./"); return; }
       if(!localStorage.getItem(LS) && !sessionStorage.getItem("cd_entered")){ location.replace("./"); return; }
       pullCloud();
-      // LIVE updates: subscribe to changes on this users row and pull instantly
       try{
         sb.realtime.setAuth(s.access_token);
         sb.channel("cd_app_state")
@@ -72,7 +87,7 @@
     });
     document.addEventListener("visibilitychange",function(){ if(document.visibilityState==="visible") pullCloud(); });
     window.addEventListener("focus", pullCloud);
-    setInterval(function(){ if(document.visibilityState==="visible") pullCloud(); }, 5000); // fallback
+    setInterval(function(){ if(document.visibilityState==="visible") pullCloud(); }, 6000);
     setTimeout(function(){
       if(document.getElementById("cd-logout")) return;
       var b=document.createElement("button");
