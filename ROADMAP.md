@@ -130,5 +130,9 @@ multi-user features on Track B. Some features (login, husband's shared data, a s
 ### Progress log
 - 2026-06-21 — Repo cleaned up; prototype fixes shipped; Gemini AI recipe button added (BYO key);
   this roadmap created.
-- 2026-06-21 — Phase 1 started: Supabase project created; built Track B login + cloud-sync page at
-  `/app/`; database schema (table `app_state` + RLS) provided for the user to run.
+- 2026-06-21 — Phase 1: Supabase project + `app_state` table/RLS; built `/app/` login gate +
+  cloud-synced full app (`menu.html`); two-way sync via Realtime + poll/focus, normalized-compare
+  to avoid reload loops.
+- 2026-06-21 — Applied new "calm modern wellness" redesign as `/app/menu.html` (clean React/CDN
+  build, same data/features, key renamed to `menuapp.cloud.v1`, cloud-sync shim re-attached).
+  Root prototype still shows the OLD look.
