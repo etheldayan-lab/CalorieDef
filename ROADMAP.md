@@ -136,3 +136,6 @@ multi-user features on Track B. Some features (login, husband's shared data, a s
 - 2026-06-21 — Applied new "calm modern wellness" redesign as `/app/menu.html` (clean React/CDN
   build, same data/features, key renamed to `menuapp.cloud.v1`, cloud-sync shim re-attached).
   Root prototype still shows the OLD look.
+- 2026-06-21 — Swapped the redesign to the **offline-bundled** version (fonts + React embedded in
+  the file, no external CDN for the app) for reliability — the CDN build may have failed to load on
+  mobile. Same look + features; cloud-sync shim re-attached in the outer head.
