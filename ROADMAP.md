@@ -1,6 +1,6 @@
 # CalorieDef — Product Roadmap
 
-**Last updated:** 2026-06-21
+**Last updated:** 2026-06-28
 **Owner:** Ethel (non-developer founder) · **Goal:** turn the personal prototype into a shareable, sellable app.
 
 > **How to resume this project in a NEW chat session:** The AI assistant does **not** remember past
@@ -62,14 +62,17 @@ multi-user features on Track B. Some features (login, husband's shared data, a s
 - **Cost:** ~free. **Effort:** the largest single leap; done in small steps.
 - **Done when:** you and Yona log in on separate phones and see/edit the same data.
 
-### Phase 2 — AI done right 🤖
+### Phase 2 — AI done right 🤖 (mostly done ✅)
 **Goal:** AI features that scale safely to many users.
-- Move the Gemini key onto the **server** (a small serverless function) — customers never paste keys;
-  you hold one key and control cost.
-- Database stays the source of truth; AI generates recipes, suggests days, answers questions, all
-  grounded in the user's real data and calorie targets.
-- **Tools:** Supabase Edge Function (or similar), Gemini.
-- **Cost:** ~free at small scale (Gemini free tier). **Done when:** AI works with no user-pasted key.
+- ✅ Gemini key moved onto the **server** as a secret — two Supabase Edge Functions live:
+  `fridge-recipes` (recipes from what's in the fridge) and `scan-meal` (photo → calories).
+  Customers never paste keys; one key, cost controlled centrally.
+- ✅ Database stays the source of truth; AI adds smart features on top (fridge recipes grounded in
+  the user's calorie targets; the built-in recipe matcher only suggests dishes the user can mostly make).
+- **Remaining:** broaden AI (suggest a balanced day, Q&A) and verify the Edge Functions are deployed
+  with the latest prompt + the `GEMINI_API_KEY` secret set in the live Supabase project.
+- **Tools:** Supabase Edge Function, Gemini.
+- **Cost:** ~free at small scale (Gemini free tier). **Done when:** AI works with no user-pasted key. ✅
 
 ### Phase 3 — Make it sellable 💳
 **Goal:** strangers can sign up and pay.
@@ -118,13 +121,14 @@ multi-user features on Track B. Some features (login, husband's shared data, a s
 ---
 
 ## Status Tracker  ← update this as we go
-- **Current phase:** **Phase 1 in progress — login + cloud sync PROVEN ✅**
+- **Current phase:** **Phase 1 (accounts + shared data) nearly complete; Phase 2 (server-side AI) mostly done ✅**
 - **Supabase project:** created — URL `https://teatxctcpkpgjmzaekvf.supabase.co` (publishable key embedded in `/app/index.html`). Table `app_state` + RLS created; email confirmation OFF for dev.
-- **Track B app:** lives at `/app/` → https://etheldayan-lab.github.io/CalorieDef/app/ (login + cloud-synced note). Tested working across devices with a shared login.
-- **Full app ported:** `/app/` now = login gate (`app/index.html`) → full meal-planner (`app/menu.html`) backed by cloud data. Track B uses its own localStorage key `menuapp.cloud.v1` (isolated from the prototype) and pushes changes to Supabase `app_state`. Logout button injected top-left.
-- **Next concrete step:** test the full app at `/app/` (login, use the app, confirm data syncs across devices).
-- **After that:** household sharing — give Ethel & Yona their own separate logins that share one household's data (needed for selling: each customer = one household).
-- **Before launch:** turn email confirmation back ON.
+- **Track B app:** lives at `/app/` → https://etheldayan-lab.github.io/CalorieDef/app/ (login + cloud-synced). Tested working across devices with a shared login.
+- **Full app ported:** `/app/` = login gate (`app/index.html`) → full meal-planner (`app/menu.html`) backed by cloud data. Track B uses its own localStorage key `menuapp.cloud.v1` (isolated from the prototype) and pushes changes to Supabase `app_state`. Logout button injected top-left.
+- **Server-side AI ✅:** Edge Functions `supabase/functions/fridge-recipes` and `scan-meal` hold the Gemini key as a server secret (no BYO-key needed in Track B).
+- **Recent app work (June 28):** Settings units-in-labels + centered values; narrowed BMI target band (~3 kg around BMI 22); fridge "set as today's breakfast/lunch/dinner" buttons; fridge scroll-to-top fix; food **dislikes** now hide matching recipes everywhere; **stricter fridge matcher** (must have the main ingredients; pantry/seasoning assumed); **period mode reshapes the whole menu by phase**; period feature is **gender-aware** (female shows, male hidden, "no gender" gets a Settings toggle) and **per-user**. Also fixed a build bug where the bundled template's `</script>` wasn't escaped (app rendered blank) — now verified rendering in a headless browser before each push.
+- **Next concrete step → household sharing:** give Ethel & Yona their own separate logins that share one household's data (needed for selling: each customer = one household). Needs a `households` table, member linking, and updated RLS so `app_state` is keyed by household, not by individual user.
+- **Also still to do:** test full app across both phones; broaden AI (balanced-day suggestion, Q&A); turn email confirmation back ON before launch.
 - **Open questions:** none blocking.
 
 ### Progress log
@@ -139,3 +143,9 @@ multi-user features on Track B. Some features (login, husband's shared data, a s
 - 2026-06-21 — Swapped the redesign to the **offline-bundled** version (fonts + React embedded in
   the file, no external CDN for the app) for reliability — the CDN build may have failed to load on
   mobile. Same look + features; cloud-sync shim re-attached in the outer head.
+- 2026-06-28 — Settings polish (units in labels, centered numbers, ~3 kg BMI target band);
+  fridge "set as today's meal" buttons + scroll-to-top fix; food dislikes hide matching recipes;
+  stricter fridge matcher (have the main ingredients; pantry assumed); period mode now reshapes the
+  whole menu by phase and is gender-aware + per-user. Confirmed Phase 2's server-side AI Edge
+  Functions are in the repo. Fixed a blank-screen build bug (unescaped `</script>` in the bundled
+  template) and added a headless-browser render check to the edit workflow.
