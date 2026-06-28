@@ -13,7 +13,7 @@ const CORS = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const MODEL = Deno.env.get("GEMINI_MODEL") || "gemini-2.0-flash";
+const MODEL = Deno.env.get("GEMINI_MODEL") || "gemini-2.5-flash";
 
 function json(obj: unknown, status = 200) {
   return new Response(JSON.stringify(obj), {
