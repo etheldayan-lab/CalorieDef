@@ -34,22 +34,25 @@ serve(async (req) => {
     if (!KEY) return json({ error: "missing_server_key" }, 500);
 
     const p = profile || {};
+    const paceLabel = p.pace === "drastic" ? "אגרסיבי" : p.pace === "slow" ? "עדין" : "מאוזן";
     const facts =
       `נתונים ידועים על המשתמש: ` +
       (p.weight ? `משקל ${Math.round(p.weight)} ק"ג, ` : "") +
       (p.height ? `גובה ${Math.round(p.height)} ס"מ, ` : "") +
       (p.age ? `גיל ${Math.round(p.age)}, ` : "") +
       (p.gender ? `מין ${p.gender === "male" ? "גבר" : p.gender === "female" ? "אישה" : "לא צוין"}, ` : "") +
-      (p.goalWeight ? `משקל יעד ${Math.round(p.goalWeight)} ק"ג. ` : ". ");
+      (p.goalWeight ? `משקל יעד נוכחי ${Math.round(p.goalWeight)} ק"ג, ` : "") +
+      `קצב דיאטה מועדף: ${paceLabel}. `;
 
     const prompt =
-      "זוהי תמונת גוף של אדם. בהתבסס על התמונה ועל הנתונים הידועים, תני הערכה גסה ולא רפואית של הרכב הגוף. " +
+      "זוהי תמונת גוף של אדם. בהתבסס על התמונה ועל הנתונים הידועים, תני הערכה כללית, אישית ולא רפואית. " +
       facts +
-      "החזירי: אחוז שומן גוף משוער (מספר שלם, הערכה גסה), קטגוריית מבנה גוף קצרה בעברית (למשל 'רזה', 'אתלטי', 'ממוצע', 'מלא יותר'), " +
-      "התאמה קטנה ומתונה ליעד הקלוריות היומי בטווח -150 עד +150 (מספר שלם, calorieAdjust) — שלילי אם נראה שכדאי גירעון מעט גדול יותר, חיובי אם נראה שצריך יותר אנרגיה, או 0 אם הנתונים הקיימים מספיקים. " +
-      "ורמת ביטחון (confidence: 'low' או 'medium'). " +
-      "הוסיפי הערה קצרה אחת בעברית (note) שמסבירה את ההערכה ומדגישה שזו הערכה גסה בלבד ולא מדידה רפואית, ושהמשקל והגובה הם המקור העיקרי לחישוב. " +
-      "אם התמונה אינה תמונת גוף ברורה, החזירי calorieAdjust=0, confidence='low' והערה שמבקשת תמונה ברורה יותר.";
+      "כתבי טקסט קצר וחם בעברית (text) של 3–5 משפטים בלבד, בסגנון מאמן כושר: ציון קצר של מבנה הגוף ואיפה מרוכז השומן אם בכלל, " +
+      "המלצה על טווח משקל יעד שיתאים למראה חטוב ובריא, ומשפט סיכום קצר. אל תכתבי רשימות ארוכות — טקסט זורם וקצר. " +
+      "החזירי גם: טווח יעד מומלץ (goalLow, goalHigh במספרים, ק\"ג), משקל יעד מומלץ יחיד (goalRecommended, מספר), " +
+      "ואחוז שומן משוער (bodyFat, מספר שלם, הערכה גסה — אופציונלי). " +
+      "התבססי על המשקל והגובה כמקור עיקרי; התמונה היא תוספת בלבד. " +
+      "אם התמונה אינה תמונת גוף ברורה, כתבי בטקסט שצריך תמונה ברורה יותר והשאירי את טווח היעד קרוב לנתונים הקיימים.";
 
     const body = {
       contents: [{
@@ -64,13 +67,13 @@ serve(async (req) => {
         responseSchema: {
           type: "OBJECT",
           properties: {
+            text: { type: "STRING" },
+            goalLow: { type: "NUMBER" },
+            goalHigh: { type: "NUMBER" },
+            goalRecommended: { type: "NUMBER" },
             bodyFat: { type: "INTEGER" },
-            build: { type: "STRING" },
-            calorieAdjust: { type: "INTEGER" },
-            confidence: { type: "STRING" },
-            note: { type: "STRING" },
           },
-          required: ["build", "calorieAdjust", "note"],
+          required: ["text", "goalRecommended"],
         },
       },
     };
@@ -89,11 +92,9 @@ serve(async (req) => {
     const txt = (data?.candidates?.[0]?.content?.parts || [])
       .map((p: { text?: string }) => p.text || "").join("");
     const parsed = JSON.parse(txt);
-    // clamp the adjustment so the AI can only ever nudge, never swing the target
-    if (typeof parsed.calorieAdjust === "number") {
-      parsed.calorieAdjust = Math.max(-150, Math.min(150, Math.round(parsed.calorieAdjust)));
-    } else {
-      parsed.calorieAdjust = 0;
+    // round the recommended goal to a sensible 0.5 kg step
+    if (typeof parsed.goalRecommended === "number") {
+      parsed.goalRecommended = Math.round(parsed.goalRecommended * 2) / 2;
     }
     return json(parsed, 200);
   } catch (e) {
