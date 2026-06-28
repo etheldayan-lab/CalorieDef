@@ -143,6 +143,11 @@ multi-user features on Track B. Some features (login, husband's shared data, a s
 - 2026-06-21 — Swapped the redesign to the **offline-bundled** version (fonts + React embedded in
   the file, no external CDN for the app) for reliability — the CDN build may have failed to load on
   mobile. Same look + features; cloud-sync shim re-attached in the outer head.
+- 2026-06-28 (cont.) — Moved meal scan out of the nav into a main-screen button; neutralized the
+  app's Hebrew to inclusive plural; built household sharing (see setup SQL); added a **body-scan
+  estimate** in Settings (new `supabase/functions/body-scan` Edge Function → Gemini Vision; returns a
+  rough body-fat/build estimate + a clamped ±150 kcal nudge to the daily target, clearly labeled as an
+  estimate). **Action: deploy the `body-scan` function to Supabase** (same GEMINI_API_KEY secret).
 - 2026-06-28 — Settings polish (units in labels, centered numbers, ~3 kg BMI target band);
   fridge "set as today's meal" buttons + scroll-to-top fix; food dislikes hide matching recipes;
   stricter fridge matcher (have the main ingredients; pantry assumed); period mode now reshapes the
