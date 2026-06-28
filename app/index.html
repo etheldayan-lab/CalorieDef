@@ -70,16 +70,35 @@
   function showMsg(t,k){ const m=$("authMsg"); m.textContent=t; m.className="msg "+k; }
   function clearMsg(){ $("authMsg").className="msg hidden"; }
 
-  // Pull the user's data from the cloud into local storage, then open the full app.
+  // Resolve the user's household id (creating one if needed). Returns null if the
+  // household tables/functions aren't set up yet — caller falls back to user-keyed data.
+  async function resolveHousehold(){
+    try{
+      const { data, error } = await sb.rpc("ensure_household");
+      if(!error && data){ return data; }
+    }catch(e){}
+    return null;
+  }
+
+  // Pull the household's (or, as a fallback, the user's) data from the cloud into
+  // local storage, then open the full app.
   async function enterApp(user){
     if(entering) return; entering = true;
     $("auth").classList.add("hidden"); $("loading").classList.remove("hidden");
     try{
-      const { data } = await sb.from("app_state").select("data,updated_at").eq("user_id", user.id).maybeSingle();
-      if(data && data.data && Object.keys(data.data).length){
-        localStorage.setItem(LS, JSON.stringify(data.data));
+      const hid = await resolveHousehold();
+      let row;
+      if(hid){
+        localStorage.setItem("cd_household", hid);
+        row = (await sb.from("app_state").select("data,updated_at").eq("household_id", hid).maybeSingle()).data;
+      } else {
+        localStorage.removeItem("cd_household");
+        row = (await sb.from("app_state").select("data,updated_at").eq("user_id", user.id).maybeSingle()).data;
       }
-      if(data && data.updated_at){ localStorage.setItem("cd_sync_at", data.updated_at); }
+      if(row && row.data && Object.keys(row.data).length){
+        localStorage.setItem(LS, JSON.stringify(row.data));
+      }
+      if(row && row.updated_at){ localStorage.setItem("cd_sync_at", row.updated_at); }
     }catch(e){}
     sessionStorage.setItem("cd_entered","1");
     location.replace("./menu.html");
