@@ -45,13 +45,13 @@
     <div id="auth" class="hidden">
       <div class="logo">🍽️</div>
       <h1 id="authTitle">התחברות</h1>
-      <div class="sub" id="authSub">היכנסי כדי לראות את התפריט שלך מכל מכשיר</div>
+      <div class="sub" id="authSub">היכנסו כדי לראות את התפריט שלך מכל מכשיר</div>
       <label for="email">אימייל</label>
       <input id="email" type="email" inputmode="email" placeholder="name@example.com" autocomplete="email">
       <label for="password">סיסמה</label>
       <input id="password" type="password" placeholder="לפחות 6 תווים" autocomplete="current-password">
-      <button id="submitBtn">התחברי</button>
-      <button class="link" id="toggleBtn">אין לך חשבון עדיין? הירשמי</button>
+      <button id="submitBtn">התחברו</button>
+      <button class="link" id="toggleBtn">אין לך חשבון עדיין? הירשמו</button>
       <div id="authMsg" class="msg hidden"></div>
     </div>
   </div>
@@ -107,21 +107,21 @@
   $("toggleBtn").onclick = () => {
     mode = mode === "login" ? "signup" : "login";
     $("authTitle").textContent = mode === "login" ? "התחברות" : "הרשמה";
-    $("authSub").textContent = mode === "login" ? "היכנסי כדי לראות את התפריט שלך מכל מכשיר" : "צרי חשבון חדש (חינם)";
-    $("submitBtn").textContent = mode === "login" ? "התחברי" : "הירשמי";
-    $("toggleBtn").textContent = mode === "login" ? "אין לך חשבון עדיין? הירשמי" : "כבר יש לך חשבון? התחברי";
+    $("authSub").textContent = mode === "login" ? "היכנסו כדי לראות את התפריט שלך מכל מכשיר" : "צרו חשבון חדש (חינם)";
+    $("submitBtn").textContent = mode === "login" ? "התחברו" : "הירשמו";
+    $("toggleBtn").textContent = mode === "login" ? "אין לך חשבון עדיין? הירשמו" : "כבר יש לך חשבון? התחברו";
     clearMsg();
   };
 
   $("submitBtn").onclick = async () => {
     const email = $("email").value.trim(), password = $("password").value;
-    if(!email || !password){ showMsg("מלאי אימייל וסיסמה","err"); return; }
+    if(!email || !password){ showMsg("מלאו אימייל וסיסמה","err"); return; }
     $("submitBtn").disabled = true; clearMsg();
     try{
       if(mode === "signup"){
         const { data, error } = await sb.auth.signUp({ email, password });
         if(error) throw error;
-        if(!data.session){ showMsg("נשלח אלייך אימייל לאישור — אשרי אותו ואז התחברי.","ok"); }
+        if(!data.session){ showMsg("נשלח אליכם אימייל לאישור — אשרו אותו ואז התחברו.","ok"); }
         // if a session is returned, onAuthStateChange handles entry
       } else {
         const { error } = await sb.auth.signInWithPassword({ email, password });
@@ -130,7 +130,7 @@
     }catch(err){
       let m = err.message || "שגיאה";
       if(/Invalid login/i.test(m)) m = "אימייל או סיסמה שגויים";
-      else if(/already registered/i.test(m)) m = "האימייל כבר רשום — נסי להתחבר";
+      else if(/already registered/i.test(m)) m = "האימייל כבר רשום — נסו להתחבר";
       else if(/at least 6/i.test(m)) m = "הסיסמה חייבת להיות לפחות 6 תווים";
       showMsg(m,"err");
       $("submitBtn").disabled = false;
